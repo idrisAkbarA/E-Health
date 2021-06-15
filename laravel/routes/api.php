@@ -17,4 +17,23 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::post('/auth/login', [App\Http\Controllers\AuthController::class, 'login']);
+
+Route::prefix('auth')->name('auth.')->group(function () {
+    Route::post('/login', 'AuthController@login')->name('login');
+    // Route::post('/change-password', 'AuthController@changePassword')->name('change-password');
+});
+
+// User Routes
+Route::prefix('user')->name('user.')->group(function () {
+    Route::get('/', 'UserController@index')->name('index');
+    Route::get('/{user}', 'UserController@show')->name('show');
+    Route::post('/', 'UserController@store')->name('store');
+    Route::put('/{user}', 'UserController@update')->name('update');
+    Route::delete('/{user}', 'UserController@destroy')->name('destroy');
+});
+
+// Dokter Routes
+Route::prefix('dokter')->name('dokter.')->group(function () {
+    Route::get('/', 'DokterController@index')->name('index');
+    Route::get('/{dokter}', 'DokterController@show')->name('show');
+});
