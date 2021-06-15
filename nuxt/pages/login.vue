@@ -76,9 +76,6 @@
         </v-container>
       </v-card-text>
     </v-card>
-    <v-card>
-      <v-btn @click="getUser()">test get user</v-btn>
-    </v-card>
   </v-container>
 </template>
 
@@ -109,11 +106,6 @@ export default {
         password: this.password,
       }
       await this.$auth.loginWith('local', { data })
-    },
-    getUser() {
-      this.$axios.get('/api/user').then((response) => {
-        console.log(response)
-      })
     },
     getCSRF() {
       // return true if retrieved, false if didnt

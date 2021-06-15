@@ -14,13 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
 Route::prefix('auth')->name('auth.')->group(function () {
     Route::post('/login', 'AuthController@login')->name('login');
     // Route::post('/change-password', 'AuthController@changePassword')->name('change-password');
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    })->middleware('auth:sanctum');
 });
 
 // User Routes
