@@ -19,8 +19,8 @@ class CreateAntrianObatTable extends Migration
             $table->text('catatan');
             $table->boolean('status')->nullable();
             $table->string('total_harga');
-            $table->timestamp('selesai_at');
-            $table->timestamp('diambil_at');
+            $table->timestamp('selesai_at')->nullable();
+            $table->timestamp('diambil_at')->nullable();
             $table->timestamps();
         });
     }

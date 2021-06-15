@@ -17,7 +17,7 @@ class CreateObatTable extends Migration
             $table->id();
             $table->string('nama');
             $table->enum('bentuk', ['Tablet', 'Cair', 'Kapsul', 'Kaplet']);
-            $table->string('golongan');
+            $table->string('golongan')->nullable();
             $table->string('harga');
             $table->timestamps();
         });

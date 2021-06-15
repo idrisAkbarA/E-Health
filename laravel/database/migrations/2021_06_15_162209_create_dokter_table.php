@@ -19,7 +19,7 @@ class CreateDokterTable extends Migration
             $table->integer('poli_id');
             $table->string('tempat_tanggal_lahir');
             $table->enum('jenis_kelamin', ['Laki-Laki', 'Perempuan']);
-            $table->enum('agama', ['Islam', 'Kristen', 'Konghucu', 'Budha', 'Hindu']);
+            $table->enum('agama', ['Islam', 'Kristen', 'Konghucu', 'Budha', 'Hindu'])->nullable();
             $table->json('pendidikan')->nullable();
             $table->string('spesialis')->nullable();
             $table->text('alamat')->nullable();
