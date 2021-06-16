@@ -15,9 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 
+// Auth Routes
 Route::prefix('auth')->name('auth.')->group(function () {
     Route::post('/login', 'AuthController@login')->name('login');
     // Route::post('/change-password', 'AuthController@changePassword')->name('change-password');
+
     Route::get('/user', function (Request $request) {
         return $request->user();
     })->middleware('auth:sanctum');
