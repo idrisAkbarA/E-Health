@@ -9,7 +9,7 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('username', 'password');
 
         if (Auth::attempt($credentials)) {
             // Authentication passed...
@@ -20,6 +20,6 @@ class AuthController extends Controller
         }
         return response()->json([
             'status' => 'Not Authenticated',
-        ]);
+        ], 401);
     }
 }

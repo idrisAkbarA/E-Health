@@ -18,6 +18,7 @@
 <script>
 import { mapMutations } from 'vuex'
 export default {
+  middleware: ['auth-redirect'],
   created() {
     var pathArray = window.location.pathname.split('/')
     this.loginUrl = pathArray[pathArray.length - 1]

@@ -22,8 +22,8 @@
             prepend-inner-icon="mdi-account-circle"
             hide-details="auto"
             color="secondary"
-            :label="loginUrl == 'login' ? 'Email' : 'Username'"
-            v-model="email"
+            label="Username"
+            v-model="username"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -90,10 +90,18 @@ export default {
     async loginProcess() {
       // set api request url based on window url
       var data = {
-        email: this.email,
+        username: this.username,
         password: this.password,
       }
-      await this.$auth.loginWith('local', { data })
+      await this.$auth
+        .loginWith('local', { data })
+        .then(() => {
+          console.log('logged in')
+        })
+        .catch(() => {
+          this.isLoading = false
+          this.error = 'Maaf terjadi kesalahan, coba lagi dalam beberapa saat'
+        })
     },
     getUser() {
       this.$axios.get('/api/user').then((response) => {
