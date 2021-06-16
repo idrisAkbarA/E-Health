@@ -43,3 +43,9 @@ Route::prefix('dokter')->name('dokter.')->group(function () {
     Route::get('/', 'DokterController@index')->name('index');
     Route::get('/{dokter}', 'DokterController@show')->name('show');
 });
+
+// Rekam Medis Routes
+Route::prefix('rekam-medis')->name('rekam-medis')->group(function () {
+    Route::get('/{pasien}', 'RekamMedisController@index')->name('index');
+    Route::get('/{rekamMedis}', 'RekamMedisController@show')->name('show');
+});
