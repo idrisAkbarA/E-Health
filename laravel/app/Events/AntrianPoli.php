@@ -29,7 +29,7 @@ class AntrianPoli implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        $channelName = 'channel-name';
+        $channelName = 'antrian-poli';
         return new Channel($channelName);
     }
 }

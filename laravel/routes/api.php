@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\AntrianPoli;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('broadcast', function () {
+    broadcast(new AntrianPoli());
+});
 
 // Auth Routes
 Route::prefix('auth')->name('auth.')->group(function () {

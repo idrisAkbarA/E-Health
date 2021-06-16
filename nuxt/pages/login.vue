@@ -1,10 +1,6 @@
 <template>
   <v-container fill-height>
-    <v-card
-      class="mx-auto"
-      flat
-      :width="windowWidth<=600?'90%':'65%'"
-    >
+    <v-card class="mx-auto" flat :width="windowWidth <= 600 ? '90%' : '65%'">
       <v-card-text>
         <v-container>
           <v-row dense>
@@ -12,10 +8,7 @@
               <h2>Login</h2>
             </v-col>
           </v-row>
-          <v-row
-            dense
-            v-if="error"
-          >
+          <v-row dense v-if="error">
             <v-col>
               <p class="red--text">{{ error }}</p>
             </v-col>
@@ -47,27 +40,20 @@
               ></v-text-field>
             </v-col>
           </v-row>
-          <v-row
-            class="mt-3"
-            align="center"
-            dense
-          >
+          <v-row class="mt-3" align="center" dense>
             <v-col cols="6">
-              <v-btn
-                :loading="isLoading"
-                @click="login()"
-                color="green"
-                dark
-              >Login</v-btn>
+              <v-btn :loading="isLoading" @click="login()" color="green" dark
+                >Login</v-btn
+              >
             </v-col>
             <v-col
-              :cols="windowWidth<=600?12:6"
+              :cols="windowWidth <= 600 ? 12 : 6"
               v-if="loginUrl == 'login'"
             >
               <span>
                 Belum memiliki akun? Daftar <a href="/pendaftaran">di sini</a>.
               </span>
-              <br>
+              <br />
               <span>
                 <a href="/lupa-password">Lupa Password?</a>
               </span>
@@ -105,7 +91,13 @@ export default {
         email: this.email,
         password: this.password,
       }
-      await this.$auth.loginWith('local', { data })
+      await this.$auth
+        .loginWith('local', { data })
+        .then(() => (this.isLoading = false))
+        .catch((e) => {
+          this.error = 'Incorrect email or password.'
+          this.isLoading = false
+        })
     },
     getCSRF() {
       // return true if retrieved, false if didnt
