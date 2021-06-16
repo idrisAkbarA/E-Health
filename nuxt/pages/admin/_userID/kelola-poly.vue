@@ -133,8 +133,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
   layout: 'admin',
   mounted() {
@@ -148,7 +146,7 @@ export default {
   },
   data() {
     return {
-      title: 'Kelola Poly',
+      title: 'Kelola Poli',
       search: '',
       isLoading: false,
       bottomSheet: false,

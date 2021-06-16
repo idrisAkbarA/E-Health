@@ -6,6 +6,7 @@
 
 <script>
 export default {
+  layout: 'pelayanan',
   mounted() {
     this.$store.commit('page/setTitle', this.title)
   },
@@ -19,6 +20,5 @@ export default {
       title: 'Dashboard Pelayanan',
     }
   },
-  layout: 'pelayanan',
 }
 </script>
