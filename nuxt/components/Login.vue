@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height>
-    <v-container class="px-10">
+    <v-container>
       <v-row dense>
         <v-col>
           <h2>Login</h2>
@@ -55,13 +55,7 @@
             dark
           >Login</v-btn>
         </v-col>
-        <v-col
-          :cols="windowWidth<=600?12:6"
-          v-if="loginUrl == 'login'"
-        >
-          <span>
-            Belum memiliki akun? Daftar <a href="/pendaftaran">di sini</a>.
-          </span>
+        <v-col>
           <br>
           <span>
             <a href="/lupa-password">Lupa Password?</a>
@@ -133,4 +127,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+a {
+  color: #b8c2ad !important;
+}
+</style>
