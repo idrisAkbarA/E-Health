@@ -22,6 +22,7 @@ Route::get('broadcast', function () {
 // Auth Routes
 Route::prefix('auth')->name('auth.')->group(function () {
     Route::post('/login', 'AuthController@login')->name('login');
+    Route::post('/logout', 'AuthController@logout')->name('logout');
     // Route::post('/change-password', 'AuthController@changePassword')->name('change-password');
 
     Route::get('/user', function (Request $request) {

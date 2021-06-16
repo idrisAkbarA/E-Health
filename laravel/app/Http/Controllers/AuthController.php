@@ -22,4 +22,8 @@ class AuthController extends Controller
             'status' => 'Not Authenticated',
         ], 401);
     }
+    public function logout()
+    {
+        Auth::logout();
+    }
 }
