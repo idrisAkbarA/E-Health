@@ -10,6 +10,7 @@
           <v-row dense>
             <v-col>
               <h2>Login</h2>
+              Silahkan login untuk masuk ke aplikasi
             </v-col>
           </v-row>
           <v-row
