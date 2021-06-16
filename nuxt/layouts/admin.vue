@@ -225,7 +225,9 @@ export default {
     source: String,
   },
   computed: {
-    ...mapState({ title: 'page/title' }),
+    title() {
+      return this.$store.state.page.title
+    },
     pages() {
       let petugas = this.$route.params.userID
       return [
