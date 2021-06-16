@@ -16,6 +16,9 @@ export default function (context) {
             case "Pelayanan":
                 context.redirect(`/pelayanan/${context.$auth.user.id}/dashboard`);
                 break;
+            case "Kasir":
+                context.redirect(`/kasir/${context.$auth.user.id}/dashboard`);
+                break;
 
             default:
                 break;
