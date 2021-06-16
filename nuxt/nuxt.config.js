@@ -25,6 +25,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: './plugins/echo', mode: 'client' }
+    // '~/plugins/vue-window-size.client.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -89,7 +90,7 @@ export default {
           secondary: "#b8c2ad",
           info: colors.teal.lighten1,
           warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
+          error: colors.red.lighten3,
           success: colors.green.accent3
         }
       }

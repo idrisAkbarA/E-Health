@@ -8,7 +8,7 @@
         </div>
         <div>Selamat bertugas!</div>
       </div>
-      <div class="right">
+      <div class="right px-10">
         <login></login>
       </div>
     </div>
