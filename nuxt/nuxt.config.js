@@ -89,7 +89,7 @@ export default {
           secondary: "#b8c2ad",
           info: colors.teal.lighten1,
           warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
+          error: colors.red.lighten3,
           success: colors.green.accent3
         }
       }
