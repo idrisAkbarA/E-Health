@@ -22,8 +22,8 @@
             prepend-inner-icon="mdi-account-circle"
             hide-details="auto"
             color="secondary"
-            :label="loginUrl == 'login' ? 'Email' : 'Username'"
-            v-model="email"
+            label="Username"
+            v-model="username"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -71,8 +71,9 @@
 import { mapMutations } from 'vuex'
 export default {
   created() {
-    var pathArray = window.location.pathname.split('/')
-    this.loginUrl = pathArray[pathArray.length - 1]
+    console.log(this)
+    // var pathArray = window.location.pathname.split('/')
+    // this.loginUrl = pathArray[pathArray.length - 1]
   },
   methods: {
     ...mapMutations(['setUser']),
@@ -90,10 +91,45 @@ export default {
     async loginProcess() {
       // set api request url based on window url
       var data = {
-        email: this.email,
+        username: this.username,
         password: this.password,
       }
-      await this.$auth.loginWith('local', { data })
+      await this.$auth
+        .loginWith('local', { data })
+        .then(() => {
+          this.redirect(this)
+          console.log('logged in')
+        })
+        .catch((error) => {
+          console.log('auth', error)
+          this.isLoading = false
+          this.error = 'Maaf terjadi kesalahan, coba lagi dalam beberapa saat'
+        })
+    },
+    redirect(that) {
+      switch (that.$auth.user.role) {
+        case 'Admin':
+          console.log('im an admin')
+          that.$router.replace(`/admin/${that.$auth.user.id}/dashboard`)
+          break
+        case 'Apoteker':
+          that.$router.replace(`/apoteker/${that.$auth.user.id}/dashboard`)
+          break
+        case 'Dokter':
+          that.$router.replace(`/dokter/${that.$auth.user.id}/dashboard`)
+          break
+        case 'Kepala Instansi':
+          that.$router.replace(
+            `/kepala-instansi/${that.$auth.user.id}/dashboard`
+          )
+          break
+        case 'Pelayanan':
+          that.$router.replace(`/pelayanan/${that.$auth.user.id}/dashboard`)
+          break
+
+        default:
+          break
+      }
     },
     getUser() {
       this.$axios.get('/api/user').then((response) => {

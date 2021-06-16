@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
     <v-navigation-drawer
-      :src="'/images/drawer-bg.jpg'"
+      :src="'/drawer-bg.jpg'"
       v-model="drawer"
       app
       clipped
@@ -32,7 +32,7 @@
           tile
         >
           <v-card-text>
-            Selamat datang {{ $route.params.petugas }}
+            Selamat datang {{ $route.params.userID }}
             <br />
             <v-btn
               class="mt-2"
@@ -48,64 +48,8 @@
         </v-card>
         <v-list dense>
           <v-list-item
-            :to="`/admin/${$route.params.petugas}/dashboard`"
-            router
-            exact
-          >
-            <v-list-item-action>
-              <v-icon>mdi-view-dashboard</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>Dashboard</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item
-            :to="`/admin/${$route.params.petugas}/ganti-password`"
-            router
-            exact
-          >
-            <v-list-item-action>
-              <v-icon>mdi-lock</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>Ganti Password</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item
-            :to="`/admin/${$route.params.petugas}/kelola-petugas`"
-            router
-            exact
-          >
-            <v-list-item-action>
-              <v-icon>mdi-account-multiple</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>Petugas</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-subheader class="ml-2">PMB</v-subheader>
-          <v-list-item
-            v-for="(page, i) in PMBpages"
+            v-for="(page, i) in pages"
             :key="'PMB-' + i"
-            :to="page.to"
-            :two-line="page.subtitle ? true : false"
-            router
-            exact
-          >
-            <v-list-item-action>
-              <v-icon>{{ page.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>{{ page.title }}</v-list-item-title>
-              <v-list-item-subtitle v-if="page.subtitle">{{
-              page.subtitle
-            }}</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-          <v-subheader class="ml-2">CAT</v-subheader>
-          <v-list-item
-            v-for="(page, i) in CATpages"
-            :key="'CAT-' + i"
             :to="page.to"
             :two-line="page.subtitle ? true : false"
             router
@@ -137,8 +81,8 @@
             v-if="!$vuetify.breakpoint.mobile"
             class="font-weight-bold ml-4"
           ></span>
-          <!-- Change this automaticly later usig VUEX -->
-          <span>{{ $route.name }}</span>
+
+          <span>{{ title }}</span>
         </v-toolbar-title>
       </div>
       <v-slide-y-transition>
@@ -236,7 +180,7 @@
         name="slide-fade"
         mode="out-in"
       >
-        <router-view></router-view>
+        <nuxt />
       </transition>
 
       <!-- <v-fade-transition mode="in" hide-on-leave="true">
@@ -249,6 +193,7 @@
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
 export default {
+  middleware: ['admin'],
   methods: {
     ...mapMutations(['toggleBottomSheet', 'toggleBottomSheet2']),
     ...mapActions(['getCurrentPeriode']),
@@ -272,91 +217,38 @@ export default {
     checkRoute(name) {
       return this.$route.name == name
     },
-    logout() {
-      axios
-        .post('/api/logout-petugas')
-        .then((response) => {
-          console.log('im shoould be loggedout', response.data)
-          window.location.replace('/')
-        })
-        .catch(() => {
-          console.log("Couldn't logout")
-          window.location.replace('/')
-          // this.$router.push({ path: "/login" });
-        })
+    async logout() {
+      await this.$auth.logout()
     },
   },
   props: {
     source: String,
   },
   computed: {
-    ...mapState(['currentPeriode']),
-    nama() {
-      return this.$store.state.name
-    },
-    PMBpages() {
-      let petugas = this.$route.params.petugas
+    ...mapState({ title: 'page/title' }),
+    pages() {
+      let petugas = this.$route.params.userID
       return [
         {
-          icon: 'mdi-school',
-          title: 'Kelola Periode',
-          to: `/admin/${petugas}/kelola-periode`,
+          icon: 'mdi-view-dashboard',
+          title: 'Dashboard',
+          to: `/admin/${petugas}/dashboard`,
         },
         {
-          icon: 'mdi-trophy',
-          title: 'Kelola Jalur Cumlaude',
-          to: `/admin/${petugas}/kelola-jalur-cumlaude`,
+          icon: 'mdi-lock',
+          title: 'Ubah Password',
+          to: `/admin/${petugas}/ganti-password`,
         },
         {
-          icon: 'mdi-clipboard-check-multiple',
-          title: 'Kelola Jurusan',
-          to: `/admin/${petugas}/kelola-jurusan`,
+          icon: 'mdi-bank',
+          title: 'Kelola Poly',
+          to: `/admin/${petugas}/kelola-poly`,
         },
         {
           icon: 'mdi-account-details',
-          title: 'Akun Pendaftar',
-          to: `/admin/${petugas}/pendaftar`,
+          title: 'Kelola Petugas',
+          to: `/admin/${petugas}/kelola-petugas`,
         },
-        {
-          icon: 'mdi-book-multiple',
-          title: 'Pendaftaran',
-          to: `/admin/${petugas}/kelola-pendaftaran`,
-        },
-        {
-          icon: 'mdi-book-plus',
-          title: 'Temu Ramah',
-          to: `/admin/${petugas}/kelola-temu-ramah`,
-        },
-      ]
-    },
-    CATpages() {
-      let petugas = this.$route.params.petugas
-      return [
-        {
-          icon: 'mdi-file-document',
-          title: 'Kelola Soal',
-          to: `/admin/${petugas}/kelola-soal`,
-        },
-        {
-          icon: 'mdi-file-compare',
-          title: 'Kelola Kategori',
-          to: `/admin/${petugas}/kelola-kategori`,
-        },
-        {
-          icon: 'mdi-file-document',
-          title: 'Laporan Ujian',
-          to: `/admin/${petugas}/laporan-ujian`,
-        },
-        // {
-        //   icon: "mdi-tools",
-        //   title: "Setting Ujian",
-        //   to: `/admin/${petugas}/setting-ujian`,
-        // },
-        // {
-        //   icon: "mdi-file-document",
-        //   title: "Hasil Ujian",
-        //   to: `/admin/${petugas}/kelola-kategori`
-        // }
       ]
     },
   },
@@ -384,8 +276,6 @@ export default {
   mounted() {
     console.log(this.$route)
     console.log(this.$route.matched)
-    this.getCurrentPeriode()
-    // this.$vuetify.theme.dark = true;
   },
 }
 </script>
@@ -445,7 +335,7 @@ export default {
   background: #ff8481;
 }
 .bg-pattern {
-  background: url('/images/pattern1.svg') repeat;
+  background: url('/pattern.svg') repeat;
   background-size: 400px;
 }
 a {

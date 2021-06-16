@@ -1,5 +1,9 @@
 <template>
-  <v-container fill-height class="pa-0" fluid>
+  <v-container
+    fill-height
+    class="pa-0"
+    fluid
+  >
     <div class="wrapper">
       <div class="left">
         <div>Selamat Datang di aplikasi</div>
@@ -9,7 +13,7 @@
         <div>Selamat bertugas!</div>
       </div>
       <div class="right px-10">
-        <login></login>
+        <login class="padding"></login>
       </div>
     </div>
   </v-container>
@@ -20,6 +24,7 @@ import Login from '~/components/Login.vue'
 import VuetifyLogo from '~/components/VuetifyLogo.vue'
 
 export default {
+  middleware: ['auth-redirect'],
   components: {
     Login,
     VuetifyLogo,
@@ -57,5 +62,25 @@ export default {
   grid-template-columns: 2fr 1fr;
   height: 100%;
   width: 100%;
+}
+@media screen and (max-width: 1000px) {
+  .padding {
+    padding-left: 160px !important;
+    padding-right: 160px !important;
+  }
+  .wrapper {
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr 3fr;
+  }
+}
+@media screen and (max-width: 600px) {
+  .padding {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
+  .wrapper {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 3fr;
+  }
 }
 </style>
