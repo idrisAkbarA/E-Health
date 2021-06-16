@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\RekamMedis;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -13,13 +14,23 @@ class AntrianPoli implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
+     * Data details
+     *
+     * @var \App\Models\RekamMedis
+     * @var \App\Models\Pasien
+     */
+    public $rekamMedis;
+    public $pasien;
+
+    /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(RekamMedis $rekamMedis)
     {
-        //
+        $this->rekamMedis = $rekamMedis;
+        $this->pasien = $rekamMedis->pasien;
     }
 
     /**
@@ -29,7 +40,6 @@ class AntrianPoli implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        $channelName = 'antrian-poli';
-        return new Channel($channelName);
+        return new Channel('antrian-poli');
     }
 }

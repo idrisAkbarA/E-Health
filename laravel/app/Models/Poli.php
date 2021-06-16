@@ -10,4 +10,9 @@ class Poli extends Model
     use HasFactory;
 
     protected $table = 'poli';
+
+    public function dokter()
+    {
+        return $this->hasMany('App\Models\Dokter');
+    }
 }

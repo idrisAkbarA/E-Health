@@ -26,7 +26,6 @@ export default {
   },
   mounted() {
     this.$echo.channel('antrian-poli').listen('AntrianPoli', (e) => {
-      console.log('Foo')
       console.log(e)
     })
   },
