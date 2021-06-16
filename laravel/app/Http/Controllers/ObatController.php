@@ -14,17 +14,13 @@ class ObatController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $obat = Obat::all();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $this->reply = [
+            'status' => true,
+            'data' => $obat
+        ];
+        return response()->json($this->reply, 200);
     }
 
     /**
@@ -35,7 +31,14 @@ class ObatController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $obat = Obat::create($request->all());
+
+        $this->reply = [
+            'status' => true,
+            'message' => 'Obat Created!',
+            'data' => $obat
+        ];
+        return response()->json($this->reply, 201);
     }
 
     /**
@@ -46,18 +49,11 @@ class ObatController extends Controller
      */
     public function show(Obat $obat)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Obat  $obat
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Obat $obat)
-    {
-        //
+        $this->reply = [
+            'status' => true,
+            'data' => $obat
+        ];
+        return response()->json($this->reply, 200);
     }
 
     /**
@@ -69,7 +65,14 @@ class ObatController extends Controller
      */
     public function update(Request $request, Obat $obat)
     {
-        //
+        $obat->update($request->all());
+
+        $this->reply = [
+            'status' => true,
+            'message' => 'Obat Updated!',
+            'data' => $obat
+        ];
+        return response()->json($this->reply, 200);
     }
 
     /**
@@ -80,6 +83,12 @@ class ObatController extends Controller
      */
     public function destroy(Obat $obat)
     {
-        //
+        $obat->delete();
+
+        $this->reply = [
+            'status' => true,
+            'message' => 'Obat Updated!'
+        ];
+        return response()->json($this->reply, 200);
     }
 }

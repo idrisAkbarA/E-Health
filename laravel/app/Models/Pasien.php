@@ -10,4 +10,10 @@ class Pasien extends Model
     use HasFactory;
 
     protected $table = 'pasien';
+
+    // Relations
+    public function rekam_medis()
+    {
+        return $this->hasMany('App\Models\RekamMedis');
+    }
 }

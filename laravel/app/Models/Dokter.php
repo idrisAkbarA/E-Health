@@ -10,4 +10,15 @@ class Dokter extends Model
     use HasFactory;
 
     protected $table = 'dokter';
+
+    // Relations
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
+    public function poli()
+    {
+        return $this->belongsTo('App\Models\Poli');
+    }
 }

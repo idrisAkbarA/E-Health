@@ -10,4 +10,9 @@ class RekamMedis extends Model
     use HasFactory;
 
     protected $table = 'rekam_medis';
+
+    public function pasien()
+    {
+        return $this->belongsTo('App\Models\Pasien');
+    }
 }

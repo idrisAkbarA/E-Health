@@ -1,6 +1,5 @@
 <?php
 
-use App\Events\AntrianPoli;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,38 +14,48 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('broadcast', function () {
-    broadcast(new AntrianPoli());
-});
 
 // Auth Routes
 Route::prefix('auth')->name('auth.')->group(function () {
-    Route::post('/login', 'AuthController@login')->name('login');
-    Route::post('/logout', 'AuthController@logout')->name('logout');
-    // Route::post('/change-password', 'AuthController@changePassword')->name('change-password');
+  Route::post('/login', 'AuthController@login')->name('login');
+  Route::post('/logout', 'AuthController@logout')->name('logout');
+  // Route::post('/change-password', 'AuthController@changePassword')->name('change-password');
 
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    })->middleware('auth:sanctum');
+  Route::get('/user', function (Request $request) {
+    return $request->user();
+  })->middleware('auth:sanctum');
 });
 
 // User Routes
 Route::prefix('user')->name('user.')->group(function () {
-    Route::get('/', 'UserController@index')->name('index');
-    Route::get('/{user}', 'UserController@show')->name('show');
-    Route::post('/', 'UserController@store')->name('store');
-    Route::put('/{user}', 'UserController@update')->name('update');
-    Route::delete('/{user}', 'UserController@destroy')->name('destroy');
+  Route::get('/', 'UserController@index')->name('index');
+  Route::get('/{user}', 'UserController@show')->name('show');
+  Route::post('/', 'UserController@store')->name('store');
+  Route::put('/{user}', 'UserController@update')->name('update');
+  Route::delete('/{user}', 'UserController@destroy')->name('destroy');
 });
 
 // Dokter Routes
 Route::prefix('dokter')->name('dokter.')->group(function () {
-    Route::get('/', 'DokterController@index')->name('index');
-    Route::get('/{dokter}', 'DokterController@show')->name('show');
+  Route::get('/', 'DokterController@index')->name('index');
+  Route::get('/{dokter}', 'DokterController@show')->name('show');
 });
 
 // Rekam Medis Routes
-Route::prefix('rekam-medis')->name('rekam-medis')->group(function () {
-    Route::get('/{pasien}', 'RekamMedisController@index')->name('index');
-    Route::get('/{rekamMedis}', 'RekamMedisController@show')->name('show');
+Route::prefix('rekam-medis')->name('rekam-medis.')->group(function () {
+  Route::post('/', 'RekamMedisController@store')->name('store');
+  Route::get('/antrian', 'RekamMedisController@antrian')->name('antrian');
+  Route::get('/{rekamMedis}', 'RekamMedisController@show')->name('show');
+  Route::put('/{rekamMedis}', 'RekamMedisController@update')->name('update');
+  // Route::get('/{pasien}', 'RekamMedisController@index')->name('index');
+});
+
+
+// Obat Routes
+Route::prefix('obat')->name('obat.')->group(function () {
+  Route::get('/', 'ObatController@index')->name('index');
+  Route::get('/{obat}', 'ObatController@show')->name('show');
+  Route::post('/', 'ObatController@store')->name('store');
+  Route::put('/{obat}', 'ObatController@update')->name('update');
+  Route::delete('/{obat}', 'ObatController@destroy')->name('destroy');
 });

@@ -31,7 +31,18 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = User::create($request->all());
+
+        if ($user->role == 'Dokter') {
+            $user->dokter()->create($request->dokter);
+        }
+
+        $this->reply = [
+            'status' => true,
+            'message' => 'User Created!',
+            'data' => $user
+        ];
+        return response()->json($this->reply, 201);
     }
 
     /**
