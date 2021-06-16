@@ -6,6 +6,7 @@
           <v-row dense>
             <v-col>
               <h2>Login</h2>
+              Silahkan login untuk masuk ke aplikasi
             </v-col>
           </v-row>
           <v-row dense v-if="error">
@@ -62,6 +63,9 @@
         </v-container>
       </v-card-text>
     </v-card>
+    <v-card>
+      <v-btn @click="getUser()">test get user</v-btn>
+    </v-card>
   </v-container>
 </template>
 
@@ -98,6 +102,11 @@ export default {
           this.error = 'Incorrect email or password.'
           this.isLoading = false
         })
+    },
+    getUser() {
+      this.$axios.get('/api/user').then((response) => {
+        console.log(response)
+      })
     },
     getCSRF() {
       // return true if retrieved, false if didnt
