@@ -32,18 +32,6 @@
         {{ props.index + 1 }}
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn
-          icon
-          x-small
-          class="mr-2"
-          title="Detail"
-          @click="
-            dialogShow = true
-            form = item
-          "
-        >
-          <v-icon>mdi-information</v-icon>
-        </v-btn>
         <v-btn icon x-small class="mr-2" title="Edit" @click="edit(item)">
           <v-icon>mdi-pencil</v-icon>
         </v-btn>

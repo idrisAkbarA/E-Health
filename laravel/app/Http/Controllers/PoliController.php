@@ -69,7 +69,7 @@ class PoliController extends Controller
 
         $this->reply = [
             'status' => true,
-            'message' => 'Obat Updated!',
+            'message' => 'Poli Updated!',
             'data' => $poli
         ];
         return response()->json($this->reply, 200);
