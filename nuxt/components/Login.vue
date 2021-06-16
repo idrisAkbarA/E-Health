@@ -126,6 +126,9 @@ export default {
         case 'Pelayanan':
           that.$router.replace(`/pelayanan/${that.$auth.user.id}/dashboard`)
           break
+        case 'Kasir':
+          that.$router.replace(`/kasir/${that.$auth.user.id}/dashboard`)
+          break
 
         default:
           break

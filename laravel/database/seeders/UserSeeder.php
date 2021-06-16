@@ -64,5 +64,12 @@ class UserSeeder extends Seeder
             'name' => 'Kepala Instansi',
             'role' => 'Kepala Instansi'
         ]);
+        User::create([
+            'email' => '5@asd.asd',
+            'username' => 'apoteker',
+            'password' => Hash::make('1'),
+            'name' => 'Apoteker',
+            'role' => 'Apoteker'
+        ]);
     }
 }
