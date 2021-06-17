@@ -133,6 +133,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   layout: 'admin',
   mounted() {
@@ -167,12 +168,15 @@ export default {
     }
   },
   computed: {
-    urlPoli() {
-      return this.$store.state.poli.url
-    },
+    ...mapState('poli', { urlPoli: (state) => state.url }),
   },
   watch: {
     bottomSheet(val) {
+      if (!val) {
+        this.form = {}
+      }
+    },
+    dialogDelete(val) {
       if (!val) {
         this.form = {}
       }
@@ -233,7 +237,7 @@ export default {
         })
         .then(() => {
           this.isLoading = false
-          this.gePoli()
+          this.getPoli()
         })
     },
     update(id) {
@@ -249,7 +253,6 @@ export default {
               show: true,
               message: response.data.message,
             }
-            this.getPoli()
           }
         })
         .catch((err) => {
@@ -260,7 +263,10 @@ export default {
             color: 'danger',
           }
         })
-        .then((this.isLoading = false))
+        .then(() => {
+          this.isLoading = false
+          this.getPoli()
+        })
     },
     destroy() {
       const id = this.form.id
@@ -271,7 +277,6 @@ export default {
         .then((response) => {
           if (response.data.status) {
             this.dialogDelete = false
-            this.getPoli()
             this.snackbar = {
               show: true,
               message: response.data.message,
@@ -286,7 +291,10 @@ export default {
             color: 'danger',
           }
         })
-        .then((this.isLoading = false))
+        .then(() => {
+          this.isLoading = false
+          this.getPoli()
+        })
     },
   },
 }

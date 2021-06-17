@@ -7,14 +7,14 @@
       loading-text="Loading... Please wait"
       :loading="isLoading"
       :headers="headers"
-      :items="user"
+      :items="petugas"
       :search="search"
     >
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title>Daftar Petugas</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
-          <v-tabs>
+          <v-tabs v-model="tab">
             <v-tab>Petugas</v-tab>
             <v-tab>Dokter</v-tab>
           </v-tabs>
@@ -39,6 +39,33 @@
         <v-chip outlined class="ma-2" :color="getRoleColor(item.role)">
           {{ item.role }}
         </v-chip>
+      </template>
+      <template v-slot:[`item.poli`]="{ item }">
+        <v-edit-dialog
+          :return-value.sync="item.dokter.poli"
+          @save="changePoli(item)"
+          @close="changePoli(item)"
+        >
+          {{ item.dokter.poli }}
+          <template v-slot:input>
+            <v-select
+              :items="poli"
+              label="Poli"
+              item-text="nama"
+              item-value="id"
+              v-model="item.dokter.poli_id"
+            ></v-select>
+          </template>
+        </v-edit-dialog>
+      </template>
+      <template v-slot:[`item.status`]="{ item }">
+        <v-switch
+          inset
+          :color="item.dokter.is_aktif ? 'success' : ''"
+          :label="item.dokter.is_aktif ? 'Aktif' : 'Non-Aktif'"
+          @change="swithStatus(item)"
+          v-model="item.dokter.is_aktif"
+        ></v-switch>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-btn
@@ -110,6 +137,30 @@
               >
               </v-text-field>
             </v-col>
+            <v-col cols="4" v-if="form.dokter">
+              <v-text-field
+                color="#2C3E50"
+                label="Tempat Tanggal Lahir"
+                v-model="form.dokter.tempat_tanggal_lahir"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="4" v-if="form.dokter">
+              <v-select
+                :items="['Laki-Laki', 'Perempuan']"
+                label="Jenis Kelamin"
+                v-model="form.dokter.jenis_kelamin"
+              ></v-select>
+            </v-col>
+            <v-col cols="4" v-if="form.dokter">
+              <v-select
+                :items="poli"
+                label="Poli"
+                item-text="nama"
+                item-value="id"
+                v-model="form.dokter.poli_id"
+              ></v-select>
+            </v-col>
           </v-row>
           <v-row v-else>
             <v-col cols="6">
@@ -155,7 +206,9 @@
         <v-card-actions>
           <v-btn text @click="dialogDelete = false"> Batal </v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="primary" dark @click="destroy"> Ya </v-btn>
+          <v-btn color="primary" dark @click="destroy" :loading="isLoading">
+            Ya
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -184,12 +237,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   layout: 'admin',
   mounted() {
     this.$store.commit('page/setTitle', this.title)
     this.getUsers()
-    console.log('this', this.$auth.user)
+    this.getPoli()
   },
   head() {
     return {
@@ -200,9 +254,11 @@ export default {
     return {
       title: 'Kelola Petugas',
       search: '',
+      tab: null,
       isLoading: false,
       bottomSheet: false,
       dialogDelete: false,
+      poli: [],
       user: [],
       form: {},
       snackbar: { show: false },
@@ -214,28 +270,62 @@ export default {
         { nama: 'Dokter', color: 'white' },
         { nama: 'Kepala Instansi', color: 'primary' },
       ],
-      headers: [
-        {
-          text: '#',
-          align: 'start',
-          value: 'no',
-        },
-        { text: 'Nama', value: 'name' },
-        { text: 'Username', value: 'username' },
-        { text: 'Role', value: 'role' },
-        { text: 'Actions', value: 'actions' },
-      ],
     }
   },
   computed: {
-    urlUser() {
-      return this.$store.state.user.url
+    ...mapState('user', { urlUser: (state) => state.url }),
+    ...mapState('poli', { urlPoli: (state) => state.url }),
+    petugas() {
+      return this.user.filter((item) => {
+        return this.tab ? item.role == 'Dokter' : item.role != 'Dokter'
+      })
+    },
+    headers() {
+      if (this.tab) {
+        var headers = [
+          {
+            text: '#',
+            align: 'start',
+            value: 'no',
+          },
+          { text: 'Nama', value: 'name' },
+          { text: 'Poli', value: 'poli' },
+          { text: 'Username', value: 'username' },
+          { text: 'Status', value: 'status' },
+          { text: 'Actions', value: 'actions' },
+        ]
+      } else {
+        var headers = [
+          {
+            text: '#',
+            align: 'start',
+            value: 'no',
+          },
+          { text: 'Nama', value: 'name' },
+          { text: 'Username', value: 'username' },
+          { text: 'Role', value: 'role' },
+          { text: 'Actions', value: 'actions' },
+        ]
+      }
+      return headers
     },
   },
   watch: {
     bottomSheet(val) {
       if (!val) {
         this.form = {}
+      }
+    },
+    dialogDelete(val) {
+      if (!val) {
+        this.form = {}
+      }
+    },
+    'form.role'(val) {
+      if (val == 'Dokter') {
+        this.form.dokter = {}
+      } else {
+        delete this.form.dokter
       }
     },
   },
@@ -259,6 +349,25 @@ export default {
         })
         .then((this.isLoading = false))
     },
+    getPoli() {
+      this.isLoading = true
+      this.$axios
+        .get(this.urlPoli)
+        .then((response) => {
+          if (response.data.status) {
+            this.poli = response.data.data
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+          this.snackbar = {
+            show: true,
+            message: err,
+            color: 'danger',
+          }
+        })
+        .then((this.isLoading = false))
+    },
     submit() {
       const form = this.form
       if (!form.id) {
@@ -266,6 +375,14 @@ export default {
         return
       }
       this.update(form.id)
+    },
+    swithStatus(item) {
+      this.form.dokter = { is_aktif: item.dokter.is_aktif }
+      this.update(item.id)
+    },
+    changePoli(item) {
+      this.form.dokter = { poli_id: item.dokter.poli_id }
+      this.update(item.id)
     },
     edit(form) {
       this.form = this.$_.clone(form)
@@ -282,6 +399,9 @@ export default {
               show: true,
               message: response.data.message,
             }
+            response.data.data.role == 'Dokter'
+              ? (this.tab = 1)
+              : (this.tab = 0)
           }
         })
         .catch((err) => {
@@ -294,7 +414,7 @@ export default {
         })
         .then(() => {
           this.isLoading = false
-          this.geUser()
+          this.getUsers()
         })
     },
     update(id) {
@@ -319,7 +439,6 @@ export default {
               show: true,
               message: response.data.message,
             }
-            this.getUser()
           }
         })
         .catch((err) => {
@@ -330,7 +449,10 @@ export default {
             color: 'danger',
           }
         })
-        .then((this.isLoading = false))
+        .then(() => {
+          this.isLoading = false
+          this.getUsers()
+        })
     },
     destroy() {
       const id = this.form.id
@@ -341,7 +463,6 @@ export default {
         .then((response) => {
           if (response.data.status) {
             this.dialogDelete = false
-            this.getUser()
             this.snackbar = {
               show: true,
               message: response.data.message,
@@ -356,7 +477,10 @@ export default {
             color: 'danger',
           }
         })
-        .then((this.isLoading = false))
+        .then(() => {
+          this.isLoading = false
+          this.getUsers()
+        })
     },
     getRoleColor(role) {
       var color = ''

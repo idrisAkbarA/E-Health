@@ -22,6 +22,7 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -43,10 +44,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+        // Override on delete
+        self::deleting(function (User $model) {
+            $model->dokter()->delete();
+        });
+    }
+
     // Setters
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
+    }
+
+    public function setUsernameAttribute($value)
+    {
+        $this->attributes['username'] = strtolower($value);
     }
 
     // Relations
