@@ -107,7 +107,10 @@
       >
 
       </v-select>
-      <v-btn color="primary">Simpan</v-btn>
+      <v-btn
+        :disabled="!valid"
+        color="primary"
+      >Simpan</v-btn>
       <v-btn
         text
         color="secondary"
