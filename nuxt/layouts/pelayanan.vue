@@ -194,7 +194,11 @@
 import { mapActions, mapMutations, mapState } from 'vuex'
 export default {
   middleware: ['pelayanan'],
+  created() {
+    this.getPoli()
+  },
   methods: {
+    ...mapActions({ getPoli: 'poli/getPoli' }),
     toggleDrawer(bool) {
       if (!bool) {
         this.miniVariant = !this.miniVariant

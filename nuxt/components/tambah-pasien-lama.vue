@@ -16,12 +16,12 @@
       ></v-autocomplete>
 
       <div class="mt-2 mb-2"></div>
-      <h4>Poly</h4>
-      <p>Isi tujuan poly pasien</p>
+      <h4>Poli</h4>
+      <p>Isi tujuan Poli pasien</p>
       <v-select
         :rules="ruleRequired"
         filled
-        label="Poly"
+        label="Poli"
       >
 
       </v-select>
