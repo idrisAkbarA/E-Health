@@ -16,12 +16,12 @@ class PoliSeeder extends Seeder
     {
         Poli::create([
             'nama' => 'Anak',
-            'keterangan' => 'Poli Anak'
+            'keterangan' => 'Poli Spesialis Anak adalah layanan pemeriksaan dan pengobatan terhadap bayi dan anak.'
         ]);
 
         Poli::create([
             'nama' => 'Jiwa',
-            'keterangan' => 'Poli Jiwa'
+            'keterangan' => 'Poli Spesialis Anak adalah layanan pemeriksaan dan pengobatan kondisi kejiwaan.'
         ]);
     }
 }

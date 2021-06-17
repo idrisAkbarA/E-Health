@@ -10,6 +10,7 @@ class Poli extends Model
     use HasFactory;
 
     protected $table = 'poli';
+    protected $guarded = ['id'];
 
     public function dokter()
     {

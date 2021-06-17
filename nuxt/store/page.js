@@ -1,9 +1,10 @@
 export const state = () => ({
-    title: null
+  title: null,
+  isLoading: false,
 })
 
 export const mutations = {
-    setTitle(state, newTitle) {
-        state.title = newTitle
-    }
+  setTitle(state, newTitle) {
+    state.title = newTitle
+  }
 }

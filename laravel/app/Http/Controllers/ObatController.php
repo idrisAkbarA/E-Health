@@ -87,7 +87,7 @@ class ObatController extends Controller
 
         $this->reply = [
             'status' => true,
-            'message' => 'Obat Updated!'
+            'message' => 'Obat Deleted!'
         ];
         return response()->json($this->reply, 200);
     }

@@ -35,6 +35,15 @@ Route::prefix('user')->name('user.')->group(function () {
   Route::delete('/{user}', 'UserController@destroy')->name('destroy');
 });
 
+// Poli Routes
+Route::prefix('poli')->name('poli.')->group(function () {
+  Route::get('/', 'PoliController@index')->name('index');
+  Route::get('/{poli}', 'PoliController@show')->name('show');
+  Route::post('/', 'PoliController@store')->name('store');
+  Route::put('/{poli}', 'PoliController@update')->name('update');
+  Route::delete('/{poli}', 'PoliController@destroy')->name('destroy');
+});
+
 // Dokter Routes
 Route::prefix('dokter')->name('dokter.')->group(function () {
   Route::get('/', 'DokterController@index')->name('index');

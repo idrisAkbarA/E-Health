@@ -14,17 +14,13 @@ class PoliController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $poli = Poli::all();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $this->reply = [
+            'status' => true,
+            'data' => $poli
+        ];
+        return response()->json($this->reply, 200);
     }
 
     /**
@@ -35,7 +31,14 @@ class PoliController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $poli = Poli::create($request->all());
+
+        $this->reply = [
+            'status' => true,
+            'message' => 'Poli Created!',
+            'data' => $poli
+        ];
+        return response()->json($this->reply, 201);
     }
 
     /**
@@ -46,18 +49,11 @@ class PoliController extends Controller
      */
     public function show(Poli $poli)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Poli  $poli
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Poli $poli)
-    {
-        //
+        $this->reply = [
+            'status' => true,
+            'data' => $poli
+        ];
+        return response()->json($this->reply, 200);
     }
 
     /**
@@ -69,7 +65,14 @@ class PoliController extends Controller
      */
     public function update(Request $request, Poli $poli)
     {
-        //
+        $poli->update($request->all());
+
+        $this->reply = [
+            'status' => true,
+            'message' => 'Poli Updated!',
+            'data' => $poli
+        ];
+        return response()->json($this->reply, 200);
     }
 
     /**
@@ -80,6 +83,12 @@ class PoliController extends Controller
      */
     public function destroy(Poli $poli)
     {
-        //
+        $poli->delete();
+
+        $this->reply = [
+            'status' => true,
+            'message' => 'Poli Deleted!'
+        ];
+        return response()->json($this->reply, 200);
     }
 }
