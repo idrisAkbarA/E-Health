@@ -14,6 +14,10 @@
         <v-toolbar flat>
           <v-toolbar-title>Daftar Petugas</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
+          <v-tabs>
+            <v-tab>Petugas</v-tab>
+            <v-tab>Dokter</v-tab>
+          </v-tabs>
           <v-spacer></v-spacer>
           <v-btn color="primary" dark class="mb-2" @click="bottomSheet = true">
             Tambah Petugas
@@ -32,19 +36,26 @@
         {{ props.index + 1 }}
       </template>
       <template v-slot:[`item.role`]="{ item }">
-        <v-chip outlined class="ma-2" :color="roles[item.role]">
+        <v-chip outlined class="ma-2" :color="getRoleColor(item.role)">
           {{ item.role }}
         </v-chip>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn icon x-small class="mr-2" title="Edit" @click="edit(item)">
-          <v-icon>mdi-pencil</v-icon>
+        <v-btn
+          icon
+          x-small
+          class="mr-2"
+          title="Ubah Password"
+          @click="edit(item)"
+        >
+          <v-icon>mdi-form-textbox-password</v-icon>
         </v-btn>
         <v-btn
           icon
           x-small
           class="mr-2"
           title="Hapus"
+          :disabled="$auth.user.id == item.id"
           @click="
             dialogDelete = true
             form = item
@@ -57,7 +68,7 @@
 
     <!-- Bottom Sheet -->
     <v-bottom-sheet v-model="bottomSheet" scrollable inset>
-      <v-card height="200px">
+      <v-card height="250px">
         <v-card-title>
           <span>Kelola Petugas</span>
           <v-spacer></v-spacer>
@@ -67,21 +78,56 @@
           >
         </v-card-title>
         <v-card-text>
-          <v-row align="center">
+          <v-row align="center" v-if="!form.id">
+            <v-col cols="6">
+              <v-text-field color="#2C3E50" label="Nama" v-model="form.name">
+              </v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-select
+                :items="roles"
+                label="Role"
+                item-text="nama"
+                item-value="nama"
+                v-model="form.role"
+              ></v-select>
+            </v-col>
             <v-col cols="6">
               <v-text-field
                 color="#2C3E50"
-                label="Nama Poli"
-                hint="*Contoh : Anak, Jiwa, Jantung"
-                v-model="form.nama"
+                label="Username"
+                v-model="form.username"
               >
               </v-text-field>
             </v-col>
             <v-col cols="6">
               <v-text-field
                 color="#2C3E50"
-                label="Keterangan"
-                v-model="form.keterangan"
+                label="Password"
+                type="password"
+                hint="Password akan digunakan untuk login"
+                v-model="form.password"
+              >
+              </v-text-field>
+            </v-col>
+          </v-row>
+          <v-row v-else>
+            <v-col cols="6">
+              <v-text-field
+                type="password"
+                color="#2C3E50"
+                label="Password Baru"
+                v-model="form.password"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                type="password"
+                color="#2C3E50"
+                label="Konfirmasi Password"
+                hint="Ulangi password baru"
+                v-model="form.password2"
               >
               </v-text-field>
             </v-col>
@@ -142,7 +188,8 @@ export default {
   layout: 'admin',
   mounted() {
     this.$store.commit('page/setTitle', this.title)
-    this.getUser()
+    this.getUsers()
+    console.log('this', this.$auth.user)
   },
   head() {
     return {
@@ -159,14 +206,14 @@ export default {
       user: [],
       form: {},
       snackbar: { show: false },
-      roles: {
-        Admin: 'info',
-        Pelayanan: 'purple',
-        Apoteker: 'warning',
-        Kasir: 'success',
-        Dokter: 'white',
-        'Kepala Instansi': 'primary',
-      },
+      roles: [
+        { nama: 'Admin', color: 'info' },
+        { nama: 'Pelayanan', color: 'purple' },
+        { nama: 'Apoteker', color: 'warning' },
+        { nama: 'Kasir', color: 'success' },
+        { nama: 'Dokter', color: 'white' },
+        { nama: 'Kepala Instansi', color: 'primary' },
+      ],
       headers: [
         {
           text: '#',
@@ -193,7 +240,7 @@ export default {
     },
   },
   methods: {
-    getUser() {
+    getUsers() {
       this.isLoading = true
       this.$axios
         .get(this.urlUser)
@@ -251,10 +298,19 @@ export default {
         })
     },
     update(id) {
+      const form = this.form
+      if (form.password != form.password2) {
+        this.snackbar = {
+          show: true,
+          message: 'Konfirmasi Password tidak sesuai',
+          color: 'red',
+        }
+        return
+      }
       const urlUser = `${this.urlUser}/${id}`
       this.isLoading = true
       this.$axios
-        .put(urlUser, this.form)
+        .put(urlUser, form)
         .then((response) => {
           if (response.data.status) {
             this.bottomSheet = false
@@ -301,6 +357,15 @@ export default {
           }
         })
         .then((this.isLoading = false))
+    },
+    getRoleColor(role) {
+      var color = ''
+      this.roles.forEach((element) => {
+        if (element.nama == role) {
+          color = element.color
+        }
+      })
+      return color
     },
   },
 }
