@@ -2,8 +2,12 @@
   <v-container>
     <h4>Biodata</h4>
     <p>Isi biodata pasien</p>
-    <v-form id="form">
+    <v-form
+      ref="form"
+      v-model="valid"
+    >
       <v-text-field
+        :rules="ruleRequired"
         dense
         filled
         color="secondary"
@@ -11,6 +15,7 @@
         prepend-inner-icon="mdi-account"
       ></v-text-field>
       <v-text-field
+        :rules="ruleRequired"
         dense
         filled
         color="secondary"
@@ -18,6 +23,7 @@
         prepend-inner-icon="mdi-card-account-details"
       ></v-text-field>
       <v-select
+        :rules="ruleRequired"
         color="secondary"
         filled
         label="Jenis Kelamin"
@@ -25,6 +31,7 @@
       >
       </v-select>
       <v-text-field
+        :rules="ruleRequired"
         dense
         filled
         color="secondary"
@@ -40,6 +47,7 @@
       >
         <template v-slot:activator="{ on, attrs }">
           <v-text-field
+            :rules="ruleRequired"
             dense
             filled
             v-model="date"
@@ -76,6 +84,7 @@
         </v-date-picker>
       </v-dialog>
       <v-text-field
+        :rules="ruleRequired"
         dense
         filled
         color="secondary"
@@ -104,8 +113,10 @@
 export default {
   data() {
     return {
+      ruleRequired: [(v) => !!v || 'Field ini wajib diisi!'],
       modal: false,
       date: null,
+      valid: false,
     }
   },
 }

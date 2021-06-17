@@ -2,8 +2,12 @@
   <v-container>
     <h4>Pilih Pasien</h4>
     <p>Pilih pasien dengan mencari di field berikut</p>
-    <v-form id="form">
+    <v-form
+      ref="form"
+      v-model="valid"
+    >
       <v-autocomplete
+        :rules="ruleRequired"
         dense
         filled
         color="secondary"
@@ -15,12 +19,16 @@
       <h4>Poly</h4>
       <p>Isi tujuan poly pasien</p>
       <v-select
+        :rules="ruleRequired"
         filled
         label="Poly"
       >
 
       </v-select>
-      <v-btn color="primary">Simpan</v-btn>
+      <v-btn
+        :disabled="!valid"
+        color="primary"
+      >Simpan</v-btn>
       <v-btn
         text
         color="secondary"
@@ -33,8 +41,10 @@
 export default {
   data() {
     return {
+      ruleRequired: [(v) => !!v || 'Field ini wajib diisi!'],
       modal: false,
       date: null,
+      valid: false,
     }
   },
 }
