@@ -195,8 +195,6 @@ import { mapActions, mapMutations, mapState } from 'vuex'
 export default {
   middleware: ['admin'],
   methods: {
-    ...mapMutations(['toggleBottomSheet', 'toggleBottomSheet2']),
-    ...mapActions(['getCurrentPeriode']),
     setBottomSheetToTrue2() {
       this.toggleBottomSheet2(true)
     },
