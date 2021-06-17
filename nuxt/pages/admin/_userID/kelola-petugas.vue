@@ -212,27 +212,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
-    <!-- Snackbar -->
-    <v-snackbar
-      v-model="snackbar.show"
-      timeout="2000"
-      :color="snackbar.color ? snackbar.color : 'success'"
-      outlined
-    >
-      {{ snackbar.message }}
-
-      <template v-slot:action="{ attrs }">
-        <v-btn
-          :color="snackbar.color ? snackbar.color : 'success'"
-          text
-          v-bind="attrs"
-          @click="snackbar.show = false"
-        >
-          Close
-        </v-btn>
-      </template>
-    </v-snackbar>
   </v-container>
 </template>
 
@@ -261,7 +240,6 @@ export default {
       poli: [],
       user: [],
       form: {},
-      snackbar: { show: false },
       roles: [
         { nama: 'Admin', color: 'info' },
         { nama: 'Pelayanan', color: 'purple' },
@@ -341,11 +319,7 @@ export default {
         })
         .catch((err) => {
           console.error(err)
-          this.snackbar = {
-            show: true,
-            message: err,
-            color: 'danger',
-          }
+          this.$snackbar('danger', err, true)
         })
         .then((this.isLoading = false))
     },
@@ -360,11 +334,7 @@ export default {
         })
         .catch((err) => {
           console.error(err)
-          this.snackbar = {
-            show: true,
-            message: err,
-            color: 'danger',
-          }
+          this.$snackbar('danger', err, true)
         })
         .then((this.isLoading = false))
     },
@@ -395,10 +365,7 @@ export default {
         .then((response) => {
           if (response.data.status) {
             this.bottomSheet = false
-            this.snackbar = {
-              show: true,
-              message: response.data.message,
-            }
+            this.$snackbar('success', response.data.message, true)
             response.data.data.role == 'Dokter'
               ? (this.tab = 1)
               : (this.tab = 0)
@@ -406,11 +373,7 @@ export default {
         })
         .catch((err) => {
           console.error(err)
-          this.snackbar = {
-            show: true,
-            message: err,
-            color: 'danger',
-          }
+          this.$snackbar('danger', err, true)
         })
         .then(() => {
           this.isLoading = false
@@ -420,11 +383,7 @@ export default {
     update(id) {
       const form = this.form
       if (form.password != form.password2) {
-        this.snackbar = {
-          show: true,
-          message: 'Konfirmasi Password tidak sesuai',
-          color: 'red',
-        }
+        this.$snackbar('danger', 'Konfirmasi password harus sama', true)
         return
       }
       const urlUser = `${this.urlUser}/${id}`
@@ -435,19 +394,12 @@ export default {
           if (response.data.status) {
             this.bottomSheet = false
             this.form = {}
-            this.snackbar = {
-              show: true,
-              message: response.data.message,
-            }
+            this.$snackbar('success', response.data.message, true)
           }
         })
         .catch((err) => {
           console.error(err)
-          this.snackbar = {
-            show: true,
-            message: err,
-            color: 'danger',
-          }
+          this.$snackbar('danger', err, true)
         })
         .then(() => {
           this.isLoading = false
@@ -463,19 +415,12 @@ export default {
         .then((response) => {
           if (response.data.status) {
             this.dialogDelete = false
-            this.snackbar = {
-              show: true,
-              message: response.data.message,
-            }
+            this.$snackbar('success', response.data.message, true)
           }
         })
         .catch((err) => {
           console.error(err)
-          this.snackbar = {
-            show: true,
-            message: err,
-            color: 'danger',
-          }
+          this.$snackbar('danger', err, true)
         })
         .then(() => {
           this.isLoading = false

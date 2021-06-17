@@ -1,6 +1,6 @@
 export const state = () => ({
   url: '/api/user',
-  data: []
+  data: null
 })
 
 export const mutations = {
