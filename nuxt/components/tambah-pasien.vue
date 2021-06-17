@@ -110,6 +110,7 @@
       <h4>Poli</h4>
       <p>Isi tujuan Poli pasien</p>
       <v-select
+        :rules="ruleRequired"
         filled
         label="Poli"
         color="secondary"
@@ -127,6 +128,7 @@
         @click="store()"
       >Simpan</v-btn>
       <v-btn
+        @click="resetDataNValidation()"
         text
         color="secondary"
       >Batal</v-btn>
@@ -188,6 +190,10 @@ export default {
       this.selectedPoli = null
       this.valid = true
     },
+    resetDataNValidation() {
+      this.$refs.form.reset()
+      this.$refs.form.resetValidation()
+    },
     store() {
       this.isLoading = true
       var data = {
@@ -204,7 +210,8 @@ export default {
         .post(this.pasienURL, data)
         .then((response) => {
           console.log(response)
-          this.resetData()
+          this.resetDataNValidation()
+          // this.resetData()
           this.isLoading = false
           this.$snackbar('success', response.data.message, true)
         })

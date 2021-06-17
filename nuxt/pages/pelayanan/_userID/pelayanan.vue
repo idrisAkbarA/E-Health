@@ -33,7 +33,7 @@
                     </v-list-item>
                   </v-list>
                 </v-expansion-panel-header>
-                <v-expansion-panel-content class="grey darken-3">
+                <v-expansion-panel-content class="blue-grey darken-4">
                   <tambah-pasien></tambah-pasien>
                 </v-expansion-panel-content>
               </v-expansion-panel>
@@ -55,7 +55,7 @@
                     </v-list-item>
                   </v-list>
                 </v-expansion-panel-header>
-                <v-expansion-panel-content class="grey darken-3">
+                <v-expansion-panel-content class="blue-grey darken-4">
                   <tambah-pasien-lama></tambah-pasien-lama>
                 </v-expansion-panel-content>
               </v-expansion-panel>

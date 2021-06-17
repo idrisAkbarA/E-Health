@@ -76,4 +76,5 @@ Route::prefix('pasien')->name('pasien.')->group(function () {
   Route::post('/', 'PasienController@store')->name('store');
   Route::put('/{pasien}', 'PasienController@update')->name('update');
   Route::delete('/{pasien}', 'PasienController@destroy')->name('destroy');
+  Route::get('/live-search', 'PasienController@liveSearch')->name('live-search');
 });
