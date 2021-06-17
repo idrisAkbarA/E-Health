@@ -65,7 +65,18 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $user->update($request->all());
+
+        if ($user->role == 'Dokter') {
+            $user->dokter()->update($request->dokter);
+        }
+
+        $this->reply = [
+            'status' => true,
+            'message' => 'User Updated!',
+            'data' => $user
+        ];
+        return response()->json($this->reply, 200);
     }
 
     /**
