@@ -28,6 +28,7 @@ export default {
     { src: './plugins/vue-window-size.js', mode: 'client' },
     { src: './plugins/vuescroll.js', mode: 'client' },
     { src: './plugins/lodash.js', mode: 'client' },
+    { src: './plugins/snackbar.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

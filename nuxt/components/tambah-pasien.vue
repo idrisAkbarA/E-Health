@@ -93,6 +93,15 @@
         dense
         filled
         color="secondary"
+        label="Alamat"
+        v-model="alamat"
+        prepend-inner-icon="mdi-map-marker"
+      ></v-text-field>
+      <v-text-field
+        :rules="ruleRequired"
+        dense
+        filled
+        color="secondary"
         label="Kontak"
         v-model="kontak"
         prepend-inner-icon="mdi-phone"
@@ -133,6 +142,8 @@ export default {
     if (!this.$store.state.poli.data) {
       this.$store.dispatch('poli/getPoli')
     }
+    // save original data value
+    console.log(this)
   },
   computed: {
     // ...mapState({ poli: 'poli/data' }),
@@ -161,6 +172,22 @@ export default {
     }
   },
   methods: {
+    // setOriginalData() {
+    //   this.$data['originalData'] = this.$data
+    // },
+    resetData() {
+      // this.$data = this.originalData
+      // this.$data['originalData'] = this.$data
+      this.nama = null
+      this.nik = null
+      this.tempatLahir = null
+      this.date = null
+      this.kontak = null
+      this.selectedJK = null
+      this.alamat = null
+      this.selectedPoli = null
+      this.valid = true
+    },
     store() {
       this.isLoading = true
       var data = {
@@ -177,7 +204,9 @@ export default {
         .post(this.pasienURL, data)
         .then((response) => {
           console.log(response)
+          this.resetData()
           this.isLoading = false
+          this.$snackbar('success', response.data.message, true)
         })
         .catch((error) => {
           console.log(error)
