@@ -139,8 +139,8 @@ export default {
     poli() {
       return this.$store.state.poli.data
     },
-    poliURL() {
-      return this.$store.state.poli.url
+    pasienURL() {
+      return this.$store.state.pasien.url
     },
   },
   data() {
@@ -174,14 +174,15 @@ export default {
         poli_id: this.selectedPoli,
       }
       this.$axios
-        .post(this.poliURL, data)
+        .post(this.pasienURL, data)
         .then((response) => {
           console.log(response)
+          this.isLoading = false
         })
         .catch((error) => {
           console.log(error)
+          this.isLoading = false
         })
-      this.isLoading = false
     },
   },
 }

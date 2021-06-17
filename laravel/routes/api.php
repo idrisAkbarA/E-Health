@@ -68,3 +68,12 @@ Route::prefix('obat')->name('obat.')->group(function () {
   Route::put('/{obat}', 'ObatController@update')->name('update');
   Route::delete('/{obat}', 'ObatController@destroy')->name('destroy');
 });
+
+// Pasien Routes
+Route::prefix('pasien')->name('pasien.')->group(function () {
+  Route::get('/', 'PasienController@index')->name('index');
+  Route::get('/{pasien}', 'PasienController@show')->name('show');
+  Route::post('/', 'PasienController@store')->name('store');
+  Route::put('/{pasien}', 'PasienController@update')->name('update');
+  Route::delete('/{pasien}', 'PasienController@destroy')->name('destroy');
+});

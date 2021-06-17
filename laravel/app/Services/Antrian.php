@@ -14,7 +14,7 @@ class Antrian
             $pasien = Pasien::create($data);
             RekamMedis::create([
                 'pasien_id' => $pasien->id,
-                'poli_id' => $data->poli_id
+                'poli_id' => $data['poli_id']
             ]);
         });
     }

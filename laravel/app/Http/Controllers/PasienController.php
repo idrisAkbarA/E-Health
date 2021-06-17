@@ -37,12 +37,13 @@ class PasienController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nik' => 'required|unique:pasiens',
+            'nik' => 'required|unique:pasien',
             'nama' => 'required',
             'jenis_kelamin' => 'kontak',
             'jenis_kelamin' => 'required',
             'tempat_lahir' => 'required',
             'tanggal_lahir' => 'required|date',
+            'kontak' => 'required',
             'alamat' => 'nullable',
             'poli_id' => 'nullable'
         ]);
