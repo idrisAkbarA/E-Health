@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::with('dokter')->get();
 
         $this->reply = [
             'status' => true,
@@ -87,6 +87,12 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+
+        $this->reply = [
+            'status' => true,
+            'message' => 'User Deleted!'
+        ];
+        return response()->json($this->reply, 200);
     }
 }
