@@ -187,6 +187,16 @@
         <router-view></router-view>
       </v-fade-transition>-->
     </v-main>
+    <v-snackbar
+      :value="snackbar.value"
+      absolute
+      bottom
+      :color="snackbar.color"
+      outlined
+      right
+    >
+      {{ snackbar.message}}
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -214,6 +224,14 @@ export default {
     source: String,
   },
   computed: {
+    snackbar: {
+      get: function () {
+        return this.$store.state.snackbar.data
+      },
+      set: function (v) {
+        this.$store.commit('snackbar/set', v)
+      },
+    },
     title() {
       return this.$store.state.page.title
     },
