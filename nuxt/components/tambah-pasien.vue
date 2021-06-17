@@ -27,6 +27,8 @@
         color="secondary"
         filled
         label="Jenis Kelamin"
+        :items="jk"
+        v-model="selectedJK"
         prepend-inner-icon="mdi-gender-male-female"
       >
       </v-select>
@@ -97,6 +99,11 @@
       <v-select
         filled
         label="Poli"
+        color="secondary"
+        :items="poli"
+        item-text="nama"
+        item-value="id"
+        v-model="selectedPoli"
       >
 
       </v-select>
@@ -110,13 +117,29 @@
   </v-container>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
+  mounted() {
+    // check if required data exist, request it if none
+    if (!this.$store.state.poli.data) {
+      this.$store.dispatch('poli/getPoli')
+    }
+  },
+  computed: {
+    // ...mapState({ poli: 'poli/data' }),
+    poli() {
+      return this.$store.state.poli.data
+    },
+  },
   data() {
     return {
       ruleRequired: [(v) => !!v || 'Field ini wajib diisi!'],
       modal: false,
       date: null,
       valid: false,
+      selectedPoli: null,
+      selectedJK: null,
+      jk: ['Laki-laki', 'Perempuan'],
     }
   },
 }

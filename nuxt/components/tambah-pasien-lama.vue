@@ -19,9 +19,13 @@
       <h4>Poli</h4>
       <p>Isi tujuan Poli pasien</p>
       <v-select
-        :rules="ruleRequired"
         filled
         label="Poli"
+        color="secondary"
+        :items="poli"
+        item-text="nama"
+        item-value="id"
+        v-model="selectedPoli"
       >
 
       </v-select>
@@ -39,12 +43,25 @@
 </template>
 <script>
 export default {
+  mounted() {
+    // check if required data exist, request it if none
+    if (!this.$store.state.poli.data) {
+      this.$store.dispatch('poli/getPoli')
+    }
+  },
+  computed: {
+    // ...mapState({ poli: 'poli/data' }),
+    poli() {
+      return this.$store.state.poli.data
+    },
+  },
   data() {
     return {
       ruleRequired: [(v) => !!v || 'Field ini wajib diisi!'],
       modal: false,
       date: null,
       valid: false,
+      selectedPoli: null,
     }
   },
 }
