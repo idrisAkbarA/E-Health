@@ -1,16 +1,12 @@
 <template>
-  <v-app dark>
-    <h1 v-if="error.statusCode === 404">
-      {{ pageNotFound }}
-    </h1>
+  <div class="bg-pattern">
+    <error404 v-if="error.statusCode === 404"></error404>
+    <error401 v-if="error.statusCode === 401"></error401>
     <h1 v-else>
       {{ otherError }}
       {{error.statusCode}}
     </h1>
-    <NuxtLink to="/">
-      Home page
-    </NuxtLink>
-  </v-app>
+  </div>
 </template>
 
 <script>
@@ -41,5 +37,9 @@ export default {
 <style scoped>
 h1 {
   font-size: 20px;
+}
+.bg-pattern {
+  background: url('/pattern.svg') repeat;
+  background-size: 400px;
 }
 </style>
