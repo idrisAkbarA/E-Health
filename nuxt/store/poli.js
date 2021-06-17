@@ -4,17 +4,18 @@ export const state = () => ({
 })
 
 export const mutations = {
-  getPoli() {
-    //
+  setPoli(state, data) {
+    state.data = data
   }
 }
 
 export const actions = {
-  getPoli(state) {
+  getPoli({ state, commit }) {
+    console.log('url', state.url);
     return new Promise((resolve, reject) => {
       this.$axios.get(state.url).then((response) => {
         console.log(response);
-        state.data = response.data
+        commit('setPoli', response.data.data)
         resolve(response);
       }).catch(error => {
         console.log(error);
