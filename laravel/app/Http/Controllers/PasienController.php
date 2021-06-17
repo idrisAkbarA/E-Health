@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pasien;
+use App\Services\Antrian;
 use Illuminate\Http\Request;
 
 class PasienController extends Controller
@@ -35,7 +36,24 @@ class PasienController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nik' => 'required|unique:pasiens',
+            'nama' => 'required',
+            'jenis_kelamin' => 'kontak',
+            'jenis_kelamin' => 'required',
+            'tempat_lahir' => 'required',
+            'tanggal_lahir' => 'required|date',
+            'alamat' => 'nullable',
+            'poli_id' => 'nullable'
+        ]);
+
+        if ($validated['poli_id']) {
+            (new Antrian())->storePasienAddQueue($validated);
+            return response()->json(['status' => true, 'message' => "Pasien berhasil ditambahkan!"]);
+        }
+
+        Pasien::create($validated);
+        return response()->json(['status' => true, 'message' => "Pasien berhasil ditambahkan!"]);
     }
 
     /**

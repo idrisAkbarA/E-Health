@@ -12,6 +12,7 @@
         filled
         color="secondary"
         label="Nama"
+        v-model="nama"
         prepend-inner-icon="mdi-account"
       ></v-text-field>
       <v-text-field
@@ -20,6 +21,7 @@
         filled
         color="secondary"
         label="NIK"
+        v-model="nik"
         prepend-inner-icon="mdi-card-account-details"
       ></v-text-field>
       <v-select
@@ -37,6 +39,7 @@
         dense
         filled
         color="secondary"
+        v-model="tempatLahir"
         label="Tempat Lahir"
         prepend-inner-icon="mdi-map-marker"
       ></v-text-field>
@@ -91,6 +94,7 @@
         filled
         color="secondary"
         label="Kontak"
+        v-model="kontak"
         prepend-inner-icon="mdi-phone"
       ></v-text-field>
       <div class="mt-2 mb-2"></div>
@@ -110,6 +114,8 @@
       <v-btn
         :disabled="!valid"
         color="primary"
+        :loading="isLoading"
+        @click="store()"
       >Simpan</v-btn>
       <v-btn
         text
@@ -133,6 +139,9 @@ export default {
     poli() {
       return this.$store.state.poli.data
     },
+    poliURL() {
+      return this.$store.state.poli.url
+    },
   },
   data() {
     return {
@@ -143,7 +152,37 @@ export default {
       selectedPoli: null,
       selectedJK: null,
       jk: ['Laki-laki', 'Perempuan'],
+      nama: null,
+      nik: null,
+      kontak: null,
+      tempatLahir: null,
+      alamat: null,
+      isLoading: false,
     }
+  },
+  methods: {
+    store() {
+      this.isLoading = true
+      var data = {
+        nama: this.nama,
+        nik: this.nik,
+        tempat_lahir: this.tempatLahir,
+        tanggal_lahir: this.date,
+        kontak: this.kontak,
+        jenis_kelamin: this.selectedJK,
+        alamat: this.alamat,
+        poli_id: this.selectedPoli,
+      }
+      this.$axios
+        .post(this.poliURL, data)
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      this.isLoading = false
+    },
   },
 }
 </script>

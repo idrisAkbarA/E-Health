@@ -23,7 +23,7 @@ class CreateRekamMedisTable extends Migration
             $table->text('aksi')->nullable();
             $table->integer('resep_obat_id')->nullable();
             $table->string('total_biaya')->nullable();
-            $table->boolean('status')->default(0);
+            $table->boolean('status')->nullable();
             $table->boolean('is_bayar')->default(0);
             $table->timestamps();
         });
