@@ -15,16 +15,36 @@
         color="secondary"
         label="Nama/NIK"
         :items="pasien"
-        item-text="nama"
+        item-text="search"
+        item-color="secondary"
         item-value="id"
         prepend-inner-icon="mdi-account"
-      ></v-autocomplete>
+        :search-input.sync="search"
+      >
+        <template v-slot:selection="data">
+          <!-- HTML that describe how select should render selected items -->
+          {{ data.item.nama }} - {{ data.item.nik}}
+        </template>
+        <template v-slot:item="data">
+          <v-list>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ data.item.nama }}
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ data.item.nik }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </template>
+      </v-autocomplete>
 
       <div class="mt-2 mb-2"></div>
       <h4>Poli</h4>
       <p>Isi tujuan Poli pasien</p>
       <v-select
-        :search-input.sync="search"
         filled
         label="Poli"
         color="secondary"
@@ -34,10 +54,9 @@
         :rules="ruleRequired"
         v-model="selectedPoli"
       >
-        <template v-slot:item="data">
-          <!-- HTML that describe how select should render items when the select is open -->
-          {{ data.item.nama }} - {{ data.item.id }}
-        </template>
+        <!-- <template v-slot:item="data">
+          {{ data.item.nama }} - {{ data.item.nik }}
+        </template> -->
 
       </v-select>
       <v-btn
@@ -70,6 +89,8 @@ export default {
   },
   data() {
     return {
+      pasienMerged: [],
+      itemText: ['nama', 'nik'],
       pasien: [],
       selectedPasien: null,
       search: null,
@@ -88,7 +109,12 @@ export default {
       this.$axios
         .get(urlLiveSearch, { data: value })
         .then((response) => {
-          this.pasien = response.data
+          var temp = response.data
+          temp.forEach((element) => {
+            element['search'] = element.nama + ' - ' + element.nik
+          })
+          this.pasien = temp
+          console.table(this.pasien)
         })
         .finally(() => {
           this.isLoading = false

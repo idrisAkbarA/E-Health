@@ -71,10 +71,10 @@ Route::prefix('obat')->name('obat.')->group(function () {
 
 // Pasien Routes
 Route::prefix('pasien')->name('pasien.')->group(function () {
+  Route::get('/live/search', 'PasienController@liveSearch')->name('live-search');
   Route::get('/', 'PasienController@index')->name('index');
   Route::get('/{pasien}', 'PasienController@show')->name('show');
   Route::post('/', 'PasienController@store')->name('store');
   Route::put('/{pasien}', 'PasienController@update')->name('update');
   Route::delete('/{pasien}', 'PasienController@destroy')->name('destroy');
-  Route::get('/live-search', 'PasienController@liveSearch')->name('live-search');
 });

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Pasien;
 use App\Services\Antrian;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class PasienController extends Controller
 {
@@ -103,7 +105,7 @@ class PasienController extends Controller
     }
     public function liveSearch(Request $request)
     {
-        $searchResult = Pasien::where('nama', 'like', '%' . $request->data . '%')
+        $searchResult = DB::table('pasien')->where('nama', 'like', '%' . $request->data . '%')
             ->orWhere('nik', 'like', '%' . $request->data . '%')
             ->get();
         return response()->json($searchResult);
