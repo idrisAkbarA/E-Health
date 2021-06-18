@@ -101,6 +101,7 @@ class PasienController extends Controller
     {
         //
     }
+
     public function liveSearch(Request $request)
     {
         $searchResult = Pasien::where('nama', 'like', '%' . $request->data . '%')
