@@ -110,7 +110,7 @@
     </v-dialog>
 
     <!-- Snackbar -->
-    <v-snackbar
+    <!-- <v-snackbar
       v-model="snackbar.show"
       timeout="2000"
       :color="snackbar.color ? snackbar.color : 'success'"
@@ -128,12 +128,12 @@
           Close
         </v-btn>
       </template>
-    </v-snackbar>
+    </v-snackbar> -->
   </v-container>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   layout: 'admin',
   mounted() {
@@ -154,7 +154,7 @@ export default {
       dialogDelete: false,
       poli: [],
       form: {},
-      snackbar: { show: false },
+      // snackbar: { show: false },
       headers: [
         {
           text: '#',
@@ -168,7 +168,10 @@ export default {
     }
   },
   computed: {
-    ...mapState('poli', { urlPoli: (state) => state.url }),
+    ...mapState('poli', {
+      urlPoli: (state) => state.url,
+      data: (state) => state.data,
+    }),
   },
   watch: {
     bottomSheet(val) {
@@ -183,6 +186,7 @@ export default {
     },
   },
   methods: {
+    // ...mapActions({ getPoli: 'poli/getPoli' }),
     getPoli() {
       this.isLoading = true
       this.$axios
@@ -194,11 +198,7 @@ export default {
         })
         .catch((err) => {
           console.error(err)
-          this.snackbar = {
-            show: true,
-            message: err,
-            color: 'danger',
-          }
+          this.$snackbar('danger', err, true)
         })
         .then((this.isLoading = false))
     },
@@ -221,19 +221,12 @@ export default {
         .then((response) => {
           if (response.data.status) {
             this.bottomSheet = false
-            this.snackbar = {
-              show: true,
-              message: response.data.message,
-            }
+            this.$snackbar('success', response.data.message, true)
           }
         })
         .catch((err) => {
           console.error(err)
-          this.snackbar = {
-            show: true,
-            message: err,
-            color: 'danger',
-          }
+          this.$snackbar('danger', err, true)
         })
         .then(() => {
           this.isLoading = false
@@ -249,19 +242,12 @@ export default {
           if (response.data.status) {
             this.bottomSheet = false
             this.form = {}
-            this.snackbar = {
-              show: true,
-              message: response.data.message,
-            }
+            this.$snackbar('success', response.data.message, true)
           }
         })
         .catch((err) => {
           console.error(err)
-          this.snackbar = {
-            show: true,
-            message: err,
-            color: 'danger',
-          }
+          this.$snackbar('danger', err, true)
         })
         .then(() => {
           this.isLoading = false
@@ -277,19 +263,12 @@ export default {
         .then((response) => {
           if (response.data.status) {
             this.dialogDelete = false
-            this.snackbar = {
-              show: true,
-              message: response.data.message,
-            }
+            this.$snackbar('success', response.data.message, true)
           }
         })
         .catch((err) => {
           console.error(err)
-          this.snackbar = {
-            show: true,
-            message: err,
-            color: 'danger',
-          }
+          this.$snackbar('danger', err, true)
         })
         .then(() => {
           this.isLoading = false
