@@ -45,12 +45,6 @@
                           label="Pengobatan"
                           v-model="form.pengobatan"
                         ></v-textarea>
-                        <v-textarea
-                          outlined
-                          color="secondary"
-                          label="Aksi"
-                          v-model="form.aksi"
-                        ></v-textarea>
                       </v-col>
                     </v-row>
                   </v-form>
@@ -82,9 +76,10 @@
                     <v-col cols="4">
                       <v-text-field
                         outlined
+                        type="number"
                         color="secondary"
                         label="Jumlah"
-                        suffix="Butir"
+                        suffix=""
                       ></v-text-field>
                     </v-col>
                     <v-col class="text-center">

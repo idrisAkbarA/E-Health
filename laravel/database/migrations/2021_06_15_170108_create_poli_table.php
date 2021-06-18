@@ -16,6 +16,7 @@ class CreatePoliTable extends Migration
         Schema::create('poli', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
+            $table->string('penanggungjawab')->nullable();
             $table->string('keterangan')->nullable();
             $table->timestamps();
         });
