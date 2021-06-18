@@ -46,17 +46,26 @@ class RekamMedisController extends Controller
      */
     public function store(Request $request)
     {
-        $pasienId = $request->pasien_id;
-        $pasien = Pasien::firstOrCreate(['id' => $pasienId], $request->pasien);
+        // old code
 
-        $rekamMedis = $pasien->rekam_medis()->create($request->all());
-        broadcast(new AntrianPoli($rekamMedis));
+        // $pasienId = $request->pasien_id;
+        // $pasien = Pasien::firstOrCreate(['id' => $pasienId], $request->pasien);
 
-        $this->reply = [
-            'status' => true,
-            'data' => $rekamMedis
-        ];
-        return response()->json($this->reply, 201);
+        // $rekamMedis = $pasien->rekam_medis()->create($request->all());
+        // broadcast(new AntrianPoli($rekamMedis));
+
+        // $this->reply = [
+        //     'status' => true,
+        //     'data' => $rekamMedis
+        // ];
+        $validated = $request->validate([
+            'pasien_id' => 'required',
+            'poli_id' => 'required'
+        ]);
+        $rekam_medis = RekamMedis::create($validated);
+        broadcast(new AntrianPoli($rekam_medis));
+
+        return response()->json(['status' => true, 'message' => 'Antrian berhail dibuat!']);
     }
 
     /**

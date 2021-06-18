@@ -7,6 +7,7 @@
       v-model="valid"
     >
       <v-autocomplete
+        :loading="isLoading"
         v-model="selectedPasien"
         hide-no-data
         :rules="ruleRequired"
@@ -62,6 +63,7 @@
       <v-btn
         :disabled="!valid"
         :loading="isLoading"
+        @click="setAntrian()"
         color="primary"
       >Simpan</v-btn>
       <v-btn
@@ -103,6 +105,27 @@ export default {
     }
   },
   methods: {
+    setAntrian() {
+      this.isLoading = true
+      var payload = {
+        pasien_id: this.selectedPasien,
+        poli_id: this.selectedPoli,
+      }
+      var urlTambahAntrian = this.$store.state.pasien.urlTambahAntrian
+      console.log(urlTambahAntrian)
+      this.$axios
+        .post(urlTambahAntrian, payload)
+        .then((response) => {
+          // console.log(response.data)
+          this.resetDataNValidation()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+        .finally(() => {
+          this.isLoading = false
+        })
+    },
     getPasien(value) {
       this.isLoading = true
       var urlLiveSearch = this.$store.state.pasien.urlLiveSearch

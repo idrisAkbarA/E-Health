@@ -7,12 +7,13 @@
             <v-icon class="mr-3">mdi-plus-box-multiple</v-icon>
             Tambah Antrian
           </v-card-title>
-          <v-card-subtitle
-            >Tambah antrian baru untuk pasien baru atau lama</v-card-subtitle
-          >
+          <v-card-subtitle>Tambah antrian baru untuk pasien baru atau lama</v-card-subtitle>
           <v-divider></v-divider>
           <v-card-text>
-            <v-expansion-panels focusable hover>
+            <v-expansion-panels
+              focusable
+              hover
+            >
               <v-expansion-panel>
                 <v-expansion-panel-header class="pink darken-4">
                   <v-list class="pink darken-4">
@@ -64,29 +65,7 @@
         </v-card>
       </v-col>
       <v-col cols="5">
-        <v-card>
-          <v-card-title>
-            <v-icon class="mr-3">mdi-human-queue</v-icon>
-            Antrian
-          </v-card-title>
-          <v-card-subtitle
-            >Daftar pasien yang sedang dalam antrian</v-card-subtitle
-          >
-          <v-divider></v-divider>
-          <v-card-text>
-            <v-list>
-              <v-list-item>
-                <v-list-item-avatar> 1 </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title
-                    >Charles Augustus Milverton</v-list-item-title
-                  >
-                  <v-list-item-subtitle>Psychiatry</v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-        </v-card>
+        <antrian-poli-pelayanan></antrian-poli-pelayanan>
       </v-col>
     </v-row>
   </v-container>
