@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AntrianPoli;
 use App\Models\Pasien;
 use App\Models\RekamMedis;
 use Illuminate\Http\Request;

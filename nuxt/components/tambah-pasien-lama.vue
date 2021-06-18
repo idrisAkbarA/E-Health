@@ -107,7 +107,7 @@ export default {
       this.isLoading = true
       var urlLiveSearch = this.$store.state.pasien.urlLiveSearch
       this.$axios
-        .get(urlLiveSearch, { data: value })
+        .get(urlLiveSearch, { params: { data: value } })
         .then((response) => {
           var temp = response.data
           temp.forEach((element) => {
