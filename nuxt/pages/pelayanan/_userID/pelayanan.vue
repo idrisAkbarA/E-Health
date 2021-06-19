@@ -67,6 +67,7 @@
       <v-col cols="5">
         <antrian-poli
           :poli="null"
+          :status="1"
           @antrian-selected="test"
         ></antrian-poli>
       </v-col>

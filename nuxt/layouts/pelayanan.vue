@@ -19,7 +19,9 @@
           tile
         >
           <v-img max-width="70" :src="'/images/LogoUIN.png'"></v-img>
-          <v-card-text>Aplikasi PMB Pascasarjana</v-card-text>
+          <v-card-text
+            >Sistem Informasi Rawat Jalan Puskesmas Bangkinang Kota</v-card-text
+          >
         </v-card>
         <v-card
           v-if="windowWidth <= 600"
@@ -28,7 +30,7 @@
           tile
         >
           <v-card-text>
-            Selamat datang {{ $route.params.userID }}
+            Selamat datang {{ $auth.user.name }}
             <br />
             <v-btn
               class="mt-2"
@@ -45,7 +47,7 @@
         <v-list dense>
           <v-list-item
             v-for="(page, i) in pages"
-            :key="'PMB-' + i"
+            :key="'key-' + i"
             :to="page.to"
             :two-line="page.subtitle ? true : false"
             router
@@ -79,83 +81,6 @@
           <span>{{ title }}</span>
         </v-toolbar-title>
       </div>
-      <v-slide-y-transition>
-        <v-btn
-          small
-          class="green darken-3"
-          dark
-          v-if="checkRoute('Kelola Petugas')"
-          @click="setBottomSheetToTrue"
-        >
-          <v-icon> mdi-plus</v-icon> tambah petugas
-        </v-btn>
-      </v-slide-y-transition>
-      <v-slide-y-transition>
-        <v-btn
-          small
-          class="green darken-3"
-          dark
-          v-if="checkRoute('Kelola Soal')"
-          @click="setBottomSheetToTrue"
-        >
-          <v-icon left> mdi-plus</v-icon> tambah soal
-        </v-btn>
-      </v-slide-y-transition>
-      <v-slide-y-transition>
-        <v-btn
-          small
-          class="green darken-3 ml-2"
-          dark
-          v-if="checkRoute('Kelola Soal')"
-          @click="setBottomSheetToTrue2"
-        >
-          <v-icon left> mdi-file-excel</v-icon> Import soal
-        </v-btn>
-      </v-slide-y-transition>
-      <v-slide-y-transition>
-        <v-btn
-          small
-          class="green darken-3"
-          dark
-          v-if="checkRoute('Kelola Periode')"
-          @click="setBottomSheetToTrue"
-        >
-          <v-icon> mdi-plus</v-icon> tambah periode
-        </v-btn>
-      </v-slide-y-transition>
-      <v-slide-y-transition>
-        <v-btn
-          small
-          class="green darken-3"
-          dark
-          v-if="checkRoute('Kelola Jurusan')"
-          @click="setBottomSheetToTrue"
-        >
-          <v-icon> mdi-plus</v-icon> tambah jurusan
-        </v-btn>
-      </v-slide-y-transition>
-      <v-slide-y-transition>
-        <v-btn
-          small
-          class="green darken-3"
-          dark
-          v-if="checkRoute('Kelola Temu Ramah') && currentPeriode"
-          @click="setBottomSheetToTrue"
-        >
-          <v-icon> mdi-plus</v-icon> tambah jadwal
-        </v-btn>
-      </v-slide-y-transition>
-      <v-slide-y-transition>
-        <v-btn
-          small
-          class="green darken-3"
-          dark
-          v-if="checkRoute('Kelola Kategori')"
-          @click="setBottomSheetToTrue"
-        >
-          <v-icon> mdi-plus</v-icon> tambah kategori
-        </v-btn>
-      </v-slide-y-transition>
 
       <v-btn v-if="windowWidth >= 600" small text @click="logout">
         <v-icon>mdi-logout-variant</v-icon>keluar
@@ -175,7 +100,6 @@
         bottom
         :color="snackbar.color"
         outlined
-        right
       >
         {{ snackbar.message }}
       </v-snackbar>

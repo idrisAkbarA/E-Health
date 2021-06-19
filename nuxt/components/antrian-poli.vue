@@ -59,12 +59,15 @@ import { mapGetters, mapState } from 'vuex'
 export default {
   props: {
     poli: null,
+    status: null,
   },
-  created() {
+  mounted() {
     // console.log(this.poli)
     if (this.poli !== null) {
       console.log('poli ada')
       this.getDetailPoli()
+    } else {
+      this.getFinalData()
     }
   },
   computed: {
@@ -77,6 +80,12 @@ export default {
     },
     search() {
       this.searchAntrian()
+    },
+    poli() {
+      this.getFinalData()
+    },
+    status() {
+      this.getFinalData()
     },
   },
   data() {
@@ -92,9 +101,15 @@ export default {
     emitDetail(item) {
       this.$emit('antrian-selected', item)
     },
+    filterByStatus(data) {
+      var filtered = data.filter((item) => {
+        return item.status === this.status
+      })
+      return filtered
+    },
     getFinalData() {
       var getData = this.getAntrianPoliByID(this.poli)
-      this.originalAntrian = getData(this.poli)
+      this.originalAntrian = this.filterByStatus(getData(this.poli))
       console.log('antrian', this.originalAntrian)
     },
     searchAntrian() {
@@ -107,7 +122,7 @@ export default {
         return e.pasien.nama.toLowerCase().includes(this.search.toLowerCase())
       }
       var item = this.originalAntrian.filter((item) => eachIndex(item))
-      this.originalAntrian = item
+      this.originalAntrian = this.filterByStatus(item)
     },
     getDetailPoli() {
       var url = this.$store.state.poli.url
