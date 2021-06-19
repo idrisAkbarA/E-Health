@@ -7,7 +7,7 @@
       loading-text="Loading... Please wait"
       :loading="isLoading"
       :headers="headers"
-      :items="petugas"
+      :items="users"
       :search="search"
     >
       <template v-slot:top>
@@ -216,13 +216,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   layout: 'admin',
   mounted() {
     this.$store.commit('page/setTitle', this.title)
-    this.getUsers()
-    this.getPoli()
+    this.$store.state.poli.data === null && this.getPoli()
+    this.$store.state.user.data === null && this.getUsers()
   },
   head() {
     return {
@@ -237,8 +237,6 @@ export default {
       isLoading: false,
       bottomSheet: false,
       dialogDelete: false,
-      poli: [],
-      user: [],
       form: {},
       roles: [
         { nama: 'Admin', color: 'info' },
@@ -253,10 +251,16 @@ export default {
   computed: {
     ...mapState('user', { urlUser: (state) => state.url }),
     ...mapState('poli', { urlPoli: (state) => state.url }),
-    petugas() {
-      return this.user.filter((item) => {
-        return this.tab ? item.role == 'Dokter' : item.role != 'Dokter'
-      })
+    users: {
+      get: function () {
+        var users = this.$store.state.user.data ?? []
+        return users.filter((item) => {
+          return this.tab ? item.role == 'Dokter' : item.role != 'Dokter'
+        })
+      },
+      set: function (v) {
+        this.$store.commit('user/SET_USERS', v)
+      },
     },
     headers() {
       if (this.tab) {
@@ -308,36 +312,7 @@ export default {
     },
   },
   methods: {
-    getUsers() {
-      this.isLoading = true
-      this.$axios
-        .get(this.urlUser)
-        .then((response) => {
-          if (response.data.status) {
-            this.user = response.data.data
-          }
-        })
-        .catch((err) => {
-          console.error(err)
-          this.$snackbar('danger', err, true)
-        })
-        .then((this.isLoading = false))
-    },
-    getPoli() {
-      this.isLoading = true
-      this.$axios
-        .get(this.urlPoli)
-        .then((response) => {
-          if (response.data.status) {
-            this.poli = response.data.data
-          }
-        })
-        .catch((err) => {
-          console.error(err)
-          this.$snackbar('danger', err, true)
-        })
-        .then((this.isLoading = false))
-    },
+    ...mapActions({ getUsers: 'user/getUsers', getPoli: 'poli/getPoli' }),
     submit() {
       const form = this.form
       if (!form.id) {

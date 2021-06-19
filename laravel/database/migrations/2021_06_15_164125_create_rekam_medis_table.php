@@ -20,7 +20,6 @@ class CreateRekamMedisTable extends Migration
             $table->integer('poli_id');
             $table->text('diagnosa')->nullable();
             $table->text('pengobatan')->nullable();
-            $table->text('aksi')->nullable();
             $table->integer('resep_obat_id')->nullable();
             $table->string('total_biaya')->nullable();
             $table->boolean('status')->nullable();

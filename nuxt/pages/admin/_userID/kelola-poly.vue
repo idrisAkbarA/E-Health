@@ -52,7 +52,7 @@
 
     <!-- Bottom Sheet -->
     <v-bottom-sheet v-model="bottomSheet" scrollable inset>
-      <v-card height="200px">
+      <v-card height="250px">
         <v-card-title>
           <span>Kelola Poli</span>
           <v-spacer></v-spacer>
@@ -73,6 +73,14 @@
               </v-text-field>
             </v-col>
             <v-col cols="6">
+              <v-text-field
+                color="#2C3E50"
+                label="Nama Penanggungjawab"
+                v-model="form.penanggungjawab"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="12">
               <v-text-field
                 color="#2C3E50"
                 label="Keterangan"
@@ -108,37 +116,16 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
-    <!-- Snackbar -->
-    <!-- <v-snackbar
-      v-model="snackbar.show"
-      timeout="2000"
-      :color="snackbar.color ? snackbar.color : 'success'"
-      outlined
-    >
-      {{ snackbar.message }}
-
-      <template v-slot:action="{ attrs }">
-        <v-btn
-          :color="snackbar.color ? snackbar.color : 'success'"
-          text
-          v-bind="attrs"
-          @click="snackbar.show = false"
-        >
-          Close
-        </v-btn>
-      </template>
-    </v-snackbar> -->
   </v-container>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   layout: 'admin',
   mounted() {
     this.$store.commit('page/setTitle', this.title)
-    this.getPoli()
+    this.$store.state.poli.data === null && this.getPoli()
   },
   head() {
     return {
@@ -152,9 +139,7 @@ export default {
       isLoading: false,
       bottomSheet: false,
       dialogDelete: false,
-      poli: [],
       form: {},
-      // snackbar: { show: false },
       headers: [
         {
           text: '#',
@@ -162,16 +147,22 @@ export default {
           value: 'no',
         },
         { text: 'Nama Poli', value: 'nama' },
+        { text: 'Penanggungjawab', value: 'penanggungjawab' },
         { text: 'Keterangan', value: 'keterangan' },
         { text: 'Actions', value: 'actions' },
       ],
     }
   },
   computed: {
-    ...mapState('poli', {
-      urlPoli: (state) => state.url,
-      data: (state) => state.data,
-    }),
+    ...mapState('poli', { urlPoli: (state) => state.url }),
+    poli: {
+      get: function () {
+        return this.$store.state.poli.data ?? []
+      },
+      set: function (v) {
+        this.$store.commit('poli/setPoli', v)
+      },
+    },
   },
   watch: {
     bottomSheet(val) {
@@ -186,22 +177,7 @@ export default {
     },
   },
   methods: {
-    // ...mapActions({ getPoli: 'poli/getPoli' }),
-    getPoli() {
-      this.isLoading = true
-      this.$axios
-        .get(this.urlPoli)
-        .then((response) => {
-          if (response.data.status) {
-            this.poli = response.data.data
-          }
-        })
-        .catch((err) => {
-          console.error(err)
-          this.$snackbar('danger', err, true)
-        })
-        .then((this.isLoading = false))
-    },
+    ...mapActions({ getPoli: 'poli/getPoli' }),
     submit() {
       const form = this.form
       if (!form.id) {

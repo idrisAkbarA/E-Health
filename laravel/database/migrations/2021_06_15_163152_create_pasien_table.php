@@ -17,11 +17,17 @@ class CreatePasienTable extends Migration
             $table->id();
             $table->string('nama');
             $table->string('nik')->unique();
-            $table->enum('jenis_kelamin', ['Laki-Laki', 'Perempuan']);
             $table->string('tempat_lahir');
             $table->date('tanggal_lahir');
+            $table->enum('jenis_kelamin', ['Laki-Laki', 'Perempuan']);
+            $table->enum('agama', ['Islam', 'Kristen', 'Konghucu', 'Budha', 'Hindu'])->nullable();
+            $table->string('pendidikan')->nullable();
+            $table->string('pekerjaan')->nullable();
             $table->text('alamat')->nullable();
-            $table->string('kontak');
+            $table->string('kontak')->nullable();
+            $table->text('riwayat_penyakit_pribadi')->nullable();
+            $table->text('riwayat_penyakit_keluarga')->nullable();
+            $table->text('riwayat_alergi')->nullable();
             $table->timestamps();
         });
     }
