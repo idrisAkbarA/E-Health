@@ -189,7 +189,6 @@
       </v-fade-transition>-->
       <v-snackbar
         :value="snackbar.value"
-        absolute
         bottom
         :color="snackbar.color"
         outlined

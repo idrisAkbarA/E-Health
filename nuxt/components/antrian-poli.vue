@@ -19,7 +19,7 @@
         placeholder="Ketik untuk mulai mencari..."
       ></v-text-field>
       <!-- @keyup="searchAntrian()" -->
-      <v-list>
+      <v-list v-if="originalAntrian">
         <v-list-item-group
           v-model="selectedItem"
           color="secondary"
@@ -27,7 +27,7 @@
           <transition-group name="scale-transition">
             <v-list-item
               :three-line="index==0 && (search == ''||search == null)"
-              v-for="(antrian,index) in originalAntrian"
+              v-for="(antrian,index) in originalAntrian.slice().reverse()"
               :key="antrian.id"
             >
               <v-list-item-avatar> {{index+1}} </v-list-item-avatar>
@@ -47,6 +47,10 @@
           </transition-group>
         </v-list-item-group>
       </v-list>
+      <span
+        v-else
+        class="text-center"
+      >Tidak ada antrian</span>
     </v-card-text>
   </v-card>
 </template>
