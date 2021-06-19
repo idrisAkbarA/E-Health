@@ -51,7 +51,10 @@
               </template>
             </v-simple-table>
             <v-divider class="my-4"></v-divider>
-            <v-expansion-panels focusable hover>
+            <v-expansion-panels
+              focusable
+              hover
+            >
               <v-expansion-panel>
                 <v-expansion-panel-header class="pink darken-4">
                   Diagnosa
@@ -113,7 +116,13 @@
                       ></v-text-field>
                     </v-col>
                     <v-col class="text-center">
-                      <v-btn class="mx-2" fab small dark color="primary">
+                      <v-btn
+                        class="mx-2"
+                        fab
+                        small
+                        dark
+                        color="primary"
+                      >
                         <v-icon dark> mdi-plus </v-icon>
                       </v-btn>
                     </v-col>
@@ -128,7 +137,7 @@
         <antrian-poli
           :poli="1"
           @antrian-selected="showDetail"
-          status="null"
+          :status="null"
         ></antrian-poli>
       </v-col>
     </v-row>

@@ -149,7 +149,7 @@ export default {
     this.getPoli()
     this.getAntrianPoli()
     this.$echo.channel('antrian-poli').listen('AntrianPoli', (e) => {
-      console.log('update', e)
+      console.log('update:', e)
       this.$store.commit('antrian-poli/setData', e.rekamMedis)
     })
   },
