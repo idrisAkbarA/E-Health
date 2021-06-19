@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\AntrianPoli;
 use App\Models\Pasien;
 use App\Models\RekamMedis;
 use Illuminate\Support\Facades\DB;
@@ -17,5 +18,6 @@ class Antrian
                 'poli_id' => $data['poli_id']
             ]);
         });
+        broadcast(new AntrianPoli());
     }
 }

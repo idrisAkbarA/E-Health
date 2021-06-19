@@ -65,7 +65,10 @@
         </v-card>
       </v-col>
       <v-col cols="5">
-        <antrian-poli-pelayanan></antrian-poli-pelayanan>
+        <antrian-poli
+          :poli="null"
+          @antrian-selected="test"
+        ></antrian-poli>
       </v-col>
     </v-row>
   </v-container>
@@ -87,6 +90,11 @@ export default {
       antrian: {},
       tab: 1,
     }
+  },
+  methods: {
+    test(item) {
+      console.log('current selected', item)
+    },
   },
   layout: 'pelayanan',
 }

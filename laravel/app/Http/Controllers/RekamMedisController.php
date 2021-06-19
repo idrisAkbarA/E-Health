@@ -6,6 +6,7 @@ use App\Events\AntrianPoli;
 use App\Models\Pasien;
 use App\Models\RekamMedis;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RekamMedisController extends Controller
 {
@@ -28,6 +29,7 @@ class RekamMedisController extends Controller
     {
         $antrian = RekamMedis::whereDate('created_at', today())
             ->with('pasien')
+            ->with('poli')
             ->latest()
             ->get();
 
@@ -63,7 +65,12 @@ class RekamMedisController extends Controller
             'poli_id' => 'required'
         ]);
         $rekam_medis = RekamMedis::create($validated);
-        broadcast(new AntrianPoli($rekam_medis));
+        Log::info('new antrian created');
+        // $antrian = RekamMedis::whereDate('created_at', today())
+        //     ->with('pasien')
+        //     ->latest()
+        //     ->get();
+        broadcast(new AntrianPoli());
 
         return response()->json(['status' => true, 'message' => 'Antrian berhail dibuat!']);
     }

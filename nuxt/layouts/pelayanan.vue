@@ -181,34 +181,45 @@
         mode="out-in"
       >
         <nuxt />
+
       </transition>
 
       <!-- <v-fade-transition mode="in" hide-on-leave="true">
         <router-view></router-view>
       </v-fade-transition>-->
+      <v-snackbar
+        :value="snackbar.value"
+        bottom
+        :color="snackbar.color"
+        outlined
+        right
+      >
+        {{ snackbar.message}}
+      </v-snackbar>
     </v-main>
-    <v-snackbar
-      :value="snackbar.value"
-      absolute
-      bottom
-      :color="snackbar.color"
-      outlined
-      right
-    >
-      {{ snackbar.message}}
-    </v-snackbar>
+
   </v-app>
 </template>
 
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
 export default {
+  mounted() {
+    this.getAntrianPoli()
+    this.$echo.channel('antrian-poli').listen('AntrianPoli', (e) => {
+      console.log('update', e)
+      this.$store.commit('antrian-poli/setData', e.rekamMedis)
+    })
+  },
   middleware: ['pelayanan'],
   created() {
     this.getPoli()
   },
   methods: {
-    ...mapActions({ getPoli: 'poli/getPoli' }),
+    ...mapActions({
+      getPoli: 'poli/getPoli',
+      getAntrianPoli: 'antrian-poli/fetchData',
+    }),
     toggleDrawer(bool) {
       if (!bool) {
         this.miniVariant = !this.miniVariant

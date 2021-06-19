@@ -18,4 +18,8 @@ class RekamMedis extends Model
     {
         return $this->belongsTo('App\Models\Pasien');
     }
+    public function poli()
+    {
+        return $this->belongsTo('App\Models\Poli');
+    }
 }
