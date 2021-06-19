@@ -125,6 +125,7 @@
 
 <script>
 export default {
+  layout: 'dokter',
   mounted() {
     this.$store.commit('page/setTitle', this.title)
   },
@@ -142,6 +143,8 @@ export default {
       tab: 1,
     }
   },
-  layout: 'dokter',
+  method: {
+    //
+  },
 }
 </script>

@@ -15,12 +15,20 @@ class PoliSeeder extends Seeder
     public function run()
     {
         Poli::create([
+            'nama' => 'Umum',
+            'penanggungjawab' => 'Dr. Stanger',
+            'keterangan' => 'Poli Umum adalah layanan pemeriksaan dan pengobatan umum.'
+        ]);
+
+        Poli::create([
             'nama' => 'Anak',
+            'penanggungjawab' => 'Dr. Idris',
             'keterangan' => 'Poli Spesialis Anak adalah layanan pemeriksaan dan pengobatan terhadap bayi dan anak.'
         ]);
 
         Poli::create([
             'nama' => 'Jiwa',
+            'penanggungjawab' => 'Dr. Stone',
             'keterangan' => 'Poli Spesialis Anak adalah layanan pemeriksaan dan pengobatan kondisi kejiwaan.'
         ]);
     }

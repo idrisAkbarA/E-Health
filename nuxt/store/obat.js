@@ -1,19 +1,19 @@
 export const state = () => ({
-  url: '/api/poli',
+  url: '/api/obat',
   data: null
 })
 
 export const mutations = {
-  setPoli(state, data) {
+  SET_OBAT(state, data) {
     state.data = data
   }
 }
 
 export const actions = {
-  getPoli({ state, commit }) {
+  getObat({ state, commit }) {
     return new Promise((resolve, reject) => {
       this.$axios.get(state.url).then((response) => {
-        commit('setPoli', response.data.data)
+        commit('SET_OBAT', response.data.data)
         resolve(response);
       }).catch(error => {
         console.error(error);

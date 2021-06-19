@@ -19,7 +19,9 @@
           tile
         >
           <v-img max-width="70" :src="'/images/LogoUIN.png'"></v-img>
-          <v-card-text>E-Health Puskesmas Bangkinang</v-card-text>
+          <v-card-text
+            >Sistem Informasi Rawat Jalan Puskesmas Bangkinang Kota</v-card-text
+          >
         </v-card>
         <v-card
           v-if="windowWidth <= 600"
@@ -45,7 +47,7 @@
         <v-list dense>
           <v-list-item
             v-for="(page, i) in pages"
-            :key="'PMB-' + i"
+            :key="'key-' + i"
             :to="page.to"
             :two-line="page.subtitle ? true : false"
             router
@@ -95,11 +97,9 @@
     </v-main>
     <v-snackbar
       :value="snackbar.value"
-      absolute
-      bottom
-      :color="snackbar.color"
+      timeout="2000"
+      :color="snackbar.color ? snackbar.color : 'success'"
       outlined
-      right
     >
       {{ snackbar.message }}
     </v-snackbar>
