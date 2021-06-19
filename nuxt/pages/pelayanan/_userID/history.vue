@@ -23,6 +23,9 @@
           </v-col>
           <v-col>
             <antrian-poli
+              icon="mdi-check"
+              header="Antrian Selesai"
+              subHeader="Daftar antrian yang sudah selesai"
               :poli="null"
               :status="null"
               @antrian-selected="test"
@@ -74,7 +77,7 @@ export default {
   background: rgb(0, 36, 15);
   background-image: linear-gradient(
     90deg,
-    rgba(184, 194, 173, 1) 0%,
+    rgb(170, 185, 153) 0%,
     rgba(247, 24, 113, 1) 100%
   );
   background-size: cover;
