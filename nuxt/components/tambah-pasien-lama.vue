@@ -117,7 +117,7 @@ export default {
         .post(urlAntrian, payload)
         .then((response) => {
           // console.log(response.data)
-          this.$snackbar('success', response.data.message, true)
+          this.$snackbar('success', response.data.message)
           this.resetDataNValidation()
         })
         .catch((error) => {
