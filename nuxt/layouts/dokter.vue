@@ -19,7 +19,9 @@
           tile
         >
           <v-img max-width="70" :src="'/images/LogoUIN.png'"></v-img>
-          <v-card-text>E-Health Puskesmas Bangkinang</v-card-text>
+          <v-card-text
+            >Sistem Informasi Rawat Jalan Puskesmas Bangkinang Kota</v-card-text
+          >
         </v-card>
         <v-card
           v-if="windowWidth <= 600"
