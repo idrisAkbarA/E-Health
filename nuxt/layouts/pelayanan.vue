@@ -192,7 +192,6 @@
         bottom
         :color="snackbar.color"
         outlined
-        right
       >
         {{ snackbar.message}}
       </v-snackbar>
