@@ -9,7 +9,7 @@
           </v-card-title>
           <v-card-subtitle>Catat hasil diagnosa pemeriksaan</v-card-subtitle>
           <v-divider></v-divider>
-          <v-card-text>
+          <v-card-text v-if="pasien">
             <v-simple-table dense>
               <template v-slot:default>
                 <tbody>
@@ -51,10 +51,7 @@
               </template>
             </v-simple-table>
             <v-divider class="my-4"></v-divider>
-            <v-expansion-panels
-              focusable
-              hover
-            >
+            <v-expansion-panels focusable hover>
               <v-expansion-panel>
                 <v-expansion-panel-header class="pink darken-4">
                   Diagnosa
@@ -116,13 +113,7 @@
                       ></v-text-field>
                     </v-col>
                     <v-col class="text-center">
-                      <v-btn
-                        class="mx-2"
-                        fab
-                        small
-                        dark
-                        color="primary"
-                      >
+                      <v-btn class="mx-2" fab small dark color="primary">
                         <v-icon dark> mdi-plus </v-icon>
                       </v-btn>
                     </v-col>
@@ -130,6 +121,9 @@
                 </v-expansion-panel-content>
               </v-expansion-panel>
             </v-expansion-panels>
+          </v-card-text>
+          <v-card-text v-else>
+            <p class="text-center">Pilih pasien terlebih daluhu...</p>
           </v-card-text>
         </v-card>
       </v-col>
@@ -163,47 +157,7 @@ export default {
       is_resep: false,
       antrian: {},
       form: {},
-      rekamMedis: {
-        id: 1,
-        pasien_id: 1,
-        dokter_id: null,
-        poli_id: 1,
-        diagnosa: null,
-        pengobatan: null,
-        resep_obat_id: null,
-        total_biaya: null,
-        status: null,
-        is_bayar: 0,
-        created_at: '2021-06-19T08:00:31.000000Z',
-        updated_at: '2021-06-19T08:00:32.000000Z',
-        pasien: {
-          id: 1,
-          nama: 'Test',
-          nik: '112312',
-          tempat_lahir: 'Pekanbaru',
-          tanggal_lahir: '2021-06-19',
-          jenis_kelamin: 'Laki-Laki',
-          agama: 'Kristen',
-          pendidikan: null,
-          pekerjaan: null,
-          alamat: null,
-          kontak: null,
-          riwayat_penyakit_pribadi: null,
-          riwayat_penyakit_keluarga: null,
-          riwayat_alergi: null,
-          created_at: '2021-06-19T08:15:32.000000Z',
-          updated_at: '2021-06-19T08:15:32.000000Z',
-        },
-        poli: {
-          id: 1,
-          nama: 'Anak',
-          penanggungjawab: 'Dr. Idris',
-          keterangan:
-            'Poli Spesialis Anak adalah layanan pemeriksaan dan pengobatan terhadap bayi dan anak.',
-          created_at: '2021-06-18T12:34:46.000000Z',
-          updated_at: '2021-06-18T12:34:46.000000Z',
-        },
-      },
+      rekamMedis: {},
     }
   },
   computed: {
@@ -234,6 +188,7 @@ export default {
     ...mapActions({ getObat: 'obat/getObat' }),
     showDetail(data) {
       console.log(data)
+      this.rekamMedis = data
     },
   },
 }
