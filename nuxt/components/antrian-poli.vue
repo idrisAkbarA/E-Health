@@ -19,7 +19,7 @@
         placeholder="Ketik untuk mulai mencari..."
       ></v-text-field>
       <!-- @keyup="searchAntrian()" -->
-      <v-list v-if="originalAntrian">
+      <v-list v-if="originalAntrian.length > 0">
         <v-list-item-group v-model="selectedItem" color="secondary">
           <transition-group name="scale-transition">
             <v-list-item
@@ -91,7 +91,7 @@ export default {
       search: '',
       selectedItem: undefined,
       poliDetail: null,
-      originalAntrian: null,
+      originalAntrian: [],
     }
   },
   methods: {

@@ -48,31 +48,21 @@ class RekamMedisController extends Controller
      */
     public function store(Request $request)
     {
-        // old code
-
-        // $pasienId = $request->pasien_id;
-        // $pasien = Pasien::firstOrCreate(['id' => $pasienId], $request->pasien);
-
-        // $rekamMedis = $pasien->rekam_medis()->create($request->all());
-        // broadcast(new AntrianPoli($rekamMedis));
-
-        // $this->reply = [
-        //     'status' => true,
-        //     'data' => $rekamMedis
-        // ];
         $validated = $request->validate([
             'pasien_id' => 'required',
             'poli_id' => 'required'
         ]);
-        $rekam_medis = RekamMedis::create($validated);
+
+        RekamMedis::create($validated);
         Log::info('new antrian created');
-        // $antrian = RekamMedis::whereDate('created_at', today())
-        //     ->with('pasien')
-        //     ->latest()
-        //     ->get();
+
         broadcast(new AntrianPoli());
 
-        return response()->json(['status' => true, 'message' => 'Antrian berhail dibuat!']);
+        $this->reply = [
+            'status' => true,
+            'message' => 'Antrian berhail dibuat!'
+        ];
+        return response()->json($this->reply, 201);
     }
 
     /**
@@ -99,19 +89,12 @@ class RekamMedisController extends Controller
      */
     public function update(Request $request, RekamMedis $rekamMedis)
     {
-        $pasienId = $request->pasien_id;
-        $pasien = Pasien::find($pasienId);
-
-        if (is_null($pasien)) {
-            $this->reply['message'] = 'Opps Something Wrong';
-            return response()->json($this->reply);
-        }
-
-        $rekamMedis = $pasien->rekam_medis()->create($request->all());
-        broadcast(new AntrianPoli($rekamMedis));
+        $rekamMedis->update($request->except('resep_obat'));
+        broadcast(new AntrianPoli());
 
         $this->reply = [
             'status' => true,
+            'message' => 'Rekam Medis updated!',
             'data' => $rekamMedis
         ];
         return response()->json($this->reply, 201);

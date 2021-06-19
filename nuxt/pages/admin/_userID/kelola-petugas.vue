@@ -340,7 +340,7 @@ export default {
         .then((response) => {
           if (response.data.status) {
             this.bottomSheet = false
-            this.$snackbar('success', response.data.message, true)
+            this.$snackbar('success', response.data.message)
             response.data.data.role == 'Dokter'
               ? (this.tab = 1)
               : (this.tab = 0)
@@ -348,7 +348,7 @@ export default {
         })
         .catch((err) => {
           console.error(err)
-          this.$snackbar('danger', err, true)
+          this.$snackbar('danger', err)
         })
         .then(() => {
           this.isLoading = false
@@ -358,7 +358,7 @@ export default {
     update(id) {
       const form = this.form
       if (form.password != form.password2) {
-        this.$snackbar('danger', 'Konfirmasi password harus sama', true)
+        this.$snackbar('danger', 'Konfirmasi password harus sama')
         return
       }
       const urlUser = `${this.urlUser}/${id}`
@@ -369,12 +369,12 @@ export default {
           if (response.data.status) {
             this.bottomSheet = false
             this.form = {}
-            this.$snackbar('success', response.data.message, true)
+            this.$snackbar('success', response.data.message)
           }
         })
         .catch((err) => {
           console.error(err)
-          this.$snackbar('danger', err, true)
+          this.$snackbar('danger', err)
         })
         .then(() => {
           this.isLoading = false
@@ -390,12 +390,12 @@ export default {
         .then((response) => {
           if (response.data.status) {
             this.dialogDelete = false
-            this.$snackbar('success', response.data.message, true)
+            this.$snackbar('success', response.data.message)
           }
         })
         .catch((err) => {
           console.error(err)
-          this.$snackbar('danger', err, true)
+          this.$snackbar('danger', err)
         })
         .then(() => {
           this.isLoading = false
