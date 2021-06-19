@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title>
       <v-icon class="mr-3">mdi-human-queue</v-icon>
-      <span v-if="poliDetail">{{"Antrian Poli "+poliDetail.nama}}</span>
+      <span v-if="poliDetail">{{ 'Antrian Poli ' + poliDetail.nama }}</span>
       <span v-else>Antrian</span>
     </v-card-title>
     <v-card-subtitle>Daftar pasien yang sedang dalam antrian</v-card-subtitle>
@@ -10,7 +10,7 @@
 
     <v-card-text>
       <v-text-field
-        @click:clear="search=''"
+        @click:clear="search = ''"
         clearable
         v-model="search"
         color="secondary"
@@ -20,37 +20,32 @@
       ></v-text-field>
       <!-- @keyup="searchAntrian()" -->
       <v-list v-if="originalAntrian">
-        <v-list-item-group
-          v-model="selectedItem"
-          color="secondary"
-        >
+        <v-list-item-group v-model="selectedItem" color="secondary">
           <transition-group name="scale-transition">
             <v-list-item
-              :three-line="index==0 && (search == ''||search == null)"
-              v-for="(antrian,index) in originalAntrian.slice().reverse()"
+              :three-line="index == 0 && (search == '' || search == null)"
+              v-for="(antrian, index) in originalAntrian.slice().reverse()"
               :key="antrian.id"
             >
-              <v-list-item-avatar> {{index+1}} </v-list-item-avatar>
-              <v-list-item-content @click="emitDetail(antrian)">
-                <v-list-item-title>{{antrian.pasien.nama}}</v-list-item-title>
-                <v-list-item-subtitle>{{"Poli "+antrian.poli.nama}}</v-list-item-subtitle>
-                <v-list-item-subtitle v-if="index==0 && (search == ''||search == null)">
-                  <v-chip
-                    label
-                    color="secondary"
-                    class="black--text"
-                    x-small
-                  >Antrian sekarang</v-chip>
+              <v-list-item-avatar> {{ index + 1 }} </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{ antrian.pasien.nama }}</v-list-item-title>
+                <v-list-item-subtitle>{{
+                  'Poli ' + antrian.poli.nama
+                }}</v-list-item-subtitle>
+                <v-list-item-subtitle
+                  v-if="index == 0 && (search == '' || search == null)"
+                >
+                  <v-chip label color="secondary" class="black--text" x-small
+                    >Antrian sekarang</v-chip
+                  >
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
           </transition-group>
         </v-list-item-group>
       </v-list>
-      <span
-        v-else
-        class="text-center"
-      >Tidak ada antrian</span>
+      <span v-else class="text-center">Tidak ada antrian</span>
     </v-card-text>
   </v-card>
 </template>
@@ -62,7 +57,6 @@ export default {
     status: null,
   },
   mounted() {
-    // console.log(this.poli)
     if (this.poli !== null) {
       console.log('poli ada')
       this.getDetailPoli()
@@ -87,20 +81,21 @@ export default {
     status() {
       this.getFinalData()
     },
+    selectedItem(val) {
+      var antrian = this.originalAntrian.slice().reverse()
+      this.$emit('antrian-selected', val == undefined ? {} : antrian[val])
+    },
   },
   data() {
     return {
       search: '',
-      selectedItem: 0,
+      selectedItem: undefined,
       poliDetail: null,
       originalAntrian: null,
     }
   },
   methods: {
     ...mapGetters({ getAntrianPoliByID: 'antrian-poli/getAntrianPoliByID' }),
-    emitDetail(item) {
-      this.$emit('antrian-selected', item)
-    },
     filterByStatus(data) {
       var filtered = data.filter((item) => {
         return item.status === this.status
