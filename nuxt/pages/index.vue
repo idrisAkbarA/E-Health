@@ -24,15 +24,15 @@ import Login from '~/components/Login.vue'
 import VuetifyLogo from '~/components/VuetifyLogo.vue'
 
 export default {
+  // mounted() {
+  //   this.$echo.channel('antrian-poli').listen('AntrianPoli', (e) => {
+  //     console.log(e)
+  //   })
+  // },
   middleware: ['auth-redirect'],
   components: {
     Login,
     VuetifyLogo,
-  },
-  mounted() {
-    this.$echo.channel('antrian-poli').listen('AntrianPoli', (e) => {
-      console.log(e)
-    })
   },
 }
 </script>

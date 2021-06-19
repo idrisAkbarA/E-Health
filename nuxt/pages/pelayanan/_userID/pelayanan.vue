@@ -65,7 +65,7 @@
         </v-card>
       </v-col>
       <v-col cols="5">
-        <antrian-poli-pelayanan></antrian-poli-pelayanan>
+        <antrian-poli></antrian-poli>
       </v-col>
     </v-row>
   </v-container>

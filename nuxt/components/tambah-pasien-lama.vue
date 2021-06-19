@@ -111,10 +111,10 @@ export default {
         pasien_id: this.selectedPasien,
         poli_id: this.selectedPoli,
       }
-      var urlTambahAntrian = this.$store.state.pasien.urlTambahAntrian
-      console.log(urlTambahAntrian)
+      var urlAntrian = this.$store.state.pasien.urlAntrian
+      // console.log(urlAntrian)
       this.$axios
-        .post(urlTambahAntrian, payload)
+        .post(urlAntrian, payload)
         .then((response) => {
           // console.log(response.data)
           this.resetDataNValidation()
