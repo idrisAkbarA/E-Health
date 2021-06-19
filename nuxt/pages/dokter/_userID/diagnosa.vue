@@ -10,7 +10,17 @@
           <v-card-subtitle>Catat hasil diagnosa pemeriksaan</v-card-subtitle>
           <v-divider></v-divider>
           <v-card-text>
-            <v-row>
+            <v-simple-table dense>
+              <template v-slot:default>
+                <tbody>
+                  <tr v-for="item in pasien" :key="item.name">
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.value }}</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
+            <!-- <v-row>
               <v-col cols="4"> Nama Pasien </v-col>
               <v-col cols="8"> : Charles Augustus Milverton </v-col>
               <v-col cols="4"> Jenis Kelamin </v-col>
@@ -21,7 +31,9 @@
               <v-col cols="8"> : Kings St. 201 </v-col>
               <v-col cols="4"> Kontak </v-col>
               <v-col cols="8"> : +01 1289-1232 </v-col>
-            </v-row>
+              <v-col cols="4"> Riwayat Penyakit </v-col>
+              <v-col cols="8"> : Demam, Sembelit </v-col>
+            </v-row> -->
             <v-divider class="my-4"></v-divider>
             <v-expansion-panels focusable hover>
               <v-expansion-panel>
@@ -69,7 +81,7 @@
                     <v-col cols="8">
                       <v-select
                         outlined
-                        :items="items"
+                        :items="obat"
                         label="Nama Obat"
                       ></v-select>
                     </v-col>
@@ -124,10 +136,12 @@
 </template>
 
 <script>
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   layout: 'dokter',
   mounted() {
     this.$store.commit('page/setTitle', this.title)
+    this.getObat()
   },
   head() {
     return {
@@ -140,11 +154,32 @@ export default {
       is_resep: false,
       antrian: {},
       form: {},
-      tab: 1,
+      pasien: [
+        { name: 'Nama', value: 'Carl' },
+        { name: 'Jenis Kelamin', value: 'Laki-Laki' },
+        { name: 'Tempat Tanggal Lahir', value: 'London, 29 Juni 1898' },
+        { name: 'Alamat', value: 'Kings St. 201' },
+        { name: 'Kontak', value: '+01 1289-1232' },
+        { name: 'Riwayat Penyakit Pribadi', value: 'Demam Sembelit' },
+        { name: 'Riwayat Penyakit Keluarga', value: 'Dracula Syndrome' },
+        { name: 'Riwayat Alergi', value: 'Alergi Sinar Matahari' },
+      ],
     }
   },
+  computed: {
+    ...mapState('obat', { urlObat: (state) => state.url }),
+    ...mapState('rekam-medis', { urlRekamMedis: (state) => state.url }),
+    obat: {
+      get: function () {
+        return this.$store.state.obat.data ?? []
+      },
+      set: function (v) {
+        this.$store.commit('obat/SET_OBAT', v)
+      },
+    },
+  },
   method: {
-    //
+    ...mapActions({ getObat: 'obat/getObat' }),
   },
 }
 </script>
