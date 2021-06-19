@@ -12,17 +12,13 @@
       dark
     >
       <vue-scroll :ops="scrollOps">
-
         <v-card
           v-if="windowWidth <= 600"
           class="d-flex justify-center pt-4 pr-2 pl-2"
           flat
           tile
         >
-          <v-img
-            max-width="70"
-            :src="'/images/LogoUIN.png'"
-          ></v-img>
+          <v-img max-width="70" :src="'/images/LogoUIN.png'"></v-img>
           <v-card-text>Aplikasi PMB Pascasarjana</v-card-text>
         </v-card>
         <v-card
@@ -61,20 +57,18 @@
             <v-list-item-content>
               <v-list-item-title>{{ page.title }}</v-list-item-title>
               <v-list-item-subtitle v-if="page.subtitle">{{
-              page.subtitle
-            }}</v-list-item-subtitle>
+                page.subtitle
+              }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-list>
       </vue-scroll>
     </v-navigation-drawer>
 
-    <v-app-bar
-      app
-      dense
-      clipped-left
-    >
-      <v-app-bar-nav-icon @click.stop="toggleDrawer(windowWidth <= 600)"></v-app-bar-nav-icon>
+    <v-app-bar app dense clipped-left>
+      <v-app-bar-nav-icon
+        @click.stop="toggleDrawer(windowWidth <= 600)"
+      ></v-app-bar-nav-icon>
       <div style="width: 100%; -webkit-app-region: drag">
         <v-toolbar-title>
           <span
@@ -106,7 +100,6 @@
         >
           <v-icon left> mdi-plus</v-icon> tambah soal
         </v-btn>
-
       </v-slide-y-transition>
       <v-slide-y-transition>
         <v-btn
@@ -118,7 +111,6 @@
         >
           <v-icon left> mdi-file-excel</v-icon> Import soal
         </v-btn>
-
       </v-slide-y-transition>
       <v-slide-y-transition>
         <v-btn
@@ -165,23 +157,14 @@
         </v-btn>
       </v-slide-y-transition>
 
-      <v-btn
-        v-if="windowWidth >= 600"
-        small
-        text
-        @click="logout"
-      >
+      <v-btn v-if="windowWidth >= 600" small text @click="logout">
         <v-icon>mdi-logout-variant</v-icon>keluar
       </v-btn>
     </v-app-bar>
 
     <v-main class="bg-pattern">
-      <transition
-        name="slide-fade"
-        mode="out-in"
-      >
+      <transition name="slide-fade" mode="out-in">
         <nuxt />
-
       </transition>
 
       <!-- <v-fade-transition mode="in" hide-on-leave="true">
@@ -194,16 +177,16 @@
         outlined
         right
       >
-        {{ snackbar.message}}
+        {{ snackbar.message }}
       </v-snackbar>
     </v-main>
-
   </v-app>
 </template>
 
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
 export default {
+  middleware: ['pelayanan'],
   mounted() {
     this.getAntrianPoli()
     this.$echo.channel('antrian-poli').listen('AntrianPoli', (e) => {
@@ -211,7 +194,6 @@ export default {
       this.$store.commit('antrian-poli/setData', e.rekamMedis)
     })
   },
-  middleware: ['pelayanan'],
   created() {
     this.getPoli()
   },
