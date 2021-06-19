@@ -107,7 +107,8 @@
         </v-card>
       </v-col>
       <v-col cols="5">
-        <v-card>
+        <antrian-poli :poli="1" @antrian-selected="showDetail"></antrian-poli>
+        <!-- <v-card>
           <v-card-title>
             <v-icon class="mr-3">mdi-human-queue</v-icon>
             Antrian
@@ -129,7 +130,7 @@
               </v-list-item>
             </v-list>
           </v-card-text>
-        </v-card>
+        </v-card> -->
       </v-col>
     </v-row>
   </v-container>
@@ -139,7 +140,7 @@
 import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   layout: 'dokter',
-  mounted() {
+  created() {
     this.$store.commit('page/setTitle', this.title)
     this.getObat()
   },
@@ -178,8 +179,11 @@ export default {
       },
     },
   },
-  method: {
+  methods: {
     ...mapActions({ getObat: 'obat/getObat' }),
+    showDetail(data) {
+      console.log(data)
+    },
   },
 }
 </script>

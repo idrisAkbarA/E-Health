@@ -19,7 +19,9 @@
           tile
         >
           <v-img max-width="70" :src="'/images/LogoUIN.png'"></v-img>
-          <v-card-text>E-Health Puskesmas Bangkinang</v-card-text>
+          <v-card-text
+            >Sistem Informasi Rawat Jalan Puskesmas Bangkinang Kota</v-card-text
+          >
         </v-card>
         <v-card
           v-if="windowWidth <= 600"
@@ -110,24 +112,37 @@
 import { mapActions, mapMutations, mapState } from 'vuex'
 export default {
   middleware: ['dokter'],
-  methods: {
-    toggleDrawer(bool) {
-      if (!bool) {
-        this.miniVariant = !this.miniVariant
-        this.expandOnHover = !this.expandOnHover
-      } else {
-        this.drawer = !this.drawer
-      }
-    },
-    checkRoute(name) {
-      return this.$route.name == name
-    },
-    async logout() {
-      await this.$auth.logout()
-    },
-  },
   props: {
     source: String,
+  },
+  data: () => ({
+    drawer: false,
+    permanent: true,
+    miniVariant: true,
+    expandOnHover: true,
+    scrollOps: {
+      scrollPanel: {
+        easing: 'easeInQuad',
+        speed: 800,
+        scrollingX: false,
+      },
+      bar: {
+        background: '#FFEBEE',
+      },
+      vuescroll: {
+        mode: 'native',
+        wheelScrollDuration: 0,
+        locking: true,
+      },
+    },
+  }),
+  created() {
+    this.getPoli()
+    this.getAntrianPoli()
+    this.$echo.channel('antrian-poli').listen('AntrianPoli', (e) => {
+      console.log('update', e)
+      this.$store.commit('antrian-poli/setData', e.rekamMedis)
+    })
   },
   computed: {
     snackbar: {
@@ -167,27 +182,26 @@ export default {
       ]
     },
   },
-  data: () => ({
-    drawer: false,
-    permanent: true,
-    miniVariant: true,
-    expandOnHover: true,
-    scrollOps: {
-      scrollPanel: {
-        easing: 'easeInQuad',
-        speed: 800,
-        scrollingX: false,
-      },
-      bar: {
-        background: '#FFEBEE',
-      },
-      vuescroll: {
-        mode: 'native',
-        wheelScrollDuration: 0,
-        locking: true,
-      },
+  methods: {
+    ...mapActions({
+      getPoli: 'poli/getPoli',
+      getAntrianPoli: 'antrian-poli/fetchData',
+    }),
+    toggleDrawer(bool) {
+      if (!bool) {
+        this.miniVariant = !this.miniVariant
+        this.expandOnHover = !this.expandOnHover
+      } else {
+        this.drawer = !this.drawer
+      }
     },
-  }),
+    checkRoute(name) {
+      return this.$route.name == name
+    },
+    async logout() {
+      await this.$auth.logout()
+    },
+  },
 }
 </script>
 
