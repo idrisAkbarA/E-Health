@@ -36,8 +36,6 @@ class AntrianPoli implements ShouldBroadcast
         // $this->pasien = $rekamMedis->pasien;
         // Log::info('broadcasting');
         // $this->rekamMedis = RekamMedis::whereDate('created_at', today())->with('pasien')->latest()->get();
-
-
     }
 
     /**
@@ -53,6 +51,7 @@ class AntrianPoli implements ShouldBroadcast
     {
         return ['rekamMedis' => RekamMedis::whereDate('created_at', today())
             ->with('pasien')
+            ->with('poli')
             ->latest()
             ->get()];
     }

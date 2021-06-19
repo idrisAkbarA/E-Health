@@ -13,11 +13,13 @@ export const getters = {
         return state.data;
     },
     getAntrianPoliByID: (state) => (id) => {
-        if (!id) {
+        if (id === null) {
             console.log('hai');
             return state.data
         }
-        return state.data.find(poli => poli.id === id)
+        return state.data.filter(data =>
+            data.poli_id === id
+        )
     }
 
 }
