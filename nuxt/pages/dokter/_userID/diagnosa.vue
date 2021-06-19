@@ -13,27 +13,43 @@
             <v-simple-table dense>
               <template v-slot:default>
                 <tbody>
-                  <tr v-for="item in pasien" :key="item.name">
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.value }}</td>
+                  <tr>
+                    <td>Nama</td>
+                    <td>: {{ pasien.nama }}</td>
+                  </tr>
+                  <tr>
+                    <td>Jenis Kelamin</td>
+                    <td>: {{ pasien.jenis_kelamin }}</td>
+                  </tr>
+                  <tr>
+                    <td>Tempat Tanggal Lahir</td>
+                    <td>
+                      : {{ `${pasien.tempat_lahir}, ${pasien.tanggal_lahir}` }}
+                    </td>
+                  </tr>
+                  <tr v-if="pasien.alamat">
+                    <td>Alamat</td>
+                    <td>: {{ pasien.alamat }}</td>
+                  </tr>
+                  <tr v-if="pasien.kontak">
+                    <td>Kontak</td>
+                    <td>: {{ pasien.kontak }}</td>
+                  </tr>
+                  <tr v-if="pasien.riwayat_penyakit_pribadi">
+                    <td>Riwayat Penyakit Pribadi</td>
+                    <td>: {{ pasien.riwayat_penyakit_pribadi }}</td>
+                  </tr>
+                  <tr v-if="pasien.riwayat_penyakit_keluarga">
+                    <td>Riwayat Penyakit Keluarga</td>
+                    <td>: {{ pasien.riwayat_penyakit_keluarga }}</td>
+                  </tr>
+                  <tr v-if="pasien.riwayat_alergi">
+                    <td>Riwayat Alergi</td>
+                    <td>: {{ pasien.riwayat_alergi }}</td>
                   </tr>
                 </tbody>
               </template>
             </v-simple-table>
-            <!-- <v-row>
-              <v-col cols="4"> Nama Pasien </v-col>
-              <v-col cols="8"> : Charles Augustus Milverton </v-col>
-              <v-col cols="4"> Jenis Kelamin </v-col>
-              <v-col cols="8"> : Laki-Laki </v-col>
-              <v-col cols="4"> Tempat Tanggal Lahir </v-col>
-              <v-col cols="8"> : London, 19 Juni 1988 </v-col>
-              <v-col cols="4"> Alamat </v-col>
-              <v-col cols="8"> : Kings St. 201 </v-col>
-              <v-col cols="4"> Kontak </v-col>
-              <v-col cols="8"> : +01 1289-1232 </v-col>
-              <v-col cols="4"> Riwayat Penyakit </v-col>
-              <v-col cols="8"> : Demam, Sembelit </v-col>
-            </v-row> -->
             <v-divider class="my-4"></v-divider>
             <v-expansion-panels focusable hover>
               <v-expansion-panel>
@@ -77,11 +93,13 @@
                     :label="is_resep ? 'Aktif' : 'Non-Aktif'"
                     v-model="is_resep"
                   ></v-switch>
-                  <v-row>
+                  <v-row v-if="is_resep">
                     <v-col cols="8">
                       <v-select
                         outlined
                         :items="obat"
+                        item-text="nama"
+                        item-value="id"
                         label="Nama Obat"
                       ></v-select>
                     </v-col>
@@ -107,30 +125,11 @@
         </v-card>
       </v-col>
       <v-col cols="5">
-        <antrian-poli :poli="1" @antrian-selected="showDetail"></antrian-poli>
-        <!-- <v-card>
-          <v-card-title>
-            <v-icon class="mr-3">mdi-human-queue</v-icon>
-            Antrian
-          </v-card-title>
-          <v-card-subtitle
-            >Daftar pasien yang sedang dalam antrian</v-card-subtitle
-          >
-          <v-divider></v-divider>
-          <v-card-text>
-            <v-list>
-              <v-list-item>
-                <v-list-item-avatar> 1 </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title
-                    >Charles Augustus Milverton</v-list-item-title
-                  >
-                  <v-list-item-subtitle>Psychiatry</v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-        </v-card> -->
+        <antrian-poli
+          :poli="1"
+          @antrian-selected="showDetail"
+          status="null"
+        ></antrian-poli>
       </v-col>
     </v-row>
   </v-container>
@@ -155,16 +154,47 @@ export default {
       is_resep: false,
       antrian: {},
       form: {},
-      pasien: [
-        { name: 'Nama', value: 'Carl' },
-        { name: 'Jenis Kelamin', value: 'Laki-Laki' },
-        { name: 'Tempat Tanggal Lahir', value: 'London, 29 Juni 1898' },
-        { name: 'Alamat', value: 'Kings St. 201' },
-        { name: 'Kontak', value: '+01 1289-1232' },
-        { name: 'Riwayat Penyakit Pribadi', value: 'Demam Sembelit' },
-        { name: 'Riwayat Penyakit Keluarga', value: 'Dracula Syndrome' },
-        { name: 'Riwayat Alergi', value: 'Alergi Sinar Matahari' },
-      ],
+      rekamMedis: {
+        id: 1,
+        pasien_id: 1,
+        dokter_id: null,
+        poli_id: 1,
+        diagnosa: null,
+        pengobatan: null,
+        resep_obat_id: null,
+        total_biaya: null,
+        status: null,
+        is_bayar: 0,
+        created_at: '2021-06-19T08:00:31.000000Z',
+        updated_at: '2021-06-19T08:00:32.000000Z',
+        pasien: {
+          id: 1,
+          nama: 'Test',
+          nik: '112312',
+          tempat_lahir: 'Pekanbaru',
+          tanggal_lahir: '2021-06-19',
+          jenis_kelamin: 'Laki-Laki',
+          agama: 'Kristen',
+          pendidikan: null,
+          pekerjaan: null,
+          alamat: null,
+          kontak: null,
+          riwayat_penyakit_pribadi: null,
+          riwayat_penyakit_keluarga: null,
+          riwayat_alergi: null,
+          created_at: '2021-06-19T08:15:32.000000Z',
+          updated_at: '2021-06-19T08:15:32.000000Z',
+        },
+        poli: {
+          id: 1,
+          nama: 'Anak',
+          penanggungjawab: 'Dr. Idris',
+          keterangan:
+            'Poli Spesialis Anak adalah layanan pemeriksaan dan pengobatan terhadap bayi dan anak.',
+          created_at: '2021-06-18T12:34:46.000000Z',
+          updated_at: '2021-06-18T12:34:46.000000Z',
+        },
+      },
     }
   },
   computed: {
@@ -177,6 +207,18 @@ export default {
       set: function (v) {
         this.$store.commit('obat/SET_OBAT', v)
       },
+    },
+    pasien() {
+      return this.rekamMedis.pasien
+    },
+  },
+  watch: {
+    is_resep(val) {
+      if (val) {
+        this.form.resep_obat = []
+      } else {
+        delete this.form.resep_obat
+      }
     },
   },
   methods: {
