@@ -59,12 +59,15 @@ import { mapGetters, mapState } from 'vuex'
 export default {
   props: {
     poli: null,
+    status: null,
   },
-  created() {
+  mounted() {
     // console.log(this.poli)
     if (this.poli !== null) {
       console.log('poli ada')
       this.getDetailPoli()
+    } else {
+      this.getFinalData()
     }
   },
   computed: {
