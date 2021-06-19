@@ -81,6 +81,12 @@ export default {
     search() {
       this.searchAntrian()
     },
+    poli() {
+      this.getFinalData()
+    },
+    status() {
+      this.getFinalData()
+    },
   },
   data() {
     return {
