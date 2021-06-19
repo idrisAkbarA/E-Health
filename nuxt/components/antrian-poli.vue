@@ -1,11 +1,16 @@
 <template>
   <v-card>
     <v-card-title>
-      <v-icon class="mr-3">mdi-human-queue</v-icon>
-      <span v-if="poliDetail">{{ 'Antrian Poli ' + poliDetail.nama }}</span>
+      <v-icon class="mr-3">{{ icon ? icon : 'mdi-human-queue' }}</v-icon>
+      <span v-if="header">{{ header }}</span>
+      <span v-else-if="poliDetail">{{
+        'Antrian Poli ' + poliDetail.nama
+      }}</span>
       <span v-else>Antrian</span>
     </v-card-title>
-    <v-card-subtitle>Daftar pasien yang sedang dalam antrian</v-card-subtitle>
+    <v-card-subtitle>{{
+      subHeader ? subHeader : 'Daftar pasien yang sedang dalam antrian'
+    }}</v-card-subtitle>
     <v-divider></v-divider>
 
     <v-card-text>
@@ -53,6 +58,9 @@
 import { mapGetters, mapState } from 'vuex'
 export default {
   props: {
+    icon: null,
+    header: null,
+    subHeader: null,
     poli: null,
     status: null,
   },
