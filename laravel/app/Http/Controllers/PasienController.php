@@ -47,7 +47,13 @@ class PasienController extends Controller
             'tanggal_lahir' => 'required|date',
             'kontak' => 'required',
             'alamat' => 'nullable',
-            'poli_id' => 'nullable'
+            'poli_id' => 'nullable',
+            'agama' => 'nullable',
+            'riwayat_alergi' => 'nullable',
+            'riwayat_penyakit_pribadi' => 'nullable',
+            'riwayat_penyakit_keluarga' => 'nullable',
+            'pekerjaan' => 'nullable',
+            'pendidikan' => 'nullable',
         ]);
 
         if ($validated['poli_id']) {

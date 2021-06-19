@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <h1>wow bisa</h1>
-  </div>
+  <ganti-password :id="parseInt($route.params.userID)"></ganti-password>
 </template>
 
 <script>
