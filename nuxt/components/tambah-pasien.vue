@@ -7,6 +7,8 @@
       v-model="valid"
     >
       <v-text-field
+        persistent-hint
+        hint="Wajib diisi"
         :rules="ruleRequired"
         dense
         filled
@@ -16,6 +18,8 @@
         prepend-inner-icon="mdi-account"
       ></v-text-field>
       <v-text-field
+        persistent-hint
+        hint="Wajib diisi"
         :rules="ruleRequired"
         dense
         filled
@@ -25,6 +29,8 @@
         prepend-inner-icon="mdi-card-account-details"
       ></v-text-field>
       <v-select
+        persistent-hint
+        hint="Wajib diisi"
         :rules="ruleRequired"
         color="secondary"
         filled
@@ -34,7 +40,17 @@
         prepend-inner-icon="mdi-gender-male-female"
       >
       </v-select>
+      <v-select
+        color="secondary"
+        filled
+        label="Agama"
+        :items="agama"
+        v-model="selectedAgama"
+      >
+      </v-select>
       <v-text-field
+        persistent-hint
+        hint="Wajib diisi"
         :rules="ruleRequired"
         dense
         filled
@@ -52,6 +68,8 @@
       >
         <template v-slot:activator="{ on, attrs }">
           <v-text-field
+            persistent-hint
+            hint="Wajib diisi"
             :rules="ruleRequired"
             dense
             filled
@@ -89,6 +107,8 @@
         </v-date-picker>
       </v-dialog>
       <v-text-field
+        persistent-hint
+        hint="Wajib diisi"
         :rules="ruleRequired"
         dense
         filled
@@ -98,6 +118,8 @@
         prepend-inner-icon="mdi-map-marker"
       ></v-text-field>
       <v-text-field
+        persistent-hint
+        hint="Wajib diisi"
         :rules="ruleRequired"
         dense
         filled
@@ -106,14 +128,59 @@
         v-model="kontak"
         prepend-inner-icon="mdi-phone"
       ></v-text-field>
+      <v-text-field
+        dense
+        filled
+        color="secondary"
+        label="Pendidikan"
+        v-model="pendidikan"
+        prepend-inner-icon="mdi-school"
+      ></v-text-field>
+      <v-text-field
+        dense
+        filled
+        color="secondary"
+        label="Pekerjaan"
+        v-model="pekerjaan"
+        prepend-inner-icon="mdi-briefcase"
+      ></v-text-field>
+      <div class="mt-2 mb-2"></div>
+      <h4>Riwayat Kesehatan</h4>
+      <p>Isi data-data riwayat penyakit pasien</p>
+      <v-text-field
+        dense
+        filled
+        color="secondary"
+        label="Riwayat Penyakit Pribadi"
+        v-model="riwayatPenyakitPribadi"
+        prepend-inner-icon="mdi-account-alert"
+      ></v-text-field>
+      <v-text-field
+        dense
+        filled
+        color="secondary"
+        label="Riwayat Penyakit Keluarga"
+        v-model="riwayatPenyakitKeluarga"
+        prepend-inner-icon="mdi-account-multiple"
+      ></v-text-field>
+      <v-text-field
+        dense
+        filled
+        color="secondary"
+        label="Riwayat Alergi"
+        v-model="riwayatAlergi"
+        prepend-inner-icon="mdi-allergy"
+      ></v-text-field>
       <div class="mt-2 mb-2"></div>
       <h4>Poli</h4>
       <p>Isi tujuan Poli pasien</p>
       <v-select
+        color="secondary"
+        persistent-hint
+        hint="Wajib diisi"
         :rules="ruleRequired"
         filled
         label="Poli"
-        color="secondary"
         :items="poli"
         item-text="nama"
         item-value="id"
@@ -164,13 +231,20 @@ export default {
       valid: false,
       selectedPoli: null,
       selectedJK: null,
+      selectedAgama: null,
       jk: ['Laki-laki', 'Perempuan'],
+      agama: ['Islam', 'Kristen', 'Konghucu', 'Budha', 'Hindu'],
       nama: null,
       nik: null,
       kontak: null,
       tempatLahir: null,
       alamat: null,
       isLoading: false,
+      riwayatAlergi: null,
+      riwayatPenyakitPribadi: null,
+      riwayatPenyakitKeluarga: null,
+      pekerjaan: null,
+      pendidikan: null,
     }
   },
   methods: {
@@ -205,6 +279,12 @@ export default {
         jenis_kelamin: this.selectedJK,
         alamat: this.alamat,
         poli_id: this.selectedPoli,
+        agama: this.selectedAgama,
+        riwayat_alergi: this.riwayatAlergi,
+        riwayat_penyakit_pribadi: this.riwayatPenyakitPribadi,
+        riwayat_penyakit_keluarga: this.riwayatPenyakitKeluarga,
+        pekerjaan: this.pekerjaan,
+        pendidikan: this.pendidikan,
       }
       this.$axios
         .post(this.pasienURL, data)
