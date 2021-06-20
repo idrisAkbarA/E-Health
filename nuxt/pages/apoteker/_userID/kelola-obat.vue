@@ -208,12 +208,12 @@ export default {
         .then((response) => {
           if (response.data.status) {
             this.bottomSheet = false
-            this.$snackbar('success', response.data.message, true)
+            this.$snackbar('success', response.data.message)
           }
         })
         .catch((err) => {
           console.error(err)
-          this.$snackbar('danger', err, true)
+          this.$snackbar('danger', err)
         })
         .then(() => {
           this.isLoading = false
@@ -229,12 +229,12 @@ export default {
           if (response.data.status) {
             this.bottomSheet = false
             this.form = {}
-            this.$snackbar('success', response.data.message, true)
+            this.$snackbar('success', response.data.message)
           }
         })
         .catch((err) => {
           console.error(err)
-          this.$snackbar('danger', err, true)
+          this.$snackbar('danger', err)
         })
         .then(() => {
           this.isLoading = false
@@ -250,12 +250,12 @@ export default {
         .then((response) => {
           if (response.data.status) {
             this.dialogDelete = false
-            this.$snackbar('success', response.data.message, true)
+            this.$snackbar('success', response.data.message)
           }
         })
         .catch((err) => {
           console.error(err)
-          this.$snackbar('danger', err, true)
+          this.$snackbar('danger', err)
         })
         .then(() => {
           this.isLoading = false

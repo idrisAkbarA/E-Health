@@ -2,14 +2,14 @@
   <v-container fill-height>
     <v-row style="height: 100%">
       <v-col cols="7">
-        <v-card>
+        <v-card class="mb-10">
           <v-card-title>
             <v-icon class="mr-3">mdi-stethoscope</v-icon>
             Diagnosa
           </v-card-title>
           <v-card-subtitle>Catat hasil diagnosa pemeriksaan</v-card-subtitle>
           <v-divider></v-divider>
-          <v-card-text v-if="pasien">
+          <v-card-text class="pb-15" v-if="pasien">
             <v-simple-table dense>
               <template v-slot:default>
                 <tbody>
@@ -73,6 +73,15 @@
                           label="Pengobatan"
                           v-model="form.pengobatan"
                         ></v-textarea>
+                        <v-text-field
+                          type="number"
+                          min="0"
+                          color="secondary"
+                          label="Total Biaya"
+                          hint="*Total biaya belum termasuk harga obat"
+                          prefix="Rp."
+                          v-model="form.total_biaya"
+                        ></v-text-field>
                       </v-col>
                     </v-row>
                   </v-form>
@@ -89,38 +98,59 @@
                   <v-switch
                     inset
                     small
-                    :color="is_resep ? 'success' : ''"
-                    :label="is_resep ? 'Aktif' : 'Non-Aktif'"
-                    v-model="is_resep"
+                    :color="isResep ? 'success' : ''"
+                    :label="isResep ? 'Aktif' : 'Non-Aktif'"
+                    v-model="isResep"
                   ></v-switch>
-                  <v-row v-if="is_resep">
-                    <v-col cols="8">
-                      <v-select
-                        outlined
-                        :items="obat"
-                        item-text="nama"
-                        item-value="id"
-                        label="Nama Obat"
-                      ></v-select>
-                    </v-col>
-                    <v-col cols="4">
-                      <v-text-field
-                        outlined
-                        type="number"
-                        color="secondary"
-                        label="Jumlah"
-                        suffix=""
-                      ></v-text-field>
-                    </v-col>
+                  <v-card-text v-if="isResep">
+                    <v-row v-for="(resep, index) in resepObat" :key="index">
+                      <v-col cols="8">
+                        <v-select
+                          outlined
+                          :items="obat"
+                          item-text="nama"
+                          item-value="id"
+                          label="Nama Obat"
+                          v-model="resep.obat"
+                        ></v-select>
+                      </v-col>
+                      <v-col cols="4">
+                        <v-text-field
+                          outlined
+                          type="number"
+                          color="secondary"
+                          label="Jumlah"
+                          suffix="Satuan"
+                          v-model="resep.jumlah"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
                     <v-col class="text-center">
-                      <v-btn class="mx-2" fab small dark color="primary">
+                      <v-btn
+                        class="mx-2"
+                        fab
+                        small
+                        dark
+                        color="primary"
+                        @click="tambahResep"
+                      >
                         <v-icon dark> mdi-plus </v-icon>
                       </v-btn>
                     </v-col>
-                  </v-row>
+                  </v-card-text>
                 </v-expansion-panel-content>
               </v-expansion-panel>
             </v-expansion-panels>
+            <v-col cols="12">
+              <v-btn
+                dark
+                color="primary"
+                class="mt-3 float-right"
+                :loading="isLoading"
+                @click="store"
+                >Simpan</v-btn
+              >
+            </v-col>
           </v-card-text>
           <v-card-text v-else>
             <p class="text-center">Pilih pasien terlebih daluhu...</p>
@@ -154,10 +184,12 @@ export default {
   data() {
     return {
       title: 'Diagnosa',
-      is_resep: false,
-      antrian: {},
+      isLoading: false,
+      isResep: false,
       form: {},
-      rekamMedis: {},
+      // pasien: null,
+      resepObat: [],
+      // rekamMedis: {},
     }
   },
   computed: {
@@ -172,23 +204,64 @@ export default {
       },
     },
     pasien() {
-      return this.rekamMedis.pasien
+      return this.form.pasien
     },
   },
   watch: {
-    is_resep(val) {
+    isResep(val) {
       if (val) {
-        this.form.resep_obat = []
+        this.resepObat = [{}]
       } else {
-        delete this.form.resep_obat
+        delete this.resepObat
+      }
+    },
+    pasien(val) {
+      if (!val) {
+        this.form = {}
+      }
+    },
+    form(val) {
+      if (this.$_.isEmpty(val)) {
+        this.isResep = false
       }
     },
   },
   methods: {
     ...mapActions({ getObat: 'obat/getObat' }),
     showDetail(data) {
-      console.log(data)
-      this.rekamMedis = data
+      // if (this.$_.isEmpty(data)) {
+      //   this.form = {}
+      //   this.pasien = null
+      //   return
+      // }
+      // this.form.id = data.id
+      // this.pasien = this.$_.clone(data.pasien)
+      this.form = this.$_.clone(data)
+    },
+    tambahResep() {
+      this.resepObat.push({})
+    },
+    store() {
+      var form = this.form
+      form.resep_obat = this.resepObat
+      form.dokter_id = this.$auth.user.id
+      form.status = 1
+      this.isLoading = true
+      this.$axios
+        .put(`${this.urlRekamMedis}/${form.id}`, form)
+        .then((response) => {
+          if (response.data.status) {
+            this.form = {}
+            this.$snackbar('success', response.data.message)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+          this.$snackbar('danger', err)
+        })
+        .then(() => {
+          this.isLoading = false
+        })
     },
   },
 }

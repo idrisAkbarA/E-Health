@@ -1,12 +1,16 @@
 <template>
   <v-card>
     <v-card-title>
-      <v-icon class="mr-3">{{icon?icon:'mdi-human-queue'}}</v-icon>
-      <span v-if="header">{{header}}</span>
-      <span v-else-if="poliDetail">{{ 'Antrian Poli ' + poliDetail.nama }}</span>
+      <v-icon class="mr-3">{{ icon ? icon : 'mdi-human-queue' }}</v-icon>
+      <span v-if="header">{{ header }}</span>
+      <span v-else-if="poliDetail">{{
+        'Antrian Poli ' + poliDetail.nama
+      }}</span>
       <span v-else>Antrian</span>
     </v-card-title>
-    <v-card-subtitle>{{subHeader?subHeader:'Daftar pasien yang sedang dalam antrian'}}</v-card-subtitle>
+    <v-card-subtitle>{{
+      subHeader ? subHeader : 'Daftar pasien yang sedang dalam antrian'
+    }}</v-card-subtitle>
     <v-divider></v-divider>
 
     <v-card-text>
@@ -20,11 +24,8 @@
         placeholder="Ketik untuk mulai mencari..."
       ></v-text-field>
       <!-- @keyup="searchAntrian()" -->
-      <v-list v-if="originalAntrian">
-        <v-list-item-group
-          v-model="selectedItem"
-          color="secondary"
-        >
+      <v-list v-if="originalAntrian.length > 0">
+        <v-list-item-group v-model="selectedItem" color="secondary">
           <transition-group name="scale-transition">
             <v-list-item
               :three-line="index == 0 && (search == '' || search == null)"
@@ -37,23 +38,19 @@
                 <v-list-item-subtitle>{{
                   'Poli ' + antrian.poli.nama
                 }}</v-list-item-subtitle>
-                <v-list-item-subtitle v-if="index == 0 && (search == '' || search == null)">
-                  <v-chip
-                    label
-                    color="secondary"
-                    class="black--text"
-                    x-small
-                  >Antrian sekarang</v-chip>
+                <v-list-item-subtitle
+                  v-if="index == 0 && (search == '' || search == null)"
+                >
+                  <v-chip label color="secondary" class="black--text" x-small
+                    >Antrian sekarang</v-chip
+                  >
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
           </transition-group>
         </v-list-item-group>
       </v-list>
-      <span
-        v-else
-        class="text-center"
-      >Tidak ada antrian</span>
+      <span v-else class="text-center">Tidak ada antrian</span>
     </v-card-text>
   </v-card>
 </template>
@@ -102,7 +99,7 @@ export default {
       search: '',
       selectedItem: undefined,
       poliDetail: null,
-      originalAntrian: null,
+      originalAntrian: [],
     }
   },
   methods: {
