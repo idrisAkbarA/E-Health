@@ -72,7 +72,34 @@
         </v-chip>
         <v-row>
           <v-col cols="12">
-            <v-data-table></v-data-table>
+            <v-data-table>
+              <template v-slot:top>
+                <v-card flat>
+                  <v-card-title>
+                    <v-icon class="mr-4">mdi-history</v-icon> Riwayat Data Pasien
+                  </v-card-title>
+                  <v-card-subtitle>Lihat riwayat data pasien</v-card-subtitle>
+                  <v-card-text>
+                    <v-expansion-panels
+                      focusable
+                      hover
+                    >
+                      <v-expansion-panel>
+                        <v-expansion-panel-header class="pink darken-4">
+                          <v-row align="center">
+                            <v-icon class="mr-4">mdi-filter</v-icon> <span>Pencarian</span>
+                          </v-row>
+                        </v-expansion-panel-header>
+                        <v-expansion-panel-content class="blue-grey darken-4">
+
+                        </v-expansion-panel-content>
+                      </v-expansion-panel>
+                    </v-expansion-panels>
+                  </v-card-text>
+                </v-card>
+
+              </template>
+            </v-data-table>
           </v-col>
         </v-row>
       </v-card>
@@ -108,7 +135,7 @@ export default {
 .ribbon {
   top: 0;
   left: 0;
-  position: fixed;
+  position: absolute;
   z-index: 0;
   background: rgb(0, 36, 15);
   background-image: linear-gradient(
