@@ -12,6 +12,12 @@ class AntrianObat extends Model
     protected $table = 'antrian_obat';
     protected $guarded = ['id'];
 
+    // Getters
+    public function getResepObatAttribute($value)
+    {
+        return json_decode($value);
+    }
+
     // Setters
     public function setResepObatAttribute($value)
     {
