@@ -202,7 +202,18 @@
 import { mapActions, mapMutations, mapState } from 'vuex'
 export default {
   middleware: ['kasir'],
+  mounted() {
+    this.getAntrianPoli()
+    this.$echo.channel('antrian-poli').listen('AntrianPoli', (e) => {
+      console.log('update', e)
+      this.$store.commit('antrian-poli/setData', e.rekamMedis)
+    })
+  },
   methods: {
+    ...mapActions({
+      getPoli: 'poli/getPoli',
+      getAntrianPoli: 'antrian-poli/fetchData',
+    }),
     toggleDrawer(bool) {
       if (!bool) {
         this.miniVariant = !this.miniVariant
