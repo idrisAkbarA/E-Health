@@ -8,7 +8,7 @@
       <div class="left">
         <div>Selamat Datang di aplikasi</div>
         <div>
-          <h1>E-Health Bangkinang</h1>
+          <h1>Klinik Bangkinang Kota</h1>
         </div>
         <div>Selamat bertugas!</div>
       </div>
