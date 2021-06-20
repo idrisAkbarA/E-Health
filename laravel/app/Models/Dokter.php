@@ -35,4 +35,9 @@ class Dokter extends Model
     {
         return $this->belongsTo('App\Models\Poli');
     }
+
+    public function rekam_medis()
+    {
+        return $this->hasMany('App\Models\RekamMedis');
+    }
 }

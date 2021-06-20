@@ -47,6 +47,7 @@ Route::prefix('poli')->name('poli.')->group(function () {
 // Dokter Routes
 Route::prefix('dokter')->name('dokter.')->group(function () {
   Route::get('/', 'DokterController@index')->name('index');
+  Route::get('user/{user}', 'DokterController@getByUserId')->name('get-by-user');
   Route::get('/{dokter}', 'DokterController@show')->name('show');
 });
 

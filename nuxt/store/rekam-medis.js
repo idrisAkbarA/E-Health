@@ -32,7 +32,7 @@ export const actions = {
       })
     })
   },
-  getRekamMedisByPasien({ state, commit }, pasien) {
+  getRekamMedisByPasienId({ state, commit }, pasien) {
     return new Promise((resolve, reject) => {
       this.$axios.get(`${state.url}/${pasien}`).then((response) => {
         commit('SET_REKAM_MEDIS', response.data.data)

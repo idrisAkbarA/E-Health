@@ -18,11 +18,10 @@
           flat
           tile
         >
-          <v-img
-            max-width="70"
-            :src="'/images/LogoUIN.png'"
-          ></v-img>
-          <v-card-text>Sistem Informasi Rawat Jalan Puskesmas Bangkinang Kota</v-card-text>
+          <v-img max-width="70" :src="'/images/LogoUIN.png'"></v-img>
+          <v-card-text
+            >Sistem Informasi Rawat Jalan Puskesmas Bangkinang Kota</v-card-text
+          >
         </v-card>
         <v-card
           v-if="windowWidth <= 600"
@@ -68,12 +67,10 @@
       </vue-scroll>
     </v-navigation-drawer>
 
-    <v-app-bar
-      app
-      dense
-      clipped-left
-    >
-      <v-app-bar-nav-icon @click.stop="toggleDrawer(windowWidth <= 600)"></v-app-bar-nav-icon>
+    <v-app-bar app dense clipped-left>
+      <v-app-bar-nav-icon
+        @click.stop="toggleDrawer(windowWidth <= 600)"
+      ></v-app-bar-nav-icon>
       <div style="width: 100%; -webkit-app-region: drag">
         <v-toolbar-title>
           <span
@@ -85,21 +82,13 @@
         </v-toolbar-title>
       </div>
 
-      <v-btn
-        v-if="windowWidth >= 600"
-        small
-        text
-        @click="logout"
-      >
+      <v-btn v-if="windowWidth >= 600" small text @click="logout">
         <v-icon>mdi-logout-variant</v-icon>keluar
       </v-btn>
     </v-app-bar>
 
     <v-main class="bg-pattern">
-      <transition
-        name="slide-fade"
-        mode="out-in"
-      >
+      <transition name="slide-fade" mode="out-in">
         <nuxt />
       </transition>
 
@@ -107,12 +96,7 @@
         <router-view></router-view>
       </v-fade-transition>-->
     </v-main>
-    <v-snackbar
-      :value="snackbar.value"
-      bottom
-      :color="snackbar.color"
-      outlined
-    >
+    <v-snackbar :value="snackbar.value" bottom :color="snackbar.color" outlined>
       {{ snackbar.message }}
     </v-snackbar>
   </v-app>
@@ -122,25 +106,30 @@
 import { mapActions, mapMutations, mapState } from 'vuex'
 export default {
   middleware: ['apoteker'],
-  methods: {
-    toggleDrawer(bool) {
-      if (!bool) {
-        this.miniVariant = !this.miniVariant
-        this.expandOnHover = !this.expandOnHover
-      } else {
-        this.drawer = !this.drawer
-      }
-    },
-    checkRoute(name) {
-      return this.$route.name == name
-    },
-    async logout() {
-      await this.$auth.logout()
-    },
-  },
   props: {
     source: String,
   },
+  data: () => ({
+    drawer: false,
+    permanent: true,
+    miniVariant: true,
+    expandOnHover: true,
+    scrollOps: {
+      scrollPanel: {
+        easing: 'easeInQuad',
+        speed: 800,
+        scrollingX: false,
+      },
+      bar: {
+        background: '#FFEBEE',
+      },
+      vuescroll: {
+        mode: 'native',
+        wheelScrollDuration: 0,
+        locking: true,
+      },
+    },
+  }),
   computed: {
     snackbar: {
       get: function () {
@@ -184,27 +173,22 @@ export default {
       ]
     },
   },
-  data: () => ({
-    drawer: false,
-    permanent: true,
-    miniVariant: true,
-    expandOnHover: true,
-    scrollOps: {
-      scrollPanel: {
-        easing: 'easeInQuad',
-        speed: 800,
-        scrollingX: false,
-      },
-      bar: {
-        background: '#FFEBEE',
-      },
-      vuescroll: {
-        mode: 'native',
-        wheelScrollDuration: 0,
-        locking: true,
-      },
+  methods: {
+    toggleDrawer(bool) {
+      if (!bool) {
+        this.miniVariant = !this.miniVariant
+        this.expandOnHover = !this.expandOnHover
+      } else {
+        this.drawer = !this.drawer
+      }
     },
-  }),
+    checkRoute(name) {
+      return this.$route.name == name
+    },
+    async logout() {
+      await this.$auth.logout()
+    },
+  },
 }
 </script>
 

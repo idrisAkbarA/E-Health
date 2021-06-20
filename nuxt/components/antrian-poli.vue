@@ -15,7 +15,7 @@
       <v-select
         hide-details
         prepend-inner-icon="mdi-bank"
-        :items="listPoli?listPoliWithAll:[]"
+        :items="listPoli ? listPoliWithAll : []"
         item-text="nama"
         item-value="id"
         v-model="poli"
@@ -38,13 +38,12 @@
       ></v-text-field>
       <!-- @keyup="searchAntrian()" -->
       <v-list v-if="originalAntrian.length > 0">
-        <v-list-item-group
-          v-model="selectedItem"
-          color="secondary"
-        >
+        <v-list-item-group v-model="selectedItem" color="secondary">
           <transition-group name="scale-transition">
             <v-list-item
-              :three-line="(index == 0 && (search == '' || search == null))||prioritas"
+              :three-line="
+                (index == 0 && (search == '' || search == null)) || prioritas
+              "
               v-for="(antrian, index) in originalAntrian.slice().reverse()"
               :key="antrian.id"
             >
@@ -54,40 +53,63 @@
                 <v-list-item-subtitle>{{
                   'Poli ' + antrian.poli.nama
                 }}</v-list-item-subtitle>
-                <v-list-item-subtitle v-if="index == 0 && (search == '' || search == null)">
+                <v-list-item-subtitle
+                  v-if="index == 0 && (search == '' || search == null)"
+                >
                   <v-chip
                     v-if="antrianSekarang == true"
                     label
                     color="secondary"
                     class="black--text"
                     x-small
-                  >{{antrianSekarangLabel?antrianSekarangLabel:"Antrian Sekarang"}}</v-chip>
+                    >{{
+                      antrianSekarangLabel
+                        ? antrianSekarangLabel
+                        : 'Antrian Sekarang'
+                    }}</v-chip
+                  >
                   <v-chip
                     v-if="prioritas == true"
                     label
-                    :color="antrian.prioritas_utama?'yellow':'pink lighten-3'"
+                    :color="
+                      antrian.prioritas_utama ? 'yellow' : 'pink lighten-3'
+                    "
                     class="black--text"
                     x-small
-                  >{{antrian.prioritas_utama?"Pasien Prioritas":"Pasien Reguler"}}</v-chip>
+                    >{{
+                      antrian.prioritas_utama
+                        ? 'Pasien Prioritas'
+                        : 'Pasien Reguler'
+                    }}</v-chip
+                  >
                 </v-list-item-subtitle>
-                <v-list-item-subtitle v-if="prioritas && !(index == 0 && (search == '' || search == null)) ">
+                <v-list-item-subtitle
+                  v-if="
+                    prioritas &&
+                    !(index == 0 && (search == '' || search == null))
+                  "
+                >
                   <v-chip
                     v-if="prioritas == true"
                     label
-                    :color="antrian.prioritas_utama?'yellow':'pink lighten-3'"
+                    :color="
+                      antrian.prioritas_utama ? 'yellow' : 'pink lighten-3'
+                    "
                     class="black--text"
                     x-small
-                  >{{antrian.prioritas_utama?"Pasien Prioritas":"Pasien Reguler"}}</v-chip>
+                    >{{
+                      antrian.prioritas_utama
+                        ? 'Pasien Prioritas'
+                        : 'Pasien Reguler'
+                    }}</v-chip
+                  >
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
           </transition-group>
         </v-list-item-group>
       </v-list>
-      <span
-        v-else
-        class="text-center"
-      >Tidak ada antrian</span>
+      <span v-else class="text-center">Tidak ada antrian</span>
     </v-card-text>
   </v-card>
 </template>
@@ -140,7 +162,7 @@ export default {
     search() {
       this.searchAntrian()
     },
-    poli() {
+    poli(val) {
       this.getFinalData()
     },
     status() {
@@ -215,6 +237,7 @@ export default {
       this.$axios.get(url + '/' + this.poli).then((response) => {
         console.log('get detail poli', response)
         this.poliDetail = response.data.data
+        this.getFinalData()
       })
     },
   },
