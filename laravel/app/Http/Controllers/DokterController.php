@@ -46,7 +46,11 @@ class DokterController extends Controller
      */
     public function show(Dokter $dokter)
     {
-        //
+        $this->reply = [
+            'status' => true,
+            'data' => $dokter
+        ];
+        return response()->json($this->reply, 200);
     }
 
     /**

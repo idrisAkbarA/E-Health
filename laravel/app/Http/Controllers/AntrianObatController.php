@@ -46,7 +46,11 @@ class AntrianObatController extends Controller
      */
     public function show(AntrianObat $antrianObat)
     {
-        //
+        $this->reply = [
+            'status' => true,
+            'data' => $antrianObat
+        ];
+        return response()->json($this->reply, 200);
     }
 
     /**

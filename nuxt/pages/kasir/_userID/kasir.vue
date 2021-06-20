@@ -1,11 +1,171 @@
 <template>
-  <div>
-    <h1>wow bisa</h1>
-  </div>
+  <v-container
+    fill-height
+    class="pb-10"
+  >
+    <div class="ribbon"></div>
+    <v-row style="height:100%">
+      <v-col cols="4">
+        <antrian-poli
+          header="Antrian Pembayaran"
+          subHeader="Daftar antrian pembayaran. Klik untuk melihat rincian"
+          :poli="null"
+          :status="1"
+          @antrian-selected="setDetail"
+        ></antrian-poli>
+      </v-col>
+      <v-col cols="8">
+        <v-container>
+          <v-row>
+            <v-card width="100%">
+              <v-card-title>
+                <v-icon class="mr-4">mdi-cash-register</v-icon> Rincian Transaksi
+
+              </v-card-title>
+              <v-card-subtitle>
+                Berikut rincian biaya pengobatan di Klinik Bangkinang Kota
+              </v-card-subtitle>
+              <transition-group name="expand-transition">
+
+                <v-card-text
+                  :key="0"
+                  v-if="currentSelected && isLoading==false"
+                >
+                  <v-card color="primary">
+                    <v-card-text class="pa-10">
+
+                      <v-row>
+                        <span>Invoice untuk</span>
+                        <v-spacer></v-spacer>
+                        <span>Tanggal 24 Oktober 2021</span>
+                      </v-row>
+                      <v-row class="mt-6">
+                        <h2>{{currentSelected.pasien.nama}}</h2>
+                      </v-row>
+                      <v-row>
+                        <span>{{currentSelected.pasien.alamat}}</span>
+                      </v-row>
+                      <v-row class="mt-7">
+                        <div style="width:100%; background-color:white; height:1px"></div>
+                      </v-row>
+                      <v-row class="mt-5">
+                        <span>Diperiksa oleh </span>&nbsp; <span class="font-weight-bold">Dr. Enoch The Great</span>
+                      </v-row>
+                      <v-row>
+                        <span>Poli</span>&nbsp;<span class="font-weight-bold">{{currentSelected.poli.nama}}</span>
+                      </v-row>
+
+                    </v-card-text>
+                  </v-card>
+                  <div class="mt-2">
+                    Rincian layanan/obat
+                  </div>
+                  <v-simple-table>
+                    <template v-slot:default>
+                      <thead>
+                        <tr>
+                          <th class="text-left">
+                            Item
+                          </th>
+                          <th class="text-left">
+                            Jumlah
+                          </th>
+                          <th class="text-left">
+                            Total
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Diagnosa</td>
+                          <td>1 </td>
+                          <td>Rp{{currentSelected.total_biaya}}</td>
+                        </tr>
+                        <tr>
+                          <td>Diagnosa</td>
+                          <td>1 </td>
+                          <td>Rp100.000.00</td>
+                        </tr>
+                        <tr>
+                          <td>Diagnosa</td>
+                          <td>1 </td>
+                          <td>Rp100.000.00</td>
+                        </tr>
+                        <v-divider inset></v-divider>
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td><span class="font-weight-bold">Total Biaya:</span> <br>Rp100.000.00</td>
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
+                </v-card-text>
+                <v-card-text
+                  :key="1"
+                  v-else-if="isLoading"
+                >Memuat data</v-card-text>
+                <v-card-text
+                  :key="2"
+                  v-else
+                >
+                  <v-container fill-height>
+                    <v-row
+                      justify="center"
+                      align="center"
+                      align-content="center"
+                      no-gutters
+                    >
+                      <v-col cols="12">
+                        <v-img
+                          max-width="30vw"
+                          :src="'/pertanyaan.png'"
+                          class=" mx-auto"
+                        ></v-img>
+
+                      </v-col>
+                      <v-col cols="12">
+                        <h2 class=" mx-auto text-center center-text">Klik antrian terlebih dahulu untuk melihat rincian </h2>
+                      </v-col>
+                    </v-row>
+                    <v-row
+                      justify="center"
+                      no-gutters
+                    >
+                    </v-row>
+                  </v-container>
+                </v-card-text>
+              </transition-group>
+            </v-card>
+          </v-row>
+          <v-row>
+            <v-card
+              v-if="currentSelected"
+              width="100%"
+            >
+              <!-- <v-card-title>
+                <v-icon class="mr-4">mdi-account-cash</v-icon> Aksi
+              </v-card-title> -->
+              <v-card-actions>
+                <v-btn
+                  block
+                  color="primary"
+                >Terima Pembayaran</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-row>
+        </v-container>
+      </v-col>
+    </v-row>
+
+  </v-container>
 </template>
 
 <script>
+import AntrianPoli from '../../../components/antrian-poli.vue'
+import antrianObat from '../../apoteker/_userID/antrian-obat.vue'
 export default {
+  components: { antrianObat, AntrianPoli },
   mounted() {
     this.$store.commit('page/setTitle', this.title)
   },
@@ -17,8 +177,45 @@ export default {
   data() {
     return {
       title: 'Kasir',
+      currentSelected: null,
+      detailObat: null,
+      detailDokter: null,
+      isLoading: false,
     }
   },
   layout: 'kasir',
+  methods: {
+    async setDetail(item) {
+      this.isLoading = true
+      this.currentSelected = item
+      var url = '/api/dokter/' + this.currentSelected.dokter_id
+      await this.$axios.get(url).then((response) => {
+        this.console.log(response.data)
+      })
+      this.isLoading = false
+      console.log('current selected', item)
+    },
+  },
 }
 </script>
+<style>
+.ribbon {
+  top: 0;
+  left: 0;
+  position: absolute;
+  z-index: 0;
+  background: rgb(0, 36, 15);
+  background-image: linear-gradient(
+    90deg,
+    rgb(170, 185, 153) 0%,
+    rgba(247, 24, 113, 1) 100%
+  );
+  background-size: cover;
+  background-position: center;
+  /* background-size: contain; */
+  /* background: url("/images/bg.jpg"); */
+  /* background: #33691e; */
+  width: 100%;
+  height: 400px;
+}
+</style>

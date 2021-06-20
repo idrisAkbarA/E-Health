@@ -29,6 +29,7 @@ class PasienFactory extends Factory
             "nik" => $faker->unique()->numerify('################'),
             "tempat_lahir" => $faker->city,
             "tanggal_lahir" => $faker->date,
+            "alamat" => $faker->address,
             "jenis_kelamin" => ['Laki-Laki', 'Perempuan'][rand(0, 1)],
             "agama" => ['Islam', 'Kristen', 'Konghucu', 'Budha', 'Hindu'][rand(0, 4)],
 
