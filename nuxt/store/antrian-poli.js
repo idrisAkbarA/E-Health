@@ -4,6 +4,30 @@ export const state = () => ({
 
 export const mutations = {
     setData(state, data) {
+        function calculateAge(birthDate) {
+            birthDate = new Date(birthDate);
+            var now = new Date();
+
+            var years = (now.getFullYear() - birthDate.getFullYear());
+
+            if (now.getMonth() < birthDate.getMonth() ||
+                now.getMonth() == birthDate.getMonth() && now.getDate() < birthDate.getDate()) {
+                years--;
+            }
+
+            return years;
+        }
+        // set priority atribute
+        data.forEach(element => {
+            var age = calculateAge(element.pasien.tanggal_lahir);
+            element['umur'] = age
+            if (age >= 60) {
+                element['prioritas_utama'] = true
+            } else {
+                element['prioritas_utama'] = false;
+            }
+
+        });
         state.data = data
     }
 

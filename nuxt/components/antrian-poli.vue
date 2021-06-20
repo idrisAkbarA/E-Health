@@ -25,10 +25,13 @@
       ></v-text-field>
       <!-- @keyup="searchAntrian()" -->
       <v-list v-if="originalAntrian.length > 0">
-        <v-list-item-group v-model="selectedItem" color="secondary">
+        <v-list-item-group
+          v-model="selectedItem"
+          color="secondary"
+        >
           <transition-group name="scale-transition">
             <v-list-item
-              :three-line="index == 0 && (search == '' || search == null)"
+              :three-line="(index == 0 && (search == '' || search == null))||prioritas"
               v-for="(antrian, index) in originalAntrian.slice().reverse()"
               :key="antrian.id"
             >
@@ -38,19 +41,40 @@
                 <v-list-item-subtitle>{{
                   'Poli ' + antrian.poli.nama
                 }}</v-list-item-subtitle>
-                <v-list-item-subtitle
-                  v-if="index == 0 && (search == '' || search == null)"
-                >
-                  <v-chip label color="secondary" class="black--text" x-small
-                    >Antrian sekarang</v-chip
-                  >
+                <v-list-item-subtitle v-if="index == 0 && (search == '' || search == null)">
+                  <v-chip
+                    v-if="antrianSekarang == true"
+                    label
+                    color="secondary"
+                    class="black--text"
+                    x-small
+                  >{{antrianSekarangLabel?antrianSekarangLabel:"Antrian Sekarang"}}</v-chip>
+                  <v-chip
+                    v-if="prioritas == true"
+                    label
+                    :color="antrian.prioritas_utama?'yellow':'pink lighten-3'"
+                    class="black--text"
+                    x-small
+                  >{{antrian.prioritas_utama?"Pasien Prioritas":"Pasien Reguler"}}</v-chip>
+                </v-list-item-subtitle>
+                <v-list-item-subtitle v-if="prioritas && !(index == 0 && (search == '' || search == null)) ">
+                  <v-chip
+                    v-if="prioritas == true"
+                    label
+                    :color="antrian.prioritas_utama?'yellow':'pink lighten-3'"
+                    class="black--text"
+                    x-small
+                  >{{antrian.prioritas_utama?"Pasien Prioritas":"Pasien Reguler"}}</v-chip>
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
           </transition-group>
         </v-list-item-group>
       </v-list>
-      <span v-else class="text-center">Tidak ada antrian</span>
+      <span
+        v-else
+        class="text-center"
+      >Tidak ada antrian</span>
     </v-card-text>
   </v-card>
 </template>
@@ -63,6 +87,13 @@ export default {
     subHeader: null,
     poli: null,
     status: null,
+    antrianSekarang: {
+      default: true,
+    },
+    prioritas: {
+      default: true,
+    },
+    antrianSekarangLabel: null,
   },
   mounted() {
     if (this.poli !== null) {
@@ -100,6 +131,9 @@ export default {
       selectedItem: undefined,
       poliDetail: null,
       originalAntrian: [],
+      antrianPrioritas: [],
+      antrianReguler: [],
+      // antrianSkipped: [],
     }
   },
   methods: {
@@ -112,8 +146,31 @@ export default {
     },
     getFinalData() {
       var getData = this.getAntrianPoliByID(this.poli)
+      if (this.prioritas) {
+        console.log('prioritas')
+        var antrian = this.filterByStatus(getData(this.poli))
+        this.originalAntrian = this.mergeAntrian(antrian)
+        return
+      }
       this.originalAntrian = this.filterByStatus(getData(this.poli))
       console.log('antrian', this.originalAntrian)
+    },
+    mergeAntrian(antrian) {
+      var antrianPrioritasTemp = []
+      var antrianRegulerTemp = []
+      // var antrianSkipped = []
+
+      antrian.forEach((element) => {
+        if (element.prioritas_utama) {
+          antrianPrioritasTemp.push(element)
+          return
+        }
+        return antrianRegulerTemp.push(element)
+      })
+
+      this.antrianPrioritas = antrianPrioritasTemp
+      this.antrianReguler = antrianRegulerTemp
+      return antrianRegulerTemp.concat(antrianPrioritasTemp)
     },
     searchAntrian() {
       if (this.search === '' || this.search === null) {
