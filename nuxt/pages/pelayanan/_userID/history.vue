@@ -13,18 +13,26 @@
         </h1>
         <h4>Lihat dan monitor detail riwayat antrian</h4>
         <h4>Klik antrian untuk melihat detail</h4>
-        <v-chip
-          color="primary"
-          label
-          class="mt-10 mb-2"
-        >
-          Antrian Hari Ini
-        </v-chip>
+        <v-row class="mt-10 mb-n6">
+          <v-col
+            cols="4"
+            class="dflex"
+          >
+            <v-chip
+              color="primary"
+              label
+            >
+              Antrian Hari Ini
+            </v-chip>
+          </v-col>
+
+        </v-row>
         <v-row>
           <v-col>
             <antrian-poli
+              :poliMenu="true"
               header="Sedang Dalam Antrian"
-              subHeader="Daftar pasien yang sedang mengantri sekarang"
+              subHeader="Daftar pasien yang sedang mengantri"
               :poli="null"
               :status="null"
               @antrian-selected="test"
@@ -32,23 +40,25 @@
           </v-col>
           <v-col>
             <antrian-poli
+              :poliMenu="true"
               icon="mdi-check"
               header="Antrian Selesai"
               subHeader="Daftar antrian yang sudah selesai"
               :poli="null"
-              :status="null"
+              :status="1"
               :antrianSekarang="false"
               @antrian-selected="test"
             ></antrian-poli>
           </v-col>
           <v-col>
             <antrian-poli
+              :poliMenu="true"
               :antrianSekarang="false"
               icon="mdi-debug-step-over"
               header="Dilewati"
               subHeader="Daftar pasien yang tidak hadir setelah dipanggil"
               :poli="null"
-              :status="null"
+              :status="2"
               @antrian-selected="test"
             ></antrian-poli>
           </v-col>

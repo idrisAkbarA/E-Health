@@ -11,6 +11,19 @@
     <v-card-subtitle>{{
       subHeader ? subHeader : 'Daftar pasien yang sedang dalam antrian'
     }}</v-card-subtitle>
+    <v-card-subtitle v-if="poliMenu">
+      <v-select
+        hide-details
+        prepend-inner-icon="mdi-bank"
+        :items="listPoli?listPoliWithAll:[]"
+        item-text="nama"
+        item-value="id"
+        v-model="poli"
+        color="secondary"
+        solo-inverted
+        label="Pilih Poli"
+      ></v-select>
+    </v-card-subtitle>
     <v-divider></v-divider>
 
     <v-card-text>
@@ -93,6 +106,9 @@ export default {
     prioritas: {
       default: true,
     },
+    poliMenu: {
+      default: false,
+    },
     antrianSekarangLabel: null,
   },
   mounted() {
@@ -105,6 +121,16 @@ export default {
   },
   computed: {
     ...mapState('antrian-poli', { AllAntrianData: (state) => state.data }),
+    ...mapState('poli', { listPoli: (state) => state.data }),
+    listPoliWithAll() {
+      var temp = JSON.parse(JSON.stringify(this.listPoli))
+      var all = {
+        id: null,
+        nama: 'Semua Poli',
+      }
+      temp.push(all)
+      return temp
+    },
   },
   watch: {
     AllAntrianData() {
