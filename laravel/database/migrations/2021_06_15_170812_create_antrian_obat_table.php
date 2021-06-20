@@ -15,12 +15,15 @@ class CreateAntrianObatTable extends Migration
     {
         Schema::create('antrian_obat', function (Blueprint $table) {
             $table->id();
+            $table->integer('rekam_medis_id')->nullable();
+            $table->string('nama')->nullable();
             $table->json('resep_obat');
             $table->text('catatan');
             $table->boolean('status')->nullable();
             $table->string('total_harga');
             $table->timestamp('selesai_at')->nullable();
             $table->timestamp('diambil_at')->nullable();
+            $table->boolean('is_bayar')->default(0);
             $table->timestamps();
         });
     }

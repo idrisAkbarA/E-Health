@@ -12,12 +12,19 @@ class RekamMedis extends Model
     protected $table = 'rekam_medis';
     protected $guarded = ['id'];
 
+    // Relations
     public function pasien()
     {
         return $this->belongsTo('App\Models\Pasien');
     }
+
     public function poli()
     {
         return $this->belongsTo('App\Models\Poli');
+    }
+
+    public function resep_obat()
+    {
+        return $this->hasOne('App\Models\AntrianObat');
     }
 }

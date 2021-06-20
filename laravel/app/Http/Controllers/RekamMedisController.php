@@ -90,6 +90,8 @@ class RekamMedisController extends Controller
     public function update(Request $request, RekamMedis $rekamMedis)
     {
         $rekamMedis->update($request->except('resep_obat'));
+        $rekamMedis->resep_obat()->create($request->resep_obat);
+
         broadcast(new AntrianPoli());
 
         $this->reply = [

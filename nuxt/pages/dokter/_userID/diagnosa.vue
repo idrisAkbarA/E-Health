@@ -103,7 +103,10 @@
                     v-model="isResep"
                   ></v-switch>
                   <v-card-text v-if="isResep">
-                    <v-row v-for="(resep, index) in resepObat" :key="index">
+                    <v-row
+                      v-for="(resep, index) in resepObat.resep_obat"
+                      :key="index"
+                    >
                       <v-col cols="8">
                         <v-select
                           outlined
@@ -125,6 +128,12 @@
                         ></v-text-field>
                       </v-col>
                     </v-row>
+                    <v-textarea
+                      outlined
+                      label="Catatan"
+                      hint="catatan dosis dan penggunaan obat"
+                      v-model="resepObat.catatan"
+                    ></v-textarea>
                     <v-col class="text-center">
                       <v-btn
                         class="mx-2"
@@ -187,9 +196,7 @@ export default {
       isLoading: false,
       isResep: false,
       form: {},
-      // pasien: null,
       resepObat: [],
-      // rekamMedis: {},
     }
   },
   computed: {
@@ -210,7 +217,7 @@ export default {
   watch: {
     isResep(val) {
       if (val) {
-        this.resepObat = [{}]
+        this.resepObat = { resep_obat: [{}] }
       } else {
         delete this.resepObat
       }
@@ -229,17 +236,10 @@ export default {
   methods: {
     ...mapActions({ getObat: 'obat/getObat' }),
     showDetail(data) {
-      // if (this.$_.isEmpty(data)) {
-      //   this.form = {}
-      //   this.pasien = null
-      //   return
-      // }
-      // this.form.id = data.id
-      // this.pasien = this.$_.clone(data.pasien)
       this.form = this.$_.clone(data)
     },
     tambahResep() {
-      this.resepObat.push({})
+      this.resepObat.resep_obat.push({})
     },
     store() {
       var form = this.form
