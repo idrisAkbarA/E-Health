@@ -53,7 +53,7 @@ class RekamMedis extends Model
         return $this->belongsTo('App\Models\Poli');
     }
 
-    public function antrian_obat()
+    public function resep_obat()
     {
         return $this->hasOne('App\Models\AntrianObat');
     }
