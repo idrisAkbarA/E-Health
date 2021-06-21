@@ -74,6 +74,12 @@
                             Jumlah
                           </th>
                           <th class="text-left">
+                            Satuan
+                          </th>
+                          <th class="text-left">
+                            Harga
+                          </th>
+                          <th class="text-left">
                             Total
                           </th>
                         </tr>
@@ -81,24 +87,29 @@
                       <tbody>
                         <tr>
                           <td>Diagnosa</td>
-                          <td>1 </td>
+                          <td>- </td>
+                          <td>- </td>
+                          <td>- </td>
                           <td>Rp{{currentSelected.total_biaya}}</td>
                         </tr>
-                        <tr>
-                          <td>Diagnosa</td>
-                          <td>1 </td>
-                          <td>Rp100.000.00</td>
+                        <tr
+                          v-for="item in detailObat.resep_obat"
+                          :key="item"
+                        >
+                          <td>{{item.obat.nama}}</td>
+                          <td>{{item.jumlah}} </td>
+                          <td>{{item.obat.satuan}} </td>
+                          <td>Rp{{item.obat.harga}} </td>
+                          <td>Rp{{item.obat.harga*item.jumlah}}</td>
                         </tr>
-                        <tr>
-                          <td>Diagnosa</td>
-                          <td>1 </td>
-                          <td>Rp100.000.00</td>
-                        </tr>
+
                         <v-divider inset></v-divider>
                         <tr>
                           <td></td>
                           <td></td>
-                          <td><span class="font-weight-bold">Total Biaya:</span> <br>Rp100.000.00</td>
+                          <td></td>
+                          <td></td>
+                          <td><span class="font-weight-bold">Total Biaya:</span> <br>Rp{{parseInt(currentSelected.total_biaya)+parseInt(detailObat.total_harga)}}</td>
                         </tr>
                       </tbody>
                     </template>
@@ -226,6 +237,7 @@ export default {
     async setDetail(item) {
       this.isLoading = true
       this.currentSelected = item
+      this.detailObat = item.resep_obat
       var url = '/api/dokter/' + this.currentSelected.dokter_id
       await this.$axios.get(url).then((response) => {
         console.log(response.data)
