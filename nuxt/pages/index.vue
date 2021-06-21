@@ -1,14 +1,10 @@
 <template>
-  <v-container
-    fill-height
-    class="pa-0"
-    fluid
-  >
+  <v-container fill-height class="pa-0" fluid>
     <div class="wrapper">
       <div class="left">
-        <div>Selamat Datang di aplikasi</div>
+        <div>Selamat Datang di Sistem Informasi Rawat Jalan</div>
         <div>
-          <h1>Klinik Bangkinang Kota</h1>
+          <h1>Puskesmas Bangkinang Kota</h1>
         </div>
         <div>Selamat bertugas!</div>
       </div>
