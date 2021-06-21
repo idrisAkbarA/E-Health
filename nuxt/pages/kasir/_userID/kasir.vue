@@ -25,7 +25,10 @@
               <v-card-subtitle>
                 Berikut rincian biaya pengobatan di Klinik Bangkinang Kota
               </v-card-subtitle>
-              <transition name="expand-transition">
+              <transition
+                name="fade-transition"
+                mode="out-in"
+              >
 
                 <v-card-text
                   :key="0"
@@ -101,16 +104,40 @@
                     </template>
                   </v-simple-table>
                 </v-card-text>
-                <v-card-actions>
-                  <v-btn
-                    block
-                    color="primary"
-                  >Terima Pembayaran</v-btn>
-                </v-card-actions>
                 <v-card-text
                   :key="1"
                   v-else-if="isLoading"
-                >Memuat data</v-card-text>
+                >
+                  <v-card width="100%">
+                    <v-skeleton-loader
+                      width="100%"
+                      type="article"
+                    ></v-skeleton-loader>
+
+                  </v-card>
+                  <v-card width="100%">
+                    <v-skeleton-loader
+                      class="mx-auto"
+                      width="100%"
+                      type="table-row"
+                    ></v-skeleton-loader>
+                    <v-skeleton-loader
+                      class="mx-auto"
+                      width="100%"
+                      type="table-row"
+                    ></v-skeleton-loader>
+                    <v-skeleton-loader
+                      class="mx-auto"
+                      width="100%"
+                      type="table-row"
+                    ></v-skeleton-loader>
+                    <v-skeleton-loader
+                      class="mx-auto"
+                      width="100%"
+                      type="table-row"
+                    ></v-skeleton-loader>
+                  </v-card>
+                </v-card-text>
                 <v-card-text
                   :key="2"
                   v-else
@@ -145,15 +172,25 @@
             </v-card>
           </v-row>
           <v-row>
-            <v-card
-              v-if="currentSelected"
-              width="100%"
+            <transition
+              name="fade-transition"
+              mode="out-in"
             >
-              <!-- <v-card-title>
+              <v-card
+                v-if="currentSelected && isLoading==false"
+                width="100%"
+              >
+                <!-- <v-card-title>
                 <v-icon class="mr-4">mdi-account-cash</v-icon> Aksi
               </v-card-title> -->
-
-            </v-card>
+                <v-card-actions>
+                  <v-btn
+                    block
+                    color="primary"
+                  >Terima Pembayaran</v-btn>
+                </v-card-actions>
+              </v-card>
+            </transition>
           </v-row>
         </v-container>
       </v-col>
