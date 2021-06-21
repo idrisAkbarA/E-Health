@@ -20,6 +20,7 @@
     "vuescroll": "^4.17.3"
   },
   "devDependencies": {
+    "@nuxtjs/moment": "^1.6.1",
     "@nuxtjs/vuetify": "^1.11.3",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",

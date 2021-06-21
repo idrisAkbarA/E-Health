@@ -30,6 +30,7 @@ class RekamMedisController extends Controller
         $antrian = RekamMedis::whereDate('created_at', today())
             ->with('pasien')
             ->with('poli')
+            ->with('resep_obat')
             ->latest()
             ->get();
 

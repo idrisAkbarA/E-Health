@@ -29,6 +29,7 @@ export default {
     { src: './plugins/vuescroll.js', mode: 'client' },
     { src: './plugins/lodash.js', mode: 'client' },
     { src: './plugins/snackbar.js', mode: 'client' },
+    { src: './plugins/thousandSeperator.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -38,6 +39,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    '@nuxtjs/moment',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -48,6 +50,10 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/auth'
   ],
+  moment: {
+    defaultLocale: 'id',
+    locales: ['id']
+  },
   auth: {
     redirect: {
       login: '/login',

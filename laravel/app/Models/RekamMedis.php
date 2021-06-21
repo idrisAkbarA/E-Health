@@ -11,6 +11,13 @@ class RekamMedis extends Model
 
     protected $table = 'rekam_medis';
     protected $guarded = ['id'];
+    // protected $appends = ['resep'];
+
+
+    // public function getResepAttribute()
+    // {
+    //     $result = AntrianObat::where(['rekam_medis_id'=>$this->id])->get();
+    // }
 
     /**
      * The accessors to append to the model's array form.

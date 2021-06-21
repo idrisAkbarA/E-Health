@@ -50,6 +50,7 @@ class AntrianPoli implements ShouldBroadcast
     public function broadcastWith()
     {
         return ['rekamMedis' => RekamMedis::whereDate('created_at', today())
+            ->with('resep_obat')
             ->with('pasien')
             ->with('poli')
             ->latest()

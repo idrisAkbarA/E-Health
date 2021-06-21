@@ -14,11 +14,34 @@ class ObatSeeder extends Seeder
      */
     public function run()
     {
-        Obat::create([
-            'nama' => 'Paracetamol Tablet',
-            'bentuk' => 'Tablet',
-            'satuan' => 'Butir',
-            'harga' => 1500,
-        ]);
+        $items = [
+            [
+                'nama' => 'Paracetamol Tablet',
+                'bentuk' => 'Tablet',
+                'satuan' => 'Butir',
+                'harga' => 1500,
+            ],
+            [
+                'nama' => 'Acetaminophen',
+                'bentuk' => 'Kaplet',
+                'satuan' => 'gram',
+                'harga' => 5500,
+            ],
+            [
+                'nama' => 'Bodrexin',
+                'bentuk' => 'Kapsul',
+                'satuan' => 'gram',
+                'harga' => 9500,
+            ],
+            [
+                'nama' => 'Antalgin',
+                'bentuk' => 'Kaplet',
+                'satuan' => 'gram',
+                'harga' => 10500,
+            ],
+        ];
+        foreach ($items as $item) {
+            Obat::create($item);
+        }
     }
 }
