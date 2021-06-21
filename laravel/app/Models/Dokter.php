@@ -17,12 +17,16 @@ class Dokter extends Model
      *
      * @var array
      */
-    protected $appends = ['poli'];
+    protected $appends = ['poli', 'nama'];
 
     // Getters
     public function getPoliAttribute()
     {
         return $this->poli()->first()->nama;
+    }
+    public function getNamaAttribute()
+    {
+        return $this->user()->first()->name;
     }
 
     // Relations

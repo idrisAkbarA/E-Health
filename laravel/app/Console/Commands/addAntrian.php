@@ -49,10 +49,12 @@ class addAntrian extends Command
             $this->dokter();
             $rekamMedis = RekamMedis::find($this->rekamMedis->id);
             $rekamMedis->status = 1;
+            $rekamMedis->dokter_id = 1;
+            $rekamMedis->total_biaya = 100000;
             $rekamMedis->save();
 
             broadcast(new AntrianPoli());
-            echo "antrian pembayaran added";
+            echo "antrian pembayaran added\n";
             return 0;
         }
     }
