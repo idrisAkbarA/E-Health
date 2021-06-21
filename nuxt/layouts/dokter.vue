@@ -18,11 +18,10 @@
           flat
           tile
         >
-          <v-img
-            max-width="70"
-            :src="'/images/LogoUIN.png'"
-          ></v-img>
-          <v-card-text>Sistem Informasi Rawat Jalan Puskesmas Bangkinang Kota</v-card-text>
+          <v-img max-width="70" :src="'/images/LogoUIN.png'"></v-img>
+          <v-card-text
+            >Sistem Informasi Rawat Jalan Puskesmas Bangkinang Kota</v-card-text
+          >
         </v-card>
         <v-card
           v-if="windowWidth <= 600"
@@ -68,12 +67,10 @@
       </vue-scroll>
     </v-navigation-drawer>
 
-    <v-app-bar
-      app
-      dense
-      clipped-left
-    >
-      <v-app-bar-nav-icon @click.stop="toggleDrawer(windowWidth <= 600)"></v-app-bar-nav-icon>
+    <v-app-bar app dense clipped-left>
+      <v-app-bar-nav-icon
+        @click.stop="toggleDrawer(windowWidth <= 600)"
+      ></v-app-bar-nav-icon>
       <div style="width: 100%; -webkit-app-region: drag">
         <v-toolbar-title>
           <span
@@ -84,34 +81,17 @@
           <span>{{ title }}</span>
         </v-toolbar-title>
       </div>
-      <v-btn
-        v-if="windowWidth >= 600"
-        small
-        text
-        @click="logout"
-      >
+      <v-btn v-if="windowWidth >= 600" small text @click="logout">
         <v-icon>mdi-logout-variant</v-icon>keluar
       </v-btn>
     </v-app-bar>
 
     <v-main class="bg-pattern">
-      <transition
-        name="slide-fade"
-        mode="out-in"
-      >
+      <transition name="slide-fade" mode="out-in">
         <nuxt />
       </transition>
-
-      <!-- <v-fade-transition mode="in" hide-on-leave="true">
-        <router-view></router-view>
-      </v-fade-transition>-->
     </v-main>
-    <v-snackbar
-      :value="snackbar.value"
-      bottom
-      :color="snackbar.color"
-      outlined
-    >
+    <v-snackbar :value="snackbar.value" bottom :color="snackbar.color" outlined>
       {{ snackbar.message }}
     </v-snackbar>
   </v-app>
@@ -145,8 +125,9 @@ export default {
       },
     },
   }),
-  created() {
+  mounted() {
     this.getPoli()
+    this.getDokterByUserId(this.$auth.user.id)
     this.getAntrianPoli()
     this.$echo.channel('antrian-poli').listen('AntrianPoli', (e) => {
       console.log('update:', e)
@@ -193,6 +174,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      getDokterByUserId: 'dokter/getDokterByUserId',
       getPoli: 'poli/getPoli',
       getAntrianPoli: 'antrian-poli/fetchData',
     }),

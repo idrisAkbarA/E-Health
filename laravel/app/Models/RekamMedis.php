@@ -18,6 +18,11 @@ class RekamMedis extends Model
         return $this->belongsTo('App\Models\Pasien');
     }
 
+    public function dokter()
+    {
+        return $this->belongsTo('App\Models\Dokter');
+    }
+
     public function poli()
     {
         return $this->belongsTo('App\Models\Poli');

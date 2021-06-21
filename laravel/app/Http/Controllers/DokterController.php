@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Dokter;
 use Illuminate\Http\Request;
 
@@ -17,14 +18,15 @@ class DokterController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function getByUserId(User $user)
     {
-        //
+        $dokter = Dokter::where('user_id', $user->id)->first();
+
+        $this->reply = [
+            'status' => true,
+            'data' => $dokter
+        ];
+        return response()->json($this->reply, 200);
     }
 
     /**
@@ -51,17 +53,6 @@ class DokterController extends Controller
             'data' => $dokter
         ];
         return response()->json($this->reply, 200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Dokter  $dokter
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Dokter $dokter)
-    {
-        //
     }
 
     /**

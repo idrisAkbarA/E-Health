@@ -166,11 +166,12 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="5">
+      <v-col cols="5" v-if="dokter">
         <antrian-poli
-          :poli="1"
-          @antrian-selected="showDetail"
+          :poli="dokter.poli_id"
           :status="null"
+          :poliMenu="false"
+          @antrian-selected="showDetail"
         ></antrian-poli>
       </v-col>
     </v-row>
@@ -200,6 +201,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('dokter', { dokter: (state) => state.currentDokter }),
     ...mapState('obat', { urlObat: (state) => state.url }),
     ...mapState('rekam-medis', { urlRekamMedis: (state) => state.url }),
     obat: {
@@ -244,7 +246,7 @@ export default {
     store() {
       var form = this.form
       form.resep_obat = this.resepObat
-      form.dokter_id = this.$auth.user.id
+      form.dokter_id = this.dokter.id
       form.status = 1
       this.isLoading = true
       this.$axios
