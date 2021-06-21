@@ -24,6 +24,7 @@ class Dokter extends Model
     {
         return $this->poli()->first()->nama;
     }
+
     public function getNamaAttribute()
     {
         return $this->user()->first()->name;

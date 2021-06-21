@@ -12,6 +12,24 @@ class RekamMedis extends Model
     protected $table = 'rekam_medis';
     protected $guarded = ['id'];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['nama_poli', 'nama_pasien'];
+
+    // Getters
+    public function getNamaPoliAttribute()
+    {
+        return $this->poli()->first()->nama;
+    }
+
+    public function getNamaPasienAttribute()
+    {
+        return $this->pasien()->first()->nama;
+    }
+
     // Relations
     public function pasien()
     {
@@ -28,7 +46,7 @@ class RekamMedis extends Model
         return $this->belongsTo('App\Models\Poli');
     }
 
-    public function resep_obat()
+    public function antrian_obat()
     {
         return $this->hasOne('App\Models\AntrianObat');
     }

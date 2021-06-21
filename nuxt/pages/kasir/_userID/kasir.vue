@@ -109,7 +109,7 @@
                 </v-card-actions>
                 <v-card-text
                   :key="1"
-                  v-else-if="isLoading"
+                  v-if="isLoading"
                 >Memuat data</v-card-text>
                 <v-card-text
                   :key="2"

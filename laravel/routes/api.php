@@ -70,6 +70,11 @@ Route::prefix('obat')->name('obat.')->group(function () {
   Route::delete('/{obat}', 'ObatController@destroy')->name('destroy');
 });
 
+// Antrian Obat Routes
+Route::prefix('antrian-obat')->name('antrian-obat.')->group(function () {
+  Route::get('/antrian', 'AntrianObatController@antrian')->name('antrian');
+});
+
 // Pasien Routes
 Route::prefix('pasien')->name('pasien.')->group(function () {
   Route::get('/live/search', 'PasienController@liveSearch')->name('live-search');

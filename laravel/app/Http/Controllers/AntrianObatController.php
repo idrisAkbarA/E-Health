@@ -18,13 +18,22 @@ class AntrianObatController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource today.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function antrian()
     {
-        //
+        $antrian = AntrianObat::whereDate('created_at', today())
+            ->with('rekam_medis')
+            ->latest()
+            ->get();
+
+        $this->reply = [
+            'status' => true,
+            'data' => $antrian
+        ];
+        return response()->json($this->reply, 200);
     }
 
     /**
@@ -35,6 +44,7 @@ class AntrianObatController extends Controller
      */
     public function store(Request $request)
     {
+        $antrianObat = AntrianObat::create($request->all());
         //
     }
 
