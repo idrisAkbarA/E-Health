@@ -40,7 +40,7 @@
                       <v-row>
                         <span>Invoice untuk</span>
                         <v-spacer></v-spacer>
-                        <span>Tanggal 24 Oktober 2021</span>
+                        <span>Tanggal {{$moment().format("Do MMMM YYYY","id")}}</span>
                       </v-row>
                       <v-row class="mt-6">
                         <h2>{{currentSelected.pasien.nama}}</h2>
