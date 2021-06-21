@@ -90,18 +90,21 @@
                           <td>- </td>
                           <td>- </td>
                           <td>- </td>
-                          <td>Rp{{currentSelected.total_biaya}}</td>
+                          <td>Rp{{$numberify(currentSelected.total_biaya)}}</td>
                         </tr>
-                        <tr
-                          v-for="item in detailObat.resep_obat"
-                          :key="item"
-                        >
-                          <td>{{item.obat.nama}}</td>
-                          <td>{{item.jumlah}} </td>
-                          <td>{{item.obat.satuan}} </td>
-                          <td>Rp{{item.obat.harga}} </td>
-                          <td>Rp{{item.obat.harga*item.jumlah}}</td>
-                        </tr>
+                        <template v-if="detailObat">
+
+                          <tr
+                            v-for="(item,index) in detailObat.resep_obat"
+                            :key="index"
+                          >
+                            <td>{{item.obat.nama}}</td>
+                            <td>{{item.jumlah}} </td>
+                            <td>{{item.obat.satuan}} </td>
+                            <td>Rp{{$numberify(item.obat.harga)}} </td>
+                            <td>Rp{{$numberify(item.obat.harga*item.jumlah)}}</td>
+                          </tr>
+                        </template>
 
                         <v-divider inset></v-divider>
                         <tr>
@@ -109,7 +112,15 @@
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td><span class="font-weight-bold">Total Biaya:</span> <br>Rp{{parseInt(currentSelected.total_biaya)+parseInt(detailObat.total_harga)}}</td>
+                          <td><span class="font-weight-bold">Total Biaya:</span>
+                            <br>
+                            <span v-if="detailObat">
+                              Rp{{$numberify(parseInt(currentSelected.total_biaya)+parseInt(detailObat.total_harga))}}
+                            </span>
+                            <span v-else>
+                              Rp{{$numberify(currentSelected.total_biaya)}}
+                            </span>
+                          </td>
                         </tr>
                       </tbody>
                     </template>
@@ -237,7 +248,7 @@ export default {
     async setDetail(item) {
       this.isLoading = true
       this.currentSelected = item
-      this.detailObat = item.resep_obat
+      this.detailObat = item.resep_obat ? item.resep_obat : null
       var url = '/api/dokter/' + this.currentSelected.dokter_id
       await this.$axios.get(url).then((response) => {
         console.log(response.data)
