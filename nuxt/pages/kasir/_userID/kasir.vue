@@ -25,7 +25,7 @@
               <v-card-subtitle>
                 Berikut rincian biaya pengobatan di Klinik Bangkinang Kota
               </v-card-subtitle>
-              <transition-group name="expand-transition">
+              <transition name="expand-transition">
 
                 <v-card-text
                   :key="0"
@@ -49,7 +49,7 @@
                         <div style="width:100%; background-color:white; height:1px"></div>
                       </v-row>
                       <v-row class="mt-5">
-                        <span>Diperiksa oleh </span>&nbsp; <span class="font-weight-bold">Dr. Enoch The Great</span>
+                        <span>Diperiksa oleh </span>&nbsp; <span class="font-weight-bold">{{detailDokter.nama}}</span>
                       </v-row>
                       <v-row>
                         <span>Poli</span>&nbsp;<span class="font-weight-bold">{{currentSelected.poli.nama}}</span>
@@ -101,6 +101,12 @@
                     </template>
                   </v-simple-table>
                 </v-card-text>
+                <v-card-actions>
+                  <v-btn
+                    block
+                    color="primary"
+                  >Terima Pembayaran</v-btn>
+                </v-card-actions>
                 <v-card-text
                   :key="1"
                   v-else-if="isLoading"
@@ -135,7 +141,7 @@
                     </v-row>
                   </v-container>
                 </v-card-text>
-              </transition-group>
+              </transition>
             </v-card>
           </v-row>
           <v-row>
@@ -146,12 +152,7 @@
               <!-- <v-card-title>
                 <v-icon class="mr-4">mdi-account-cash</v-icon> Aksi
               </v-card-title> -->
-              <v-card-actions>
-                <v-btn
-                  block
-                  color="primary"
-                >Terima Pembayaran</v-btn>
-              </v-card-actions>
+
             </v-card>
           </v-row>
         </v-container>
@@ -190,7 +191,8 @@ export default {
       this.currentSelected = item
       var url = '/api/dokter/' + this.currentSelected.dokter_id
       await this.$axios.get(url).then((response) => {
-        this.console.log(response.data)
+        console.log(response.data)
+        this.detailDokter = response.data.data
       })
       this.isLoading = false
       console.log('current selected', item)
