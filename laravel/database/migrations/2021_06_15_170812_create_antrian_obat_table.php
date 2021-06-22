@@ -18,7 +18,7 @@ class CreateAntrianObatTable extends Migration
             $table->integer('rekam_medis_id')->nullable();
             $table->string('nama')->nullable();
             $table->json('resep_obat');
-            $table->text('catatan');
+            $table->text('catatan')->nullable();
             $table->boolean('status')->nullable();
             $table->string('total_harga');
             $table->timestamp('selesai_at')->nullable();
