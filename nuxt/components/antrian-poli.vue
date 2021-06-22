@@ -125,6 +125,9 @@ export default {
     antrianSekarang: {
       default: true,
     },
+    excludePaid: {
+      default: 0,
+    },
     prioritas: {
       default: true,
     },
@@ -195,15 +198,22 @@ export default {
       })
       return filtered
     },
+    filterByPayment(data) {
+      var filtered = data.filter((item) => {
+        return item.is_bayar != this.excludePaid
+      })
+      return filtered
+    },
     getFinalData() {
       var getData = this.getAntrianPoliByID(this.poli)
+      var antrian = this.filterByStatus(getData(this.poli))
+      antrian = this.filterByPayment(antrian)
       if (this.prioritas) {
         console.log('prioritas')
-        var antrian = this.filterByStatus(getData(this.poli))
         this.originalAntrian = this.mergeAntrian(antrian)
         return
       }
-      this.originalAntrian = this.filterByStatus(getData(this.poli))
+      this.originalAntrian = antrian
       console.log('antrian', this.originalAntrian)
     },
     mergeAntrian(antrian) {

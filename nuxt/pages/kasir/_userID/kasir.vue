@@ -7,6 +7,7 @@
     <v-row style="height:100%">
       <v-col cols="4">
         <antrian-poli
+          :excludePaid="1"
           header="Antrian Pembayaran"
           subHeader="Daftar antrian pembayaran. Klik untuk melihat rincian"
           :poli="null"
@@ -130,7 +131,10 @@
                   :key="1"
                   v-else-if="isLoading"
                 >
-                  <v-card width="100%">
+                  <v-card
+                    width="100%"
+                    color="primary"
+                  >
                     <v-skeleton-loader
                       width="100%"
                       type="article"
@@ -209,6 +213,8 @@
                   <v-btn
                     block
                     color="primary"
+                    :loading="isPaymentLoading"
+                    @click="dialogConfirm = true"
                   >Terima Pembayaran</v-btn>
                 </v-card-actions>
               </v-card>
@@ -217,7 +223,35 @@
         </v-container>
       </v-col>
     </v-row>
-
+    <v-dialog
+      width="400px"
+      v-model="dialogConfirm"
+      overlay-color="secondary"
+    >
+      <v-card outlined>
+        <v-card-title>
+          Terima pembayaran?
+        </v-card-title>
+        <v-card-subtitle>
+          Pastikan pembayaran diterima
+        </v-card-subtitle>
+        <v-card-actions>
+          <v-btn
+            @click="acceptPayment()"
+            color="primary"
+            :loading="isPaymentLoading"
+          >
+            Terima
+          </v-btn>
+          <v-btn
+            text
+            @click="dialogConfirm = false"
+          >
+            batal
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -241,6 +275,8 @@ export default {
       detailObat: null,
       detailDokter: null,
       isLoading: false,
+      isPaymentLoading: false,
+      dialogConfirm: false,
     }
   },
   layout: 'kasir',
@@ -256,6 +292,28 @@ export default {
       })
       this.isLoading = false
       console.log('current selected', item)
+    },
+    acceptPayment() {
+      this.isPaymentLoading = true
+      var id = this.currentSelected.id
+      var url = this.$store.state.pasien.urlAntrian + '/' + id
+      var form = { payment: true }
+      this.$axios
+        .put(url, form)
+        .then((response) => {
+          console.log('pembayaran', response.data)
+          this.$snackbar('success', response.data.message)
+        })
+        .catch((error) => {
+          this.$snackbar(
+            'error',
+            'Maaf terjadi kesalahan, coba dalam beberapa saat lagi.'
+          )
+        })
+        .finally(() => {
+          this.isPaymentLoading = false
+          this.dialogConfirm = false
+        })
     },
   },
 }
