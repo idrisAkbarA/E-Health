@@ -86,7 +86,9 @@
 import { mapGetters, mapState } from 'vuex'
 export default {
   props: {
-    statusPembayaran: null,
+    statusPembayaran: {
+      default: null,
+    },
   },
   mounted() {
     // this.getFinalData()
@@ -97,6 +99,7 @@ export default {
       get: function () {
         var data = this.$store.state['antrian-obat'].data
         if (this.statusPembayaran !== null) {
+          console.log('this')
           data = this.filterByStatusPembayaran(data)
         }
         return data
