@@ -22,7 +22,7 @@
             </v-chip>
           </template>
           <template v-slot:[`item.created_at`]="{ item }">
-            {{ $moment(item.created_at).format('Do MMMM YYYY', 'id') }}
+            {{ $moment(item.created_at).format('dddd, Do MMMM YYYY', 'id') }}
           </template>
           <template v-slot:top>
             <v-card flat>
@@ -44,7 +44,11 @@
                       <v-container>
                         <v-row>
                           <v-col>
-                            <v-text-field label="Cari Nama/Nik"> </v-text-field>
+                            <v-text-field
+                              label="Cari Nama / NIK"
+                              v-model="filter.nama"
+                            >
+                            </v-text-field>
                           </v-col>
                           <v-col>
                             <v-text-field label="Cari Nama/Nik"> </v-text-field>
@@ -54,10 +58,16 @@
                           </v-col>
                         </v-row>
                         <v-row>
-                          <v-btn color="primary" class="mr-2">
+                          <v-btn
+                            color="primary"
+                            class="mr-2"
+                            @click="getAntrianObat"
+                          >
                             <v-icon>mdi-magnify</v-icon> Cari
                           </v-btn>
-                          <v-btn text> reset pencarian</v-btn>
+                          <v-btn text @click="filter = {}">
+                            reset pencarian</v-btn
+                          >
                         </v-row>
                       </v-container>
                     </v-expansion-panel-content>
@@ -91,6 +101,7 @@ export default {
       title: 'History',
       isLoading: false,
       antrianObat: [],
+      filter: {},
       headers: [
         {
           text: '#',
@@ -110,7 +121,7 @@ export default {
     getAntrianObat() {
       this.isLoading = true
       this.$axios
-        .get(this.urlAntrianObat)
+        .get(this.urlAntrianObat, { params: this.filter })
         .then((response) => {
           if (response.data.status) {
             this.antrianObat = response.data.data

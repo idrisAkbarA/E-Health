@@ -13,9 +13,20 @@ class AntrianObatController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $antrian = AntrianObat::with('rekam_medis')->latest()->get();
+        $nama = $request->nama;
+
+        $antrian = AntrianObat::with('rekam_medis')
+            ->when($nama, function ($q) use ($nama) {
+                return $q->where('nama', $nama)->orWhereHas('rekam_medis', function ($query) use ($nama) {
+                    return $query->wherehas('pasien', function ($que) use ($nama) {
+                        return $que->where('nama', 'LIKE', '%' . $nama . '%')->orWhere('nik', $nama);
+                    });
+                });
+            })
+            ->latest()
+            ->get();
 
         $this->reply = [
             'status' => true,
