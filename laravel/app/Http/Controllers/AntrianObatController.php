@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AntrianObatEvent;
 use App\Models\AntrianObat;
 use Illuminate\Http\Request;
 
@@ -44,8 +45,14 @@ class AntrianObatController extends Controller
      */
     public function store(Request $request)
     {
-        $antrianObat = AntrianObat::create($request->all());
-        //
+        AntrianObat::create($request->all());
+        broadcast(new AntrianObatEvent());
+
+        $this->reply = [
+            'status' => true,
+            'message' => 'Antrian berhail dibuat!'
+        ];
+        return response()->json($this->reply, 201);
     }
 
     /**
@@ -64,17 +71,6 @@ class AntrianObatController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\AntrianObat  $antrianObat
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(AntrianObat $antrianObat)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -83,7 +79,16 @@ class AntrianObatController extends Controller
      */
     public function update(Request $request, AntrianObat $antrianObat)
     {
-        //
+        $antrianObat->update($request->all());
+
+        broadcast(new AntrianObatEvent());
+
+        $this->reply = [
+            'status' => true,
+            'message' => 'Rekam Medis updated!',
+            'data' => $antrianObat
+        ];
+        return response()->json($this->reply, 200);
     }
 
     /**

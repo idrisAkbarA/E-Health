@@ -2,17 +2,23 @@
 
 namespace App\Events;
 
+use App\Models\AntrianObat;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class AntrianObat
+class AntrianObatEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    /**
+     * Data details
+     *
+     * @var \App\Models\AntrianObat
+     */
+    public $antrianObat;
 
     /**
      * Create a new event instance.
@@ -31,6 +37,14 @@ class AntrianObat
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new Channel('antrian-obat');
+    }
+
+    public function broadcastWith()
+    {
+        return ['antrianObat' => AntrianObat::whereDate('created_at', today())
+            ->with('rekam_medis')
+            ->latest()
+            ->get()];
     }
 }

@@ -114,7 +114,7 @@ class RekamMedisController extends Controller
             'message' => 'Rekam Medis updated!',
             'data' => $rekamMedis
         ];
-        return response()->json($this->reply, 201);
+        return response()->json($this->reply, 200);
     }
 
     /**
