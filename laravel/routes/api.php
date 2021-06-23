@@ -73,6 +73,8 @@ Route::prefix('obat')->name('obat.')->group(function () {
 // Antrian Obat Routes
 Route::prefix('antrian-obat')->name('antrian-obat.')->group(function () {
   Route::get('/antrian', 'AntrianObatController@antrian')->name('antrian');
+  Route::post('/', 'AntrianObatController@store')->name('store');
+  Route::put('/{antrianObat}', 'AntrianObatController@update')->name('update');
 });
 
 // Pasien Routes

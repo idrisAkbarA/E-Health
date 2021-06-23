@@ -91,10 +91,6 @@
       <transition name="slide-fade" mode="out-in">
         <nuxt />
       </transition>
-
-      <!-- <v-fade-transition mode="in" hide-on-leave="true">
-        <router-view></router-view>
-      </v-fade-transition>-->
     </v-main>
     <v-snackbar :value="snackbar.value" bottom :color="snackbar.color" outlined>
       {{ snackbar.message }}
@@ -130,6 +126,13 @@ export default {
       },
     },
   }),
+  mounted() {
+    this.getAntrianObat()
+    this.$echo.channel('antrian-obat').listen('AntrianObatEvent', (e) => {
+      console.log('update:', e)
+      this.$store.commit('antrian-obat/SET_DATA', e.antrianObat)
+    })
+  },
   computed: {
     snackbar: {
       get: function () {
@@ -174,6 +177,9 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      getAntrianObat: 'antrian-obat/fetchData',
+    }),
     toggleDrawer(bool) {
       if (!bool) {
         this.miniVariant = !this.miniVariant

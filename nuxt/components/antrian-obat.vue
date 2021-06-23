@@ -2,140 +2,178 @@
   <v-card>
     <v-card-title>
       <v-icon class="mr-3">mdi-medical-bag</v-icon>
-      Antrian Obat
+      <span>Antrian Obat</span>
     </v-card-title>
     <v-card-subtitle
-      ><strong>Kamis, 24 Juni 2021</strong> | Antrian pembelian obat hari
-      ini</v-card-subtitle
-    >
+      ><strong>Kamis, 24 Juni 2021</strong> | Antrian hari ini
+    </v-card-subtitle>
+    <v-card-actions>
+      <v-btn
+        color="primary"
+        block
+        depressed
+        class="mb-2"
+        @click="createAntrian"
+      >
+        Tambah Antrian
+      </v-btn>
+    </v-card-actions>
     <v-divider></v-divider>
-    <v-data-table
-      item-key="name"
-      class="elevation-1"
-      show-expand
-      loading-text="Loading... Please wait"
-      :headers="headers"
-      :loading="isLoading"
-      :items="antrian"
-      :single-expand="true"
-      :search="search"
-      :expanded.sync="expanded"
-    >
-      <template v-slot:top>
-        <!-- <v-toolbar flat>
-          <v-toolbar-title>Daftar Obat</v-toolbar-title>
-          <v-divider class="mx-4" inset vertical></v-divider>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" dark class="mb-2"> Tambah Obat </v-btn>
-        </v-toolbar> -->
-        <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          class="mx-4"
-          single-line
-          hide-details
-        ></v-text-field>
-      </template>
-      <template v-slot:[`item.no`]="props">
-        {{ props.index + 1 }}
-      </template>
-      <template v-slot:[`item.nama`]="{ item }">
-        {{ item.nama ? item.nama : item.rekam_medis.nama_pasien }}
-      </template>
-      <template v-slot:[`item.is_bayar`]="{ item }">
-        <v-icon
-          :color="item.is_bayar ? 'success' : 'red'"
-          :title="item.is_bayar ? 'Sudah Bayar' : 'Belum bayar'"
-          >{{ item.is_bayar ? 'mdi-cash-check' : 'mdi-cash-remove' }}</v-icon
-        >
-      </template>
-      <template v-slot:[`item.status`]="{ item }">
-        <v-chip outlined class="ma-2" :color="getStatusColor(item.status)">
-          {{
-            item.status !== null
-              ? item.status
-                ? 'Obat sudah diambil'
-                : 'Obat sudah selesai'
-              : 'Obat sedang dibuat'
-          }}
-        </v-chip>
-      </template>
-      <!-- <template v-slot:[`item.actions`]="{ item }">
-        <v-btn icon x-small class="mr-2" title="Edit" @click="edit(item)">
-          <v-icon>mdi-pencil</v-icon>
-        </v-btn>
-        <v-btn
-          icon
-          x-small
-          class="mr-2"
-          title="Hapus"
-          @click="
-            dialogDelete = true
-            form = item
-          "
-        >
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-      </template> -->
-      <template v-slot:expanded-item="{ headers, item }">
-        <td :colspan="headers.length">More info about {{ item.name }}</td>
-      </template>
-    </v-data-table>
+
+    <v-card-text>
+      <v-text-field
+        @click:clear="search = ''"
+        clearable
+        v-model="search"
+        color="secondary"
+        label="Pencarian"
+        prepend-inner-icon="mdi-magnify"
+        placeholder="Ketik untuk mulai mencari..."
+      ></v-text-field>
+      <v-list v-if="antrian.length > 0">
+        <v-list-item-group v-model="selectedItem" color="secondary">
+          <transition-group name="scale-transition">
+            <v-list-item
+              @click="emitData(row)"
+              :three-line="index == 0 && (search == '' || search == null)"
+              v-for="(row, index) in antrian.slice().reverse()"
+              :key="row.id"
+            >
+              <v-list-item-avatar> {{ index + 1 }} </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{
+                  row.rekam_medis ? row.rekam_medis.nama_pasien : row.nama
+                }}</v-list-item-title>
+                <v-list-item-subtitle>{{ 'Poli ' }}</v-list-item-subtitle>
+                <v-list-item-subtitle>
+                  <v-chip
+                    label
+                    x-small
+                    class="black--text"
+                    :color="row.is_bayar ? 'success' : 'secondary'"
+                    >{{ row.is_bayar ? 'Sudah Bayar' : 'Belum Bayar' }}</v-chip
+                  >
+                  <v-chip
+                    label
+                    :color="
+                      row.status !== null
+                        ? row.status
+                          ? 'success'
+                          : 'info'
+                        : 'warning'
+                    "
+                    class="black--text"
+                    x-small
+                    >{{
+                      row.status !== null
+                        ? row.status
+                          ? 'Sudah Diambil'
+                          : 'Selesai Dibuat'
+                        : 'Sedang Dibuat'
+                    }}</v-chip
+                  >
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </transition-group>
+        </v-list-item-group>
+      </v-list>
+      <span v-else class="text-center">Tidak ada antrian</span>
+    </v-card-text>
   </v-card>
 </template>
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
-
+import { mapGetters, mapState } from 'vuex'
 export default {
-  data() {
-    return {
-      isLoading: false,
-      selectedRow: 0,
-      search: '',
-      expanded: [],
-      antrian: [],
-      headers: [
-        {
-          text: '#',
-          align: 'start',
-          value: 'no',
-        },
-        { text: 'Nama Pembeli', value: 'nama' },
-        { text: 'Pembayaran', value: 'is_bayar' },
-        { text: 'Status', value: 'status' },
-        // { text: 'Actions', value: 'actions' },
-      ],
-    }
+  props: {
+    // status: null,
   },
   mounted() {
-    this.getAntrianObat()
+    // this.getFinalData()
   },
   computed: {
-    ...mapState('antrian-obat', { urlAntrianObat: (state) => state.url }),
+    ...mapState('antrian-obat', { antrianState: (state) => state.data }),
+    antrian: {
+      get: function () {
+        return this.$store.state['antrian-obat'].data
+      },
+      set: function (v) {
+        this.$store.commit('antrian-obat/SET_DATA', v)
+      },
+    },
+  },
+  watch: {
+    antrianState() {
+      this.emitData({})
+    },
+    search() {
+      this.searchAntrian()
+    },
+  },
+  data() {
+    return {
+      search: '',
+      selectedItem: undefined,
+      originalAntrian: [],
+      antrianPrioritas: [],
+      antrianReguler: [],
+    }
   },
   methods: {
-    getAntrianObat() {
-      this.$axios
-        .get(`${this.urlAntrianObat}/antrian`)
-        .then((response) => {
-          if (response.data.status) {
-            this.antrian = response.data.data
-          }
-        })
-        .catch((err) => {
-          console.error(err)
-          this.$snackbar('danger', err)
-        })
-        .then(() => {
-          this.isLoading = false
-        })
+    ...mapGetters({ getAntrianObat: 'antrian-obat/getAntrian' }),
+    emitData(data) {
+      this.$emit('antrian-selected', data)
     },
-    info(item) {
-      console.log('info', item)
+    createAntrian() {
+      this.$emit('button-clicked')
     },
-    getStatusColor(status) {
-      return status !== null ? (status ? 'secondary' : 'success') : 'info'
+    filterByStatus(data) {
+      var filtered = data.filter((item) => {
+        return item.status === this.status
+      })
+      return filtered
+    },
+    getFinalData() {
+      var data = this.getAntrianObat()
+      console.log('antrian', data)
+      this.originalAntrian = this.filterByStatus(data)
+    },
+    // mergeAntrian(antrian) {
+    //   var antrianPrioritasTemp = []
+    //   var antrianRegulerTemp = []
+    //   // var antrianSkipped = []
+
+    //   antrian.forEach((element) => {
+    //     if (element.prioritas_utama) {
+    //       antrianPrioritasTemp.push(element)
+    //       return
+    //     }
+    //     return antrianRegulerTemp.push(element)
+    //   })
+
+    //   this.antrianPrioritas = antrianPrioritasTemp
+    //   this.antrianReguler = antrianRegulerTemp
+    //   return antrianRegulerTemp.concat(antrianPrioritasTemp)
+    // },
+    searchAntrian() {
+      if (this.search === '' || this.search === null) {
+        this.getFinalData()
+        return
+      }
+      let eachIndex = (e) => {
+        // console.log('Looping each index element ', e)
+        return e.pasien.nama.toLowerCase().includes(this.search.toLowerCase())
+      }
+      var item = this.originalAntrian.filter((item) => eachIndex(item))
+      this.originalAntrian = this.filterByStatus(item)
+    },
+    getDetailPoli() {
+      var url = this.$store.state.poli.url
+      this.$axios.get(url + '/' + this.poli).then((response) => {
+        console.log('get detail poli', response)
+        this.poliDetail = response.data.data
+        this.getFinalData()
+      })
     },
   },
 }

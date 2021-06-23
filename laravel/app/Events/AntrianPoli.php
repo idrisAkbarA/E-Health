@@ -3,13 +3,11 @@
 namespace App\Events;
 
 use App\Models\RekamMedis;
-use Carbon\Carbon;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class AntrianPoli implements ShouldBroadcast
 {
@@ -47,6 +45,7 @@ class AntrianPoli implements ShouldBroadcast
     {
         return new Channel('antrian-poli');
     }
+
     public function broadcastWith()
     {
         return ['rekamMedis' => RekamMedis::whereDate('created_at', today())
