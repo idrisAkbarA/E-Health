@@ -87,33 +87,103 @@
                         </v-expansion-panel-header>
                         <v-expansion-panel-content class="blue-grey darken-4">
                           <v-container>
-                            <v-row>
-                              <v-col>
-                                <v-text-field label="Cari Nama/Nik">
-                                </v-text-field>
-                              </v-col>
-                              <v-col>
-                                <v-text-field label="Poli">
-                                </v-text-field>
-                              </v-col>
-                              <v-col>
-                                <v-text-field label="Status bayar">
-                                </v-text-field>
-                              </v-col>
-                              <v-col>
-                                <v-text-field label="Tanggal">
-                                </v-text-field>
-                              </v-col>
-                            </v-row>
-                            <v-row>
-                              <v-btn
-                                color="primary"
-                                class="mr-2"
-                              >
-                                <v-icon>mdi-magnify</v-icon> Cari
-                              </v-btn>
-                              <v-btn text> reset pencarian</v-btn>
-                            </v-row>
+                            <v-form
+                              ref="form"
+                              v-model="valid"
+                            >
+
+                              <v-row>
+                                <v-col>
+                                  <v-text-field
+                                    prepend-inner-icon="mdi-account"
+                                    color="secondary"
+                                    label="Cari Nama"
+                                    v-model="nama.nama"
+                                  >
+                                  </v-text-field>
+                                </v-col>
+                                <v-col>
+                                  <v-select
+                                    hide-details
+                                    prepend-inner-icon="mdi-bank"
+                                    :items="listPoli ? listPoliWithAll : []"
+                                    item-text="nama"
+                                    item-value="id"
+                                    v-model="poli"
+                                    color="secondary"
+                                    label="Pilih Poli"
+                                  ></v-select>
+                                </v-col>
+                                <v-col>
+                                  <v-select
+                                    hide-details
+                                    prepend-inner-icon="mdi-cash-multiple"
+                                    :items="status_bayar"
+                                    item-text="nama"
+                                    item-value="status"
+                                    v-model="poli"
+                                    color="secondary"
+                                    label="Status bayar"
+                                  ></v-select>
+                                </v-col>
+                                <v-col>
+                                  <v-dialog
+                                    ref="dialog"
+                                    v-model="modal"
+                                    :return-value.sync="date"
+                                    persistent
+                                    width="290px"
+                                  >
+                                    <template v-slot:activator="{ on, attrs }">
+                                      <v-text-field
+                                        v-model="date"
+                                        color="secondary"
+                                        label="Tanggal Lahir"
+                                        prepend-inner-icon="mdi-calendar"
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                      ></v-text-field>
+                                    </template>
+                                    <v-date-picker
+                                      v-model="date"
+                                      locale="id-ID"
+                                      header-color="primary"
+                                      color="secondary"
+                                      scrollable
+                                    >
+                                      <v-spacer></v-spacer>
+                                      <v-btn
+                                        text
+                                        color="secondary"
+                                        @click="modal = false"
+                                      >
+                                        Cancel
+                                      </v-btn>
+                                      <v-btn
+                                        text
+                                        color="secondary"
+                                        @click="$refs.dialog.save(date)"
+                                      >
+                                        OK
+                                      </v-btn>
+                                    </v-date-picker>
+                                  </v-dialog>
+                                </v-col>
+                              </v-row>
+                              <v-row>
+                                <v-btn
+                                  color="primary"
+                                  class="mr-2"
+                                >
+                                  <v-icon>mdi-magnify</v-icon> Cari
+                                </v-btn>
+                                <v-btn
+                                  text
+                                  @click="resetDataNValidation()"
+                                > reset pencarian</v-btn>
+                              </v-row>
+                            </v-form>
                           </v-container>
                         </v-expansion-panel-content>
                       </v-expansion-panel>
@@ -131,6 +201,7 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex'
 import AntrianPoli from '../../../components/antrian-poli.vue'
 export default {
   mounted() {
@@ -142,8 +213,31 @@ export default {
       title: this.title,
     }
   },
+  computed: {
+    ...mapState('poli', { listPoli: (state) => state.data }),
+    listPoliWithAll() {
+      var temp = JSON.parse(JSON.stringify(this.listPoli))
+      var all = {
+        id: null,
+        nama: 'Semua Poli',
+      }
+      temp.push(all)
+      return temp
+    },
+  },
   data() {
     return {
+      nama: { nama: null },
+      poli: { poli: null },
+      tanggal: null,
+      statusBayar: { statusBayar: null },
+      date: null,
+      modal: false,
+      status_bayar: [
+        { status: 0, nama: 'Belum Bayar' },
+        { status: 1, nama: 'Sudah Bayar' },
+      ],
+      poli: null,
       title: 'History',
       headers: [
         {
@@ -187,6 +281,10 @@ export default {
   methods: {
     test(item) {
       console.log('current selected', item)
+    },
+    resetDataNValidation() {
+      this.$refs.form.reset()
+      this.$refs.form.resetValidation()
     },
   },
 }
