@@ -86,7 +86,7 @@
 import { mapGetters, mapState } from 'vuex'
 export default {
   props: {
-    // status: null,
+    statusPembayaran: null,
   },
   mounted() {
     // this.getFinalData()
@@ -95,7 +95,11 @@ export default {
     ...mapState('antrian-obat', { antrianState: (state) => state.data }),
     antrian: {
       get: function () {
-        return this.$store.state['antrian-obat'].data
+        var data = this.$store.state['antrian-obat'].data
+        if (this.statusPembayaran !== null) {
+          data = this.filterByStatusPembayaran(data)
+        }
+        return data
       },
       set: function (v) {
         this.$store.commit('antrian-obat/SET_DATA', v)
@@ -127,37 +131,14 @@ export default {
     createAntrian() {
       this.$emit('button-clicked')
     },
-    filterByStatus(data) {
-      var filtered = data.filter((item) => {
-        return item.status === this.status
+    filterByStatusPembayaran(data) {
+      return data.filter((item) => {
+        return item.is_bayar == this.statusPembayaran
       })
-      return filtered
     },
-    getFinalData() {
-      var data = this.getAntrianObat()
-      console.log('antrian', data)
-      this.originalAntrian = this.filterByStatus(data)
-    },
-    // mergeAntrian(antrian) {
-    //   var antrianPrioritasTemp = []
-    //   var antrianRegulerTemp = []
-    //   // var antrianSkipped = []
-
-    //   antrian.forEach((element) => {
-    //     if (element.prioritas_utama) {
-    //       antrianPrioritasTemp.push(element)
-    //       return
-    //     }
-    //     return antrianRegulerTemp.push(element)
-    //   })
-
-    //   this.antrianPrioritas = antrianPrioritasTemp
-    //   this.antrianReguler = antrianRegulerTemp
-    //   return antrianRegulerTemp.concat(antrianPrioritasTemp)
-    // },
     searchAntrian() {
       if (this.search === '' || this.search === null) {
-        this.getFinalData()
+        // this.getFinalData()
         return
       }
       let eachIndex = (e) => {
@@ -166,14 +147,6 @@ export default {
       }
       var item = this.originalAntrian.filter((item) => eachIndex(item))
       this.originalAntrian = this.filterByStatus(item)
-    },
-    getDetailPoli() {
-      var url = this.$store.state.poli.url
-      this.$axios.get(url + '/' + this.poli).then((response) => {
-        console.log('get detail poli', response)
-        this.poliDetail = response.data.data
-        this.getFinalData()
-      })
     },
   },
 }

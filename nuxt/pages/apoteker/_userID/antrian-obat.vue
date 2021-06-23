@@ -3,6 +3,7 @@
     <v-row style="height: 100%">
       <v-col cols="5">
         <antrian-obat
+          :statusPembayaran="false"
           @antrian-selected="showDetail"
           @button-clicked="createAntrian"
         ></antrian-obat>
