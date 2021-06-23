@@ -202,6 +202,9 @@
 import { mapActions, mapMutations, mapState } from 'vuex'
 export default {
   middleware: ['kasir'],
+  created() {
+    this.getPoli()
+  },
   mounted() {
     this.getAntrianPoli()
     this.$echo.channel('antrian-poli').listen('AntrianPoli', (e) => {
