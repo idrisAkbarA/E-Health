@@ -7,6 +7,7 @@
     <v-row style="height:100%">
       <v-col cols="4">
         <antrian-poli
+          :withUnpaidObat="true"
           :excludePaid="1"
           header="Antrian Pembayaran"
           subHeader="Daftar antrian pembayaran. Klik untuk melihat rincian"
@@ -333,7 +334,7 @@ export default {
       this.isPaymentLoading = true
       var id = this.currentSelected.id
       var url = this.$store.state.pasien.urlAntrian + '/' + id
-      var form = { payment: true }
+      var form = { id, payment: true }
       this.$axios
         .put(url, form)
         .then((response) => {

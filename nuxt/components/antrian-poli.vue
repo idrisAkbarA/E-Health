@@ -126,6 +126,9 @@ export default {
     subHeader: null,
     poli: null,
     status: null,
+    withUnpaidObat: {
+      default: false,
+    },
     paidOnly: {
       default: false,
     },
@@ -154,6 +157,7 @@ export default {
   computed: {
     ...mapState('antrian-poli', { AllAntrianData: (state) => state.data }),
     ...mapState('poli', { listPoli: (state) => state.data }),
+    ...mapState('antrian-obat', { antrianObat: (state) => state.data }),
     listPoliWithAll() {
       var temp = JSON.parse(JSON.stringify(this.listPoli))
       var all = {
@@ -167,6 +171,10 @@ export default {
   watch: {
     AllAntrianData() {
       console.log('something change')
+      this.getFinalData()
+    },
+    antrianObat() {
+      console.log('something change in Obat')
       this.getFinalData()
     },
     search() {
@@ -223,10 +231,21 @@ export default {
       })
       return filtered
     },
+    getUnpaidObat() {
+      var obat = this.antrianObat.filter((item) => {
+        return item.rekam_medis_id === null
+      })
+      console.log('unpaid obat:', obat)
+      return obat
+    },
     getFinalData() {
       var getData = this.getAntrianPoliByID(this.poli)
       var antrian = this.filterByStatus(getData(this.poli))
       antrian = this.filterByPayment(antrian)
+      if (this.withUnpaidObat) {
+        console.log('unpaid obat trigered')
+        antrian.concat(this.getUnpaidObat())
+      }
       if (this.prioritas) {
         console.log('prioritas')
         this.originalAntrian = this.mergeAntrian(antrian)

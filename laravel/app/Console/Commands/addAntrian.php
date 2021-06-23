@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Events\AntrianObatEvent;
 use App\Events\AntrianPoli;
 use App\Models\AntrianObat;
 use App\Models\Obat;
@@ -79,6 +80,7 @@ class addAntrian extends Command
             ]);
 
             broadcast(new AntrianPoli());
+            broadcast(new AntrianObatEvent());
             echo "antrian pembayaran added\n";
             return 0;
         }
