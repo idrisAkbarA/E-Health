@@ -250,10 +250,13 @@ export default {
   },
   computed: {
     ...mapState('user', { urlUser: (state) => state.url }),
-    ...mapState('poli', { urlPoli: (state) => state.url }),
+    ...mapState('poli', {
+      urlPoli: (state) => state.url,
+      poli: (state) => state.data,
+    }),
     users: {
       get: function () {
-        var users = this.$store.state.user.data ?? []
+        var users = this.$_.cloneDeep(this.$store.state.user.data) ?? []
         return users.filter((item) => {
           return this.tab ? item.role == 'Dokter' : item.role != 'Dokter'
         })

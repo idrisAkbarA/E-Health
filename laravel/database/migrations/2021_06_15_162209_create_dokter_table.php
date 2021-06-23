@@ -24,7 +24,7 @@ class CreateDokterTable extends Migration
             $table->string('spesialis')->nullable();
             $table->text('alamat')->nullable();
             $table->string('kontak')->nullable();
-            $table->boolean('is_aktif')->default(false);
+            $table->boolean('is_aktif')->default(true);
             $table->timestamps();
         });
     }
