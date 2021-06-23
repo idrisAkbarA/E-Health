@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\AntrianPoli;
 use App\Models\Pasien;
 use App\Models\RekamMedis;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -90,6 +91,19 @@ class RekamMedisController extends Controller
      */
     public function update(Request $request, RekamMedis $rekamMedis)
     {
+        // request to update payment status should has "payment" property
+        if ($request->has('payment')) {
+            $rekamMedis->update([
+                'is_bayar' => true,
+                'lunas_at' => Carbon::now()
+            ]);
+            broadcast(new AntrianPoli());
+            $this->reply = [
+                'status' => true,
+                'message' => 'Pembayaran berhasil di simpan!',
+            ];
+            return response()->json($this->reply, 201);
+        }
         $rekamMedis->update($request->except('resep_obat'));
         $rekamMedis->resep_obat()->create($request->resep_obat);
 

@@ -23,6 +23,7 @@ class CreateRekamMedisTable extends Migration
             $table->string('total_biaya')->nullable();
             $table->boolean('status')->nullable();
             $table->boolean('is_bayar')->default(0);
+            $table->date('lunas_at')->nullable();
             $table->timestamps();
         });
     }
