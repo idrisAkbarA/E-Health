@@ -333,7 +333,7 @@ export default {
       this.isPaymentLoading = true
       var id = this.currentSelected.id
       var url = this.$store.state.pasien.urlAntrian + '/' + id
-      var form = { payment: true }
+      var form = { id, payment: true }
       this.$axios
         .put(url, form)
         .then((response) => {

@@ -208,9 +208,15 @@ export default {
       console.log('update', e)
       this.$store.commit('antrian-poli/setData', e.rekamMedis)
     })
+    this.getAntrianObat()
+    this.$echo.channel('antrian-obat').listen('AntrianObatEvent', (e) => {
+      console.log('update:', e)
+      this.$store.commit('antrian-obat/SET_DATA', e.antrianObat)
+    })
   },
   methods: {
     ...mapActions({
+      getAntrianObat: 'antrian-obat/fetchData',
       getPoli: 'poli/getPoli',
       getAntrianPoli: 'antrian-poli/fetchData',
     }),
