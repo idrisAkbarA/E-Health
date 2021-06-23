@@ -32,6 +32,7 @@
               >
 
                 <v-card-text
+                  id="print"
                   :key="0"
                   v-if="currentSelected && isLoading==false"
                 >
@@ -293,6 +294,41 @@ export default {
       this.isLoading = false
       console.log('current selected', item)
     },
+    async print() {
+      // Pass the element id here
+      // Get HTML to print from element
+      const prtHtml = document.getElementById('print').innerHTML
+
+      // Get all stylesheets HTML
+      let stylesHtml = ''
+      for (const node of [
+        ...document.querySelectorAll('link[rel="stylesheet"], style'),
+      ]) {
+        stylesHtml += node.outerHTML
+      }
+
+      // Open the print window
+      const WinPrint = window.open(
+        '',
+        '',
+        'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0'
+      )
+
+      WinPrint.document.write(`<!DOCTYPE html>
+      <html>
+        <head>
+          ${stylesHtml}
+        </head>
+        <body>
+          ${prtHtml}
+        </body>
+      </html>`)
+
+      WinPrint.document.close()
+      WinPrint.focus()
+      WinPrint.print()
+      WinPrint.close()
+    },
     acceptPayment() {
       this.isPaymentLoading = true
       var id = this.currentSelected.id
@@ -302,9 +338,13 @@ export default {
         .put(url, form)
         .then((response) => {
           console.log('pembayaran', response.data)
+          console.log(this)
+          this.print()
           this.$snackbar('success', response.data.message)
+          this.currentSelected = null
         })
         .catch((error) => {
+          console.log(error)
           this.$snackbar(
             'error',
             'Maaf terjadi kesalahan, coba dalam beberapa saat lagi.'

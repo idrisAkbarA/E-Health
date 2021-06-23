@@ -122,6 +122,9 @@ export default {
     subHeader: null,
     poli: null,
     status: null,
+    paidOnly: {
+      default: false,
+    },
     antrianSekarang: {
       default: true,
     },
@@ -199,6 +202,12 @@ export default {
       return filtered
     },
     filterByPayment(data) {
+      if (this.paidOnly) {
+        var filtered = data.filter((item) => {
+          return item.is_bayar == 1
+        })
+        return filtered
+      }
       var filtered = data.filter((item) => {
         return item.is_bayar != this.excludePaid
       })

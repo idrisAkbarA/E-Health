@@ -30,6 +30,7 @@ export default {
     { src: './plugins/lodash.js', mode: 'client' },
     { src: './plugins/snackbar.js', mode: 'client' },
     { src: './plugins/thousandSeperator.js', mode: 'client' },
+    { src: './plugins/vue-html-to-paper.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
