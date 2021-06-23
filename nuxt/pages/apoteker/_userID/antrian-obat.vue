@@ -217,17 +217,19 @@ export default {
       isLoading: false,
       formCreate: false,
       selectedItem: {},
-      obat: [],
       form: { resep_obat: [{}] },
     }
   },
   mounted() {
     this.$store.commit('page/setTitle', this.title)
+    this.$store.state.obat.data === null && this.getObat()
   },
   computed: {
+    ...mapState('obat', { obat: (state) => state.data }),
     ...mapState('antrian-obat', { urlAntrianObat: (state) => state.url }),
   },
   methods: {
+    ...mapActions({ getObat: 'obat/getObat' }),
     tambahObat() {
       this.form.resep_obat.push({})
     },

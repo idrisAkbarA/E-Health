@@ -36,7 +36,7 @@
             <v-list-item
               @click="emitData(row)"
               :three-line="index == 0 && (search == '' || search == null)"
-              v-for="(row, index) in antrian.slice().reverse()"
+              v-for="(row, index) in antrian.slice()"
               :key="row.id"
             >
               <v-list-item-avatar> {{ index + 1 }} </v-list-item-avatar>
@@ -99,7 +99,6 @@ export default {
       get: function () {
         var data = this.$store.state['antrian-obat'].data
         if (this.statusPembayaran !== null) {
-          console.log('this')
           data = this.filterByStatusPembayaran(data)
         }
         return data
