@@ -30,6 +30,7 @@
         <v-row>
           <v-col>
             <antrian-poli
+              :height="600"
               :excludePaid="1"
               :poliMenu="true"
               header="Sedang Dalam Antrian Pembayaran"
@@ -41,6 +42,7 @@
           </v-col>
           <v-col>
             <antrian-poli
+              :height="600"
               :paidOnly="true"
               :poliMenu="true"
               icon="mdi-cash-check"
@@ -81,7 +83,31 @@
                           </v-row>
                         </v-expansion-panel-header>
                         <v-expansion-panel-content class="blue-grey darken-4">
-
+                          <v-container>
+                            <v-row>
+                              <v-col>
+                                <v-text-field label="Cari Nama/Nik">
+                                </v-text-field>
+                              </v-col>
+                              <v-col>
+                                <v-text-field label="Cari Nama/Nik">
+                                </v-text-field>
+                              </v-col>
+                              <v-col>
+                                <v-text-field label="Cari Nama/Nik">
+                                </v-text-field>
+                              </v-col>
+                            </v-row>
+                            <v-row>
+                              <v-btn
+                                color="primary"
+                                class="mr-2"
+                              >
+                                <v-icon>mdi-magnify</v-icon> Cari
+                              </v-btn>
+                              <v-btn text> reset pencarian</v-btn>
+                            </v-row>
+                          </v-container>
                         </v-expansion-panel-content>
                       </v-expansion-panel>
                     </v-expansion-panels>

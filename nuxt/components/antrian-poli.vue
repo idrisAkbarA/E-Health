@@ -23,10 +23,6 @@
         solo-inverted
         label="Pilih Poli"
       ></v-select>
-    </v-card-subtitle>
-    <v-divider></v-divider>
-
-    <v-card-text>
       <v-text-field
         @click:clear="search = ''"
         clearable
@@ -36,6 +32,11 @@
         prepend-inner-icon="mdi-magnify"
         placeholder="Ketik untuk mulai mencari..."
       ></v-text-field>
+    </v-card-subtitle>
+    <v-divider></v-divider>
+
+    <v-card-text :style="setHeight()">
+
       <!-- @keyup="searchAntrian()" -->
       <v-list v-if="originalAntrian.length > 0">
         <v-list-item-group
@@ -117,6 +118,9 @@
 import { mapGetters, mapState } from 'vuex'
 export default {
   props: {
+    height: {
+      default: null,
+    },
     icon: null,
     header: null,
     subHeader: null,
@@ -192,6 +196,12 @@ export default {
   },
   methods: {
     ...mapGetters({ getAntrianPoliByID: 'antrian-poli/getAntrianPoliByID' }),
+    setHeight() {
+      if (this.height !== null) {
+        return `height:${this.height}px; overflow:auto;`
+      }
+      return ''
+    },
     emitData(data) {
       this.$emit('antrian-selected', data)
     },
