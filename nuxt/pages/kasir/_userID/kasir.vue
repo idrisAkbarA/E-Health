@@ -21,7 +21,7 @@
                 Transaksi
               </v-card-title>
               <v-card-subtitle>
-                Berikut rincian biaya pengobatan di Klinik Bangkinang Kota
+                Berikut rincian biaya pengobatan di Puskesmas Bangkinang Kota
               </v-card-subtitle>
               <transition name="fade-transition" mode="out-in">
                 <v-card-text
