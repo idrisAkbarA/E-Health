@@ -46,19 +46,19 @@
                         <span>Tanggal {{$moment().format("Do MMMM YYYY","id")}}</span>
                       </v-row>
                       <v-row class="mt-6">
-                        <h2>{{currentSelected.pasien.nama}}</h2>
+                        <h2>{{currentSelected.pasien?currentSelected.pasien.nama:currentSelected.nama}}</h2>
                       </v-row>
                       <v-row>
-                        <span>{{currentSelected.pasien.alamat}}</span>
+                        <span>{{currentSelected.pasien?currentSelected.pasien.alamat:"-"}}</span>
                       </v-row>
                       <v-row class="mt-7">
                         <div style="width:100%; background-color:white; height:1px"></div>
                       </v-row>
                       <v-row class="mt-5">
-                        <span>Diperiksa oleh </span>&nbsp; <span class="font-weight-bold">{{detailDokter.nama}}</span>
+                        <span>Diperiksa oleh </span>&nbsp; <span class="font-weight-bold">{{detailDokter?detailDokter.nama:"-"}}</span>
                       </v-row>
                       <v-row>
-                        <span>Poli</span>&nbsp;<span class="font-weight-bold">{{currentSelected.poli.nama}}</span>
+                        <span>Poli</span>&nbsp;<span class="font-weight-bold">{{currentSelected.poli?currentSelected.poli.nama:"-"}}</span>
                       </v-row>
 
                     </v-card-text>
@@ -88,7 +88,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
+                        <tr v-if="currentSelected.pasien">
                           <td>Diagnosa</td>
                           <td>- </td>
                           <td>- </td>
@@ -96,9 +96,10 @@
                           <td>Rp{{$numberify(currentSelected.total_biaya)}}</td>
                         </tr>
                         <template v-if="detailObat">
-
+                          <!-- <h1>obat ada</h1>
+                          {{detailObat}} -->
                           <tr
-                            v-for="(item,index) in detailObat.resep_obat"
+                            v-for="(item,index) in detailObat.resep_obat?detailObat.resep_obat:detailObat"
                             :key="index"
                           >
                             <td>{{item.obat.nama}}</td>
@@ -117,8 +118,11 @@
                           <td></td>
                           <td><span class="font-weight-bold">Total Biaya:</span>
                             <br>
-                            <span v-if="detailObat">
-                              Rp{{$numberify(parseInt(currentSelected.total_biaya)+parseInt(detailObat.total_harga))}}
+                            <span v-if="detailObat.resep_obat">
+                              Rp{{$numberify((parseFloat(currentSelected.total_biaya)+parseFloat(detailObat.total_harga)))}}
+                            </span>
+                            <span v-else-if="!detailObat.resep_obat">
+                              Rp{{$numberify(calcTotal())}}
                             </span>
                             <span v-else>
                               Rp{{$numberify(currentSelected.total_biaya)}}
@@ -287,11 +291,15 @@ export default {
       this.isLoading = true
       this.currentSelected = item
       this.detailObat = item.resep_obat ? item.resep_obat : null
-      var url = '/api/dokter/' + this.currentSelected.dokter_id
-      await this.$axios.get(url).then((response) => {
-        console.log(response.data)
-        this.detailDokter = response.data.data
-      })
+      console.log(item)
+      console.log('detail obat', this.detailObat)
+      if (item.pasien) {
+        var url = '/api/dokter/' + this.currentSelected.dokter_id
+        await this.$axios.get(url).then((response) => {
+          console.log(response.data)
+          this.detailDokter = response.data.data
+        })
+      }
       this.isLoading = false
       console.log('current selected', item)
     },
@@ -330,9 +338,43 @@ export default {
       WinPrint.print()
       WinPrint.close()
     },
+    calcTotal() {
+      var total = 0
+      this.detailObat.forEach((element) => {
+        // console.log('el', element.obat.harga * element.jumlah)
+        total += element.obat.harga * element.jumlah
+      })
+      // console.log('total', total)
+      return total
+    },
     acceptPayment() {
       this.isPaymentLoading = true
       var id = this.currentSelected.id
+      if (!this.currentSelected.pasien) {
+        var url = this.$store.state['antrian-obat'].url + '/' + id
+        var form = { id, payment: true }
+        this.$axios
+          .put(url, form)
+          .then((response) => {
+            console.log('pembayaran', response.data)
+            console.log(this)
+            this.print()
+            this.$snackbar('success', response.data.message)
+            this.currentSelected = null
+          })
+          .catch((error) => {
+            console.log(error)
+            this.$snackbar(
+              'error',
+              'Maaf terjadi kesalahan, coba dalam beberapa saat lagi.'
+            )
+          })
+          .finally(() => {
+            this.isPaymentLoading = false
+            this.dialogConfirm = false
+          })
+        return
+      }
       var url = this.$store.state.pasien.urlAntrian + '/' + id
       var form = { id, payment: true }
       this.$axios

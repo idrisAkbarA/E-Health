@@ -1,5 +1,8 @@
 <template>
-  <v-container fill-height>
+  <v-container
+    fill-height
+    class="pb-10"
+  >
     <v-row style="height: 100%">
       <v-col cols="7">
         <v-card>
@@ -68,6 +71,7 @@
         <antrian-poli
           :poli="null"
           :status="null"
+          :excludePaid="1"
           :poliMenu="true"
           @antrian-selected="test"
         ></antrian-poli>

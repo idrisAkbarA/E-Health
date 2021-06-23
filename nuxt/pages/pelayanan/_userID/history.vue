@@ -30,6 +30,7 @@
         <v-row>
           <v-col>
             <antrian-poli
+              height="400"
               :poliMenu="true"
               header="Sedang Dalam Antrian"
               subHeader="Daftar pasien yang sedang mengantri"
@@ -40,6 +41,7 @@
           </v-col>
           <v-col>
             <antrian-poli
+              height="400"
               :poliMenu="true"
               icon="mdi-check"
               header="Antrian Selesai"
@@ -52,6 +54,7 @@
           </v-col>
           <v-col>
             <antrian-poli
+              height="400"
               :poliMenu="true"
               :antrianSekarang="false"
               icon="mdi-debug-step-over"

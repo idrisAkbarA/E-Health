@@ -54,10 +54,12 @@
             >
               <v-list-item-avatar> {{ index + 1 }} </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title>{{ antrian.pasien.nama }}</v-list-item-title>
-                <v-list-item-subtitle>{{
-                  'Poli ' + antrian.poli.nama
-                }}</v-list-item-subtitle>
+                <v-list-item-title>{{ antrian.pasien ? antrian.pasien.nama : antrian.nama }}</v-list-item-title>
+                <v-list-item-subtitle>
+                  {{
+                  antrian.poli?antrian.poli.nama:'-'
+                }}
+                </v-list-item-subtitle>
                 <v-list-item-subtitle v-if="index == 0 && (search == '' || search == null)">
                   <v-chip
                     v-if="antrianSekarang == true"
@@ -233,7 +235,7 @@ export default {
     },
     getUnpaidObat() {
       var obat = this.antrianObat.filter((item) => {
-        return item.rekam_medis_id === null
+        return item.rekam_medis_id === null && item.is_bayar == 0
       })
       console.log('unpaid obat:', obat)
       return obat
@@ -244,7 +246,10 @@ export default {
       antrian = this.filterByPayment(antrian)
       if (this.withUnpaidObat) {
         console.log('unpaid obat trigered')
-        antrian.concat(this.getUnpaidObat())
+        var temp = this.getUnpaidObat()
+        temp.forEach((element) => {
+          antrian.push(element)
+        })
       }
       if (this.prioritas) {
         console.log('prioritas')

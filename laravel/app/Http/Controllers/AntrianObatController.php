@@ -79,6 +79,16 @@ class AntrianObatController extends Controller
      */
     public function update(Request $request, AntrianObat $antrianObat)
     {
+        if ($request->has('payment')) {
+            $antrianObat->is_bayar = 1;
+            $antrianObat->save();
+            $this->reply = [
+                'status' => true,
+                'message' => 'Pembayaran berhasil disimpan!',
+            ];
+            broadcast(new AntrianObatEvent());
+            return response()->json($this->reply, 200);
+        }
         $antrianObat->update($request->all());
 
         broadcast(new AntrianObatEvent());

@@ -64,7 +64,10 @@
         </v-chip>
         <v-row>
           <v-col cols="12">
-            <v-data-table>
+            <v-data-table
+              :headers="headers"
+              :items="dataHistory"
+            >
               <template v-slot:top>
                 <v-card flat>
                   <v-card-title>
@@ -90,11 +93,15 @@
                                 </v-text-field>
                               </v-col>
                               <v-col>
-                                <v-text-field label="Cari Nama/Nik">
+                                <v-text-field label="Poli">
                                 </v-text-field>
                               </v-col>
                               <v-col>
-                                <v-text-field label="Cari Nama/Nik">
+                                <v-text-field label="Status bayar">
+                                </v-text-field>
+                              </v-col>
+                              <v-col>
+                                <v-text-field label="Tanggal">
                                 </v-text-field>
                               </v-col>
                             </v-row>
@@ -138,6 +145,43 @@ export default {
   data() {
     return {
       title: 'History',
+      headers: [
+        {
+          text: 'Nama',
+          align: 'start',
+          sortable: false,
+          value: 'nama',
+        },
+        { text: 'Poli', value: 'poli' },
+        { text: 'Status Bayar', value: 'status_bayar' },
+        { text: 'Tanggal', value: 'tanggal' },
+      ],
+      dataHistory: [
+        {
+          nama: 'Charles',
+          poli: 'Umum',
+          status_bayar: 'Lunas',
+          tanggal: '2 Desember 2019',
+        },
+        {
+          nama: 'Charles',
+          poli: 'Umum',
+          status_bayar: 'Lunas',
+          tanggal: '2 Desember 2019',
+        },
+        {
+          nama: 'Charles',
+          poli: 'Umum',
+          status_bayar: 'Lunas',
+          tanggal: '2 Desember 2019',
+        },
+        {
+          nama: 'Charles',
+          poli: 'Umum',
+          status_bayar: 'Lunas',
+          tanggal: '2 Desember 2019',
+        },
+      ],
     }
   },
   methods: {
