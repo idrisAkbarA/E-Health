@@ -173,7 +173,7 @@ export default {
       console.log('something change')
       this.getFinalData()
     },
-    antrianOata() {
+    antrianObat() {
       console.log('something change in Obat')
       this.getFinalData()
     },
@@ -231,11 +231,21 @@ export default {
       })
       return filtered
     },
-    getUnpaidObat() {},
+    getUnpaidObat() {
+      var obat = this.antrianObat.filter((item) => {
+        return item.rekam_medis_id === null
+      })
+      console.log('unpaid obat:', obat)
+      return obat
+    },
     getFinalData() {
       var getData = this.getAntrianPoliByID(this.poli)
       var antrian = this.filterByStatus(getData(this.poli))
       antrian = this.filterByPayment(antrian)
+      if (this.withUnpaidObat) {
+        console.log('unpaid obat trigered')
+        antrian.concat(this.getUnpaidObat())
+      }
       if (this.prioritas) {
         console.log('prioritas')
         this.originalAntrian = this.mergeAntrian(antrian)

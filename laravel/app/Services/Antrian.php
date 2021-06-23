@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\AntrianObatEvent;
 use App\Events\AntrianPoli;
 use App\Models\AntrianObat;
 use App\Models\Pasien;
@@ -37,6 +38,6 @@ class Antrian
             }
         });
         broadcast(new AntrianPoli());
-        broadcast(new AntrianObat());
+        broadcast(new AntrianObatEvent());
     }
 }

@@ -7,6 +7,7 @@
     <v-row style="height:100%">
       <v-col cols="4">
         <antrian-poli
+          :withUnpaidObat="true"
           :excludePaid="1"
           header="Antrian Pembayaran"
           subHeader="Daftar antrian pembayaran. Klik untuk melihat rincian"
