@@ -5,7 +5,10 @@
       <span>Antrian Obat</span>
     </v-card-title>
     <v-card-subtitle
-      ><strong>Kamis, 24 Juni 2021</strong> | Antrian hari ini
+      ><strong>{{
+        $moment(new Date()).format('dddd, Do MMMM YYYY', 'id')
+      }}</strong>
+      | Antrian hari ini
     </v-card-subtitle>
     <v-card-actions>
       <v-btn

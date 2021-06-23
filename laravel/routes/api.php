@@ -47,6 +47,7 @@ Route::prefix('poli')->name('poli.')->group(function () {
 // Dokter Routes
 Route::prefix('dokter')->name('dokter.')->group(function () {
   Route::get('/', 'DokterController@index')->name('index');
+  Route::get('/rekam-medis', 'DokterController@rekamMedis')->name('rekam-medis');
   Route::get('user/{user}', 'DokterController@getByUserId')->name('get-by-user');
   Route::get('/{dokter}', 'DokterController@show')->name('show');
   Route::put('/{dokter}', 'DokterController@update')->name('update');
@@ -74,6 +75,7 @@ Route::prefix('obat')->name('obat.')->group(function () {
 // Antrian Obat Routes
 Route::prefix('antrian-obat')->name('antrian-obat.')->group(function () {
   Route::get('/antrian', 'AntrianObatController@antrian')->name('antrian');
+  Route::get('/', 'AntrianObatController@index')->name('index');
   Route::post('/', 'AntrianObatController@store')->name('store');
   Route::put('/{antrianObat}', 'AntrianObatController@update')->name('update');
 });

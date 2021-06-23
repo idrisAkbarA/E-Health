@@ -15,7 +15,13 @@ class AntrianObatController extends Controller
      */
     public function index()
     {
-        //
+        $antrian = AntrianObat::with('rekam_medis')->latest()->get();
+
+        $this->reply = [
+            'status' => true,
+            'data' => $antrian
+        ];
+        return response()->json($this->reply, 200);
     }
 
     /**
