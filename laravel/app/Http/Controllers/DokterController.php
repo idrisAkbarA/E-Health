@@ -30,17 +30,6 @@ class DokterController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  \App\Models\Dokter  $dokter
@@ -64,17 +53,13 @@ class DokterController extends Controller
      */
     public function update(Request $request, Dokter $dokter)
     {
-        //
-    }
+        $dokter->update($request->all());
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Dokter  $dokter
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Dokter $dokter)
-    {
-        //
+        $this->reply = [
+            'status' => true,
+            'message' => 'Dokter Updated!',
+            'data' => $dokter
+        ];
+        return response()->json($this->reply, 200);
     }
 }

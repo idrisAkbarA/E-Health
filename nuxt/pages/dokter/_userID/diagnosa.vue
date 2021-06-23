@@ -168,6 +168,7 @@
       </v-col>
       <v-col cols="5" v-if="dokter">
         <antrian-poli
+          :excludePaid="1"
           :poli="dokter.poli_id"
           :status="null"
           :poliMenu="false"
@@ -182,7 +183,7 @@
 import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   layout: 'dokter',
-  created() {
+  mounted() {
     this.$store.commit('page/setTitle', this.title)
     this.getObat()
   },
@@ -202,16 +203,11 @@ export default {
   },
   computed: {
     ...mapState('dokter', { dokter: (state) => state.currentDokter }),
-    ...mapState('obat', { urlObat: (state) => state.url }),
     ...mapState('rekam-medis', { urlRekamMedis: (state) => state.url }),
-    obat: {
-      get: function () {
-        return this.$store.state.obat.data ?? []
-      },
-      set: function (v) {
-        this.$store.commit('obat/SET_OBAT', v)
-      },
-    },
+    ...mapState('obat', {
+      urlObat: (state) => state.url,
+      obat: (state) => state.data,
+    }),
     pasien() {
       return this.form.pasien
     },

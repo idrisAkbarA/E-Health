@@ -6,6 +6,7 @@
 
 <script>
 export default {
+  layout: 'apoteker',
   mounted() {
     this.$store.commit('page/setTitle', this.title)
   },
@@ -19,6 +20,5 @@ export default {
       title: 'History',
     }
   },
-  layout: 'apoteker',
 }
 </script>

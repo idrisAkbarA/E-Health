@@ -30,6 +30,22 @@ class Dokter extends Model
         return $this->user()->first()->name;
     }
 
+    public function getPendidikanAttribute($value)
+    {
+        return json_decode($value);
+    }
+
+    // Setters
+    public function setPendidikanAttribute($value)
+    {
+        foreach($value as $index => $row){
+            if(!$row){
+                unset($value[$index]);
+            }
+        }
+        return $this->attributes['pendidikan'] = json_encode($value);
+    }
+
     // Relations
     public function user()
     {
