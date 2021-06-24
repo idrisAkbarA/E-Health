@@ -186,8 +186,9 @@ class RekamMedisController extends Controller
             ];
             return response()->json($this->reply, 201);
         }
+
         $rekamMedis->update($request->except('resep_obat'));
-        $rekamMedis->resep_obat()->create($request->resep_obat);
+        $request->resep_obat && $rekamMedis->resep_obat()->create($request->resep_obat);
 
         broadcast(new AntrianPoli());
 

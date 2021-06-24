@@ -18,16 +18,6 @@ class SuratRujukanController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -35,7 +25,23 @@ class SuratRujukanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'pasien_id' => 'required',
+            'dokter_id' => 'required',
+            'diagnosa' => 'required',
+            'pengobatan' => 'required',
+            'keadaan' => 'required',
+            'tujuan' => 'required',
+        ]);
+
+        $suratRujukan = SuratRujukan::create($validated);
+
+        $this->reply = [
+            'status' => true,
+            'data' => $suratRujukan,
+            'message' => 'Surat Rujukan berhail dibuat!'
+        ];
+        return response()->json($this->reply, 201);
     }
 
     /**

@@ -40,20 +40,73 @@
                       <v-container>
                         <v-row>
                           <v-col>
-                            <v-text-field label="Cari Nama/Nik"> </v-text-field>
+                            <v-text-field
+                              filled
+                              color="secondary"
+                              label="Nama / NIK"
+                              prepend-inner-icon="mdi-account"
+                              v-model="filter.nama"
+                            >
+                            </v-text-field>
                           </v-col>
                           <v-col>
-                            <v-text-field label="Cari Nama/Nik"> </v-text-field>
-                          </v-col>
-                          <v-col>
-                            <v-text-field label="Cari Nama/Nik"> </v-text-field>
+                            <v-dialog
+                              ref="dialog"
+                              v-model="modal"
+                              :return-value.sync="filter.date"
+                              persistent
+                              width="290px"
+                            >
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-text-field
+                                  filled
+                                  readonly
+                                  v-on="on"
+                                  v-bind="attrs"
+                                  label="Tanggal"
+                                  color="secondary"
+                                  prepend-inner-icon="mdi-calendar"
+                                  v-model="filter.date"
+                                ></v-text-field>
+                              </template>
+                              <v-date-picker
+                                scrollable
+                                range
+                                header-color="primary"
+                                color="secondary"
+                                locale="id-ID"
+                                v-model="filter.date"
+                              >
+                                <v-spacer></v-spacer>
+                                <v-btn
+                                  text
+                                  color="secondary"
+                                  @click="modal = false"
+                                >
+                                  Cancel
+                                </v-btn>
+                                <v-btn
+                                  text
+                                  color="secondary"
+                                  @click="$refs.dialog.save(filter.date)"
+                                >
+                                  OK
+                                </v-btn>
+                              </v-date-picker>
+                            </v-dialog>
                           </v-col>
                         </v-row>
                         <v-row>
-                          <v-btn color="primary" class="mr-2">
+                          <v-btn
+                            color="primary"
+                            class="mr-2"
+                            @click="getRekamMedis"
+                          >
                             <v-icon>mdi-magnify</v-icon> Cari
                           </v-btn>
-                          <v-btn text> reset pencarian</v-btn>
+                          <v-btn text @click="filter = {}">
+                            reset pencarian</v-btn
+                          >
                         </v-row>
                       </v-container>
                     </v-expansion-panel-content>
@@ -86,7 +139,9 @@ export default {
     return {
       title: 'History',
       isLoading: false,
+      modal: false,
       rekamMedis: [],
+      filter: {},
       headers: [
         {
           text: '#',
@@ -94,7 +149,7 @@ export default {
           value: 'no',
         },
         { text: 'Nama Pasien', value: 'nama_pasien' },
-        { text: 'Status', value: 'status' },
+        { text: 'Diagnosa', value: 'diagnosa' },
         { text: 'Tanggal', value: 'created_at' },
       ],
     }
@@ -106,7 +161,7 @@ export default {
     getRekamMedis() {
       this.isLoading = true
       this.$axios
-        .get(`${this.urlDokter}/rekam-medis`)
+        .get(`${this.urlDokter}/rekam-medis`, { params: this.filter })
         .then((response) => {
           if (response.data.status) {
             this.rekamMedis = response.data.data
