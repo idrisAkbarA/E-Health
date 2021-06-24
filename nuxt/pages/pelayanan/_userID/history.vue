@@ -72,6 +72,13 @@
                   {{ getStatusText(item.status) }}
                 </v-chip>
               </template>
+              <template v-slot:[`item.is_bayar`]="{ item }">
+                <v-chip
+                  class="black--text"
+                  :color="item.is_bayar ? 'success' : 'sedondary'"
+                  >{{ item.is_bayar ? 'Sudah Bayar' : 'Belum Bayar' }}</v-chip
+                >
+              </template>
               <template v-slot:[`item.created_at`]="{ item }">
                 {{
                   $moment(item.created_at).format('dddd, Do MMMM YYYY', 'id')
