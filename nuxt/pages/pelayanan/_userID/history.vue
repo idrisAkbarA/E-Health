@@ -63,6 +63,9 @@
               :headers="headers"
               :items="rekamMedis"
             >
+              <template v-slot:[`item.no`]="props">
+                {{ props.index + 1 }}
+              </template>
               <template v-slot:[`item.status`]="{ item }">
                 <v-chip
                   outlined
