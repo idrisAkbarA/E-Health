@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
             'tempat_tanggal_lahir' => 'Pekanbaru 16 Juli 1999',
             'jenis_kelamin' => 'Laki-Laki',
             'agama' => 'Islam',
-            'pendidikan' => '["S1 Pendidikan Dokter", "S2 Kedokteran Anak"]',
+            'pendidikan' => ["S1 Pendidikan Dokter", "S2 Kedokteran Anak"],
             'spesialis' => 'Anak',
             'is_aktif' => 1
         ]);

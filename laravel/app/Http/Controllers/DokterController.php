@@ -35,10 +35,24 @@ class DokterController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function rekamMedis()
+  public function rekamMedis(Request $request)
   {
+    $nama = $request->nama;
+    $from = $request->date[0];
+    $to = $request->date[1] ?? $request->date[0];
+
     $dokter = Dokter::where('user_id', Auth::id())->first();
-    $rekamMedis = $dokter->rekam_medis()->get();
+    $rekamMedis = $dokter->rekam_medis()
+      ->when($nama, function ($q) use ($nama) {
+        return $q->wherehas('pasien', function ($query) use ($nama) {
+          return $query->where('nama', 'LIKE', '%' . $nama . '%')->orWhere('nik', $nama);
+        });
+      })
+      ->when($request->date, function ($q) use ($from, $to) {
+        return $q->whereBetween('created_at', [$from, date('Y-m-d', strtotime($to . '+1 day'))]);
+      })
+      ->latest()
+      ->get();
 
     $this->reply = [
       'status' => true,
