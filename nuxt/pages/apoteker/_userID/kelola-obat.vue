@@ -57,48 +57,63 @@
           <span>Kelola Obat</span>
           <v-spacer></v-spacer>
           <v-btn text class="mr-2" @click="bottomSheet = false">batal</v-btn>
-          <v-btn color="primary" dark @click="submit" :loading="isLoading"
+          <v-btn
+            color="primary"
+            dark
+            @click="submit"
+            :loading="isLoading"
+            :disabled="!formCreate"
             >Simpan</v-btn
           >
         </v-card-title>
         <v-card-text>
-          <v-row align="center">
-            <v-col cols="6">
-              <v-text-field
-                color="#2C3E50"
-                label="Nama Obat"
-                v-model="form.nama"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col cols="6">
-              <v-select
-                :items="['Tablet', 'Cair', 'Kapsul', 'Kaplet']"
-                label="Bentuk Obat"
-                v-model="form.bentuk"
-              ></v-select>
-            </v-col>
-            <v-col cols="6">
-              <v-text-field
-                color="#2C3E50"
-                label="Satuan"
-                hint="Contoh: Butir, Bungkus, Mg, Ml"
-                v-model="form.satuan"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col cols="6">
-              <v-text-field
-                color="#2C3E50"
-                type="number"
-                label="Harga"
-                prefix="Rp."
-                hint="Harga per satuan"
-                v-model="form.harga"
-              >
-              </v-text-field>
-            </v-col>
-          </v-row>
+          <v-form v-model="formCreate">
+            <v-row align="center">
+              <v-col cols="6">
+                <v-text-field
+                  filled
+                  :rules="ruleRequired"
+                  color="#2C3E50"
+                  label="Nama Obat"
+                  v-model="form.nama"
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="6">
+                <v-select
+                  filled
+                  :rules="ruleRequired"
+                  :items="['Tablet', 'Cair', 'Kapsul', 'Kaplet']"
+                  label="Bentuk Obat"
+                  v-model="form.bentuk"
+                ></v-select>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  filled
+                  :rules="ruleRequired"
+                  color="#2C3E50"
+                  label="Satuan"
+                  hint="Contoh: Butir, Bungkus, Mg, Ml"
+                  v-model="form.satuan"
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  filled
+                  :rules="ruleRequired"
+                  color="#2C3E50"
+                  type="number"
+                  label="Harga"
+                  prefix="Rp."
+                  hint="Harga per satuan"
+                  v-model="form.harga"
+                >
+                </v-text-field>
+              </v-col>
+            </v-row>
+          </v-form>
         </v-card-text>
       </v-card>
     </v-bottom-sheet>
@@ -149,7 +164,9 @@ export default {
       isLoading: false,
       bottomSheet: false,
       dialogDelete: false,
+      formCreate: false,
       form: {},
+      ruleRequired: [(v) => !!v || 'Field ini wajib diisi!'],
       headers: [
         {
           text: '#',

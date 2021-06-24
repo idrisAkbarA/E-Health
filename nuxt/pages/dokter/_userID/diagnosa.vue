@@ -58,22 +58,25 @@
                 </v-expansion-panel-header>
                 <v-expansion-panel-content class="blue-grey darken-4">
                   <p class="text-secondary mt-3">Hasil diagnosa pasien</p>
-                  <v-form>
+                  <v-form v-model="formDiagnosa">
                     <v-row>
                       <v-col cols="12">
                         <v-textarea
+                          :rules="ruleRequired"
                           outlined
                           color="secondary"
                           label="Diagnosa"
                           v-model="form.diagnosa"
                         ></v-textarea>
                         <v-textarea
+                          :rules="ruleRequired"
                           outlined
                           color="secondary"
                           label="Pengobatan"
                           v-model="form.pengobatan"
                         ></v-textarea>
                         <v-text-field
+                          :rules="ruleRequired"
                           outlined
                           type="number"
                           min="0"
@@ -157,10 +160,16 @@
                 color="primary"
                 class="mt-3 float-right"
                 :loading="isLoading"
+                :disabled="!formDiagnosa"
                 @click="store"
                 >Selesai</v-btn
               >
-              <v-btn dark class="mt-3" :loading="isLoading" @click="rujukan"
+              <v-btn
+                dark
+                class="mt-3"
+                :loading="isLoading"
+                :disabled="!formDiagnosa"
+                @click="rujukan"
                 >Rujuk Pasien</v-btn
               >
             </v-col>
@@ -225,11 +234,12 @@
               </template>
             </v-simple-table>
             <v-divider class="my-4"></v-divider>
-            <v-form>
+            <v-form v-model="formSurat">
               <v-row>
                 <v-col cols="12">
                   <v-text-field
                     filled
+                    :rules="ruleRequired"
                     color="secondary"
                     label="Tujuan Rujukan"
                     hint="*Rumah Sakit tujuan rujukan"
@@ -237,18 +247,21 @@
                   ></v-text-field>
                   <v-textarea
                     filled
+                    :rules="ruleRequired"
                     color="secondary"
                     label="Diagnosa"
                     v-model="formRujukan.diagnosa"
                   ></v-textarea>
                   <v-textarea
                     filled
+                    :rules="ruleRequired"
                     color="secondary"
                     label="Pengobatan"
                     v-model="formRujukan.pengobatan"
                   ></v-textarea>
                   <v-textarea
                     filled
+                    :rules="ruleRequired"
                     color="secondary"
                     label="Keadaan"
                     v-model="formRujukan.keadaan"
@@ -344,6 +357,7 @@
                 color="primary"
                 class="mt-3 float-right"
                 :loading="isLoading"
+                :disabled="!formSurat"
                 @click="storeRujukan"
                 >Selesai</v-btn
               >
@@ -383,9 +397,12 @@ export default {
       isLoading: false,
       isResep: false,
       isRujuk: false,
+      formDiagnosa: false,
+      formSurat: false,
       form: {},
       formRujukan: {},
       resepObat: [],
+      ruleRequired: [(v) => !!v || 'Field ini wajib diisi!'],
     }
   },
   computed: {
