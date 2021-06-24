@@ -17,7 +17,8 @@ class AntrianObatController extends Controller
     {
         $nama = $request->nama;
         $status = $request->status;
-        $date = $request->date;
+        $from = $request->date[0];
+        $to = $request->date[1] ?? $request->date[0];
 
         $antrian = AntrianObat::with('rekam_medis')
             ->when($nama, function ($q) use ($nama) {
@@ -30,8 +31,8 @@ class AntrianObatController extends Controller
             ->when($status, function ($q) use ($status) {
                 return $q->where('status', $status == 'null' ? null : $status);
             })
-            ->when($date, function ($q) use ($date) {
-                return $q->whereBetween('created_at', [$date[0], date('Y-m-d', strtotime($date[1] . '+1 day'))]);
+            ->when($request->date, function ($q) use ($from, $to) {
+                return $q->whereBetween('created_at', [$from, date('Y-m-d', strtotime($to . '+1 day'))]);
             })
             ->latest()
             ->get();
