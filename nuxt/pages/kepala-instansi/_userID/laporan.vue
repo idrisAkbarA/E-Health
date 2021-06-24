@@ -1,140 +1,42 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="12">
-        <v-data-table
-          item-key="name"
-          class="elevation-1"
-          loading-text="Loading... Please wait"
-          :loading="isLoading"
-          :headers="headers"
-          :items="data"
+    <v-card>
+      <v-card-title>
+        Pusat Laporan
+      </v-card-title>
+      <v-card-subtitle>
+        Daftar Laporan Aplikasi Puskesmas Bangkinang Kota
+      </v-card-subtitle>
+      <v-card-text>
+        <v-tabs
+          v-model="tab"
+          align-with-title
+          color="secondary"
         >
-          <template v-slot:[`item.no`]="props">
-            {{ props.index + 1 }}
-          </template>
-          <template v-slot:[`item.nama_pasien`]="{ item }">
-            {{ item.rekam_medis ? item.rekam_medis.nama_pasien : item.nama }}
-          </template>
-          <template v-slot:[`item.status`]="{ item }">
-            <v-chip outlined class="ma-2" :color="getStatusColor(item.status)">
-              {{ getStatusText(item.status) }}
-            </v-chip>
-          </template>
-          <template v-slot:[`item.created_at`]="{ item }">
-            {{ $moment(item.created_at).format('dddd, Do MMMM YYYY', 'id') }}
-          </template>
-          <template v-slot:top>
-            <v-card flat>
-              <v-card-title>
-                <v-icon class="mr-4">mdi-history</v-icon> Riwayat Data Antrian
-                Obat
-              </v-card-title>
-              <v-card-subtitle>Lihat riwayat data antrian obat</v-card-subtitle>
-              <v-card-text>
-                <v-expansion-panels focusable hover>
-                  <v-expansion-panel>
-                    <v-expansion-panel-header class="pink darken-4">
-                      <v-row align="center">
-                        <v-icon class="mr-4">mdi-filter</v-icon>
-                        <span>Pencarian</span>
-                      </v-row>
-                    </v-expansion-panel-header>
-                    <v-expansion-panel-content class="blue-grey darken-4">
-                      <v-container>
-                        <v-row>
-                          <v-col>
-                            <v-text-field
-                              filled
-                              color="secondary"
-                              label="Nama / NIK"
-                              prepend-inner-icon="mdi-account"
-                              v-model="filter.nama"
-                            >
-                            </v-text-field>
-                          </v-col>
-                          <v-col>
-                            <v-select
-                              filled
-                              color="secondary"
-                              label="Status"
-                              item-text="text"
-                              item-value="status"
-                              prepend-inner-icon="mdi-list-status"
-                              :items="statuses"
-                              v-model="filter.status"
-                            >
-                            </v-select>
-                          </v-col>
-                          <v-col>
-                            <v-dialog
-                              ref="dialog"
-                              v-model="modal"
-                              :return-value.sync="filter.date"
-                              persistent
-                              width="290px"
-                            >
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-text-field
-                                  filled
-                                  readonly
-                                  v-on="on"
-                                  v-bind="attrs"
-                                  label="Tanggal"
-                                  color="secondary"
-                                  prepend-inner-icon="mdi-calendar"
-                                  v-model="filter.date"
-                                ></v-text-field>
-                              </template>
-                              <v-date-picker
-                                scrollable
-                                range
-                                header-color="primary"
-                                color="secondary"
-                                locale="id-ID"
-                                v-model="filter.date"
-                              >
-                                <v-spacer></v-spacer>
-                                <v-btn
-                                  text
-                                  color="secondary"
-                                  @click="modal = false"
-                                >
-                                  Cancel
-                                </v-btn>
-                                <v-btn
-                                  text
-                                  color="secondary"
-                                  @click="$refs.dialog.save(filter.date)"
-                                >
-                                  OK
-                                </v-btn>
-                              </v-date-picker>
-                            </v-dialog>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-btn
-                            color="primary"
-                            class="mr-2"
-                            @click="getAntrianObat"
-                          >
-                            <v-icon>mdi-magnify</v-icon> Cari
-                          </v-btn>
-                          <v-btn text @click="filter = {}">
-                            reset pencarian</v-btn
-                          >
-                        </v-row>
-                      </v-container>
-                    </v-expansion-panel-content>
-                  </v-expansion-panel>
-                </v-expansion-panels>
-              </v-card-text>
-            </v-card>
-          </template>
-        </v-data-table>
-      </v-col>
-    </v-row>
+          <v-tabs-slider color="yellow"></v-tabs-slider>
+
+          <v-tab>
+            Pelayanan
+
+          </v-tab>
+          <v-tab>
+            Kasir
+
+          </v-tab>
+          <v-tab>
+            Apoteker
+
+          </v-tab>
+        </v-tabs>
+        <v-tabs-items v-model="tab">
+          <v-tab-item></v-tab-item>
+          <v-tab-item class="bg-pattern">
+            <kasir-history :noRibbon="true"></kasir-history>
+          </v-tab-item>
+          <v-tab-item></v-tab-item>
+        </v-tabs-items>
+      </v-card-text>
+    </v-card>
   </v-container>
 </template>
 
@@ -151,79 +53,16 @@ export default {
   },
   data() {
     return {
+      tab: 1,
       title: 'Laporan',
-      isLoading: false,
-      modal: false,
-      antrianObat: [],
-      filter: {},
-      statuses: [
-        { status: 'null', text: 'Sedang Dibuat' },
-        { status: 0, text: 'Obat Selesai' },
-        { status: 1, text: 'Obat Diambil' },
-      ],
-      headers: [
-        {
-          text: '#',
-          align: 'start',
-          value: 'no',
-        },
-        { text: 'Nama Pasien', value: 'nama_pasien' },
-        { text: 'Status', value: 'status' },
-        { text: 'Tanggal', value: 'created_at' },
-      ],
-      data: [
-        {
-          nama: 'Charles',
-          poli: 'Umum',
-          status: 1,
-          tanggal: '2 Desember 2019',
-        },
-        {
-          nama: 'Carl',
-          poli: 'Umum',
-          status: 1,
-          tanggal: '2 Desember 2019',
-        },
-        {
-          nama: 'Stone',
-          poli: 'Umum',
-          status: 1,
-          tanggal: '2 Desember 2019',
-        },
-        {
-          nama: 'Charles',
-          poli: 'Umum',
-          status: 1,
-          tanggal: '2 Desember 2019',
-        },
-      ],
     }
   },
-  methods: {
-    getStatusColor(val) {
-      switch (val) {
-        case null:
-          return 'warning'
-        case 0:
-          return 'info'
-        case 1:
-          return 'success'
-        default:
-          return ''
-      }
-    },
-    getStatusText(val) {
-      switch (val) {
-        case null:
-          return 'Sedang Dibuat'
-        case 0:
-          return 'Obat Selesai'
-        case 1:
-          return 'Obat Diambil'
-        default:
-          return '-'
-      }
-    },
-  },
+  methods: {},
 }
 </script>
+<style>
+.bg-pattern {
+  background: url('/pattern.svg') repeat;
+  background-size: 400px;
+}
+</style>

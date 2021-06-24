@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <div class="ribbon"></div>
+    <div :class="noRibbon?'':'ribbon'"></div>
     <div style="z-index:2">
       <v-card
         class="mt-5"
@@ -30,7 +30,7 @@
         <v-row>
           <v-col>
             <antrian-poli
-              :height="600"
+              :height="450"
               :excludePaid="1"
               :poliMenu="true"
               header="Sedang Dalam Antrian Pembayaran"
@@ -42,7 +42,7 @@
           </v-col>
           <v-col>
             <antrian-poli
-              :height="600"
+              :height="450"
               :paidOnly="true"
               :poliMenu="true"
               icon="mdi-cash-check"
@@ -323,6 +323,12 @@
 import { mapGetters, mapState } from 'vuex'
 import AntrianPoli from './antrian-poli.vue'
 export default {
+  props: {
+    noRibbon: {
+      default: false,
+    },
+  },
+
   components: {
     'antrian-poli': AntrianPoli,
   },
