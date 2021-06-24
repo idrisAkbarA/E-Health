@@ -45,16 +45,72 @@
                         <v-row>
                           <v-col>
                             <v-text-field
-                              label="Cari Nama / NIK"
+                              filled
+                              color="secondary"
+                              label="Nama / NIK"
+                              prepend-inner-icon="mdi-account"
                               v-model="filter.nama"
                             >
                             </v-text-field>
                           </v-col>
                           <v-col>
-                            <v-text-field label="Cari Nama/Nik"> </v-text-field>
+                            <v-select
+                              filled
+                              color="secondary"
+                              label="Status"
+                              item-text="text"
+                              item-value="status"
+                              prepend-inner-icon="mdi-list-status"
+                              :items="statuses"
+                              v-model="filter.status"
+                            >
+                            </v-select>
                           </v-col>
                           <v-col>
-                            <v-text-field label="Cari Nama/Nik"> </v-text-field>
+                            <v-dialog
+                              ref="dialog"
+                              v-model="modal"
+                              :return-value.sync="filter.date"
+                              persistent
+                              width="290px"
+                            >
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-text-field
+                                  filled
+                                  readonly
+                                  v-on="on"
+                                  v-bind="attrs"
+                                  label="Tanggal"
+                                  color="secondary"
+                                  prepend-inner-icon="mdi-calendar"
+                                  v-model="filter.date"
+                                ></v-text-field>
+                              </template>
+                              <v-date-picker
+                                scrollable
+                                range
+                                header-color="primary"
+                                color="secondary"
+                                locale="id-ID"
+                                v-model="filter.date"
+                              >
+                                <v-spacer></v-spacer>
+                                <v-btn
+                                  text
+                                  color="secondary"
+                                  @click="modal = false"
+                                >
+                                  Cancel
+                                </v-btn>
+                                <v-btn
+                                  text
+                                  color="secondary"
+                                  @click="$refs.dialog.save(filter.date)"
+                                >
+                                  OK
+                                </v-btn>
+                              </v-date-picker>
+                            </v-dialog>
                           </v-col>
                         </v-row>
                         <v-row>
@@ -100,8 +156,14 @@ export default {
     return {
       title: 'History',
       isLoading: false,
+      modal: false,
       antrianObat: [],
       filter: {},
+      statuses: [
+        { status: 'null', text: 'Sedang Dibuat' },
+        { status: 0, text: 'Obat Selesai' },
+        { status: 1, text: 'Obat Diambil' },
+      ],
       headers: [
         {
           text: '#',

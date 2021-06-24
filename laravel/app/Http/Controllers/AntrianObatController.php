@@ -16,14 +16,22 @@ class AntrianObatController extends Controller
     public function index(Request $request)
     {
         $nama = $request->nama;
+        $status = $request->status;
+        $date = $request->date;
 
         $antrian = AntrianObat::with('rekam_medis')
             ->when($nama, function ($q) use ($nama) {
-                return $q->where('nama', $nama)->orWhereHas('rekam_medis', function ($query) use ($nama) {
-                    return $query->wherehas('pasien', function ($que) use ($nama) {
-                        return $que->where('nama', 'LIKE', '%' . $nama . '%')->orWhere('nik', $nama);
+                return $q->where('nama', $nama)->orWhereHas('rekam_medis', function ($que) use ($nama) {
+                    return $que->wherehas('pasien', function ($query) use ($nama) {
+                        return $query->where('nama', 'LIKE', '%' . $nama . '%')->orWhere('nik', $nama);
                     });
                 });
+            })
+            ->when($status, function ($q) use ($status) {
+                return $q->where('status', $status == 'null' ? null : $status);
+            })
+            ->when($date, function ($q) use ($date) {
+                return $q->whereBetween('created_at', [$date[0], date('Y-m-d', strtotime($date[1] . '+1 day'))]);
             })
             ->latest()
             ->get();
