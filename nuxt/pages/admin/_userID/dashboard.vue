@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <div>
+    <div v-if="false">
       <v-row>
         <v-col cols="12">
           <v-card width="100%">
@@ -53,7 +53,7 @@
         </v-col>
       </v-row>
     </div>
-    <div v-if="periode">
+    <div v-if="true">
 
       <v-row justify="space-between">
         <v-col cols="12">
@@ -66,13 +66,13 @@
               cover
             >
               <v-card-title>
-                <span class="body 2">Periode Terbaru</span>
+                <span class="body 2">Dashboard Administrator</span>
               </v-card-title>
               <v-card-text>
-                <h1>{{periode.nama}}</h1>
-                <p>Awal Periode: <br>
-                  Akhir Periode:
-                </p>
+                <h1>Selamat Datang Admin!</h1>
+                <!-- <p>Lihat lebih rinci di menu history <br>
+                  Selamat bekerja!
+                </p> -->
               </v-card-text>
             </v-img>
           </v-card>
@@ -88,10 +88,10 @@
               :src="'https://picsum.photos/200/100?random=3'"
             >
               <v-card-title>
-                <span class="body 2">Total Pendaftaran</span>
+                <span class="body 2">Total Petugas</span>
               </v-card-title>
               <v-card-text>
-                <h1></h1>
+                <h1>20</h1>
               </v-card-text>
             </v-img>
           </v-card>
@@ -107,10 +107,10 @@
               :src="'https://picsum.photos/200/100?random=2'"
             >
               <v-card-title>
-                <span class="body 2">Total Lulus</span>
+                <span class="body 2">Total Poli</span>
               </v-card-title>
               <v-card-text>
-                <h1></h1>
+                <h1>5</h1>
               </v-card-text>
             </v-img>
           </v-card>
@@ -126,10 +126,10 @@
               :src="'https://picsum.photos/200/100?random=1'"
             >
               <v-card-title>
-                <span class="body 2">Total Gagal</span>
+                <span class="body 2">Total Pasien</span>
               </v-card-title>
               <v-card-text>
-                <h1></h1>
+                <h1>15</h1>
               </v-card-text>
             </v-img>
           </v-card>
@@ -137,8 +137,8 @@
       </v-row>
       <!-- Tabel -->
       <v-card class="mt-10">
-        <v-data-table>
-        </v-data-table>
+        <!-- <v-data-table>
+        </v-data-table> -->
         <!-- :headers="headers"
           :items="final_data"
           :items-per-page="10"
@@ -148,6 +148,7 @@
     </div>
 
   </v-container>
+
 </template>
 
 <script>
