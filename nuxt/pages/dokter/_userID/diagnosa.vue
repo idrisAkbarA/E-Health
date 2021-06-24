@@ -74,6 +74,7 @@
                           v-model="form.pengobatan"
                         ></v-textarea>
                         <v-text-field
+                          outlined
                           type="number"
                           min="0"
                           color="secondary"
@@ -170,170 +171,183 @@
         </v-card>
       </v-col>
       <v-col cols="7" v-else>
-        <v-card class="mb-10">
+        <v-card class="mb-10 pb-5">
           <v-card-title>
             <v-icon class="mr-3">mdi-stethoscope</v-icon>
-            Diagnosa
+            Surat Rujukan
           </v-card-title>
-          <v-card-subtitle>Catat hasil diagnosa pemeriksaan</v-card-subtitle>
+          <v-card-subtitle>Buat Surat Rujukan</v-card-subtitle>
           <v-divider></v-divider>
-          <v-card-text class="pb-10" v-if="pasien">
+          <v-card-text class="pb-10" v-if="formRujukan.pasien">
             <v-simple-table dense>
               <template v-slot:default>
                 <tbody>
                   <tr>
                     <td>Nama</td>
-                    <td>: {{ pasien.nama }}</td>
+                    <td>: {{ formRujukan.pasien.nama }}</td>
                   </tr>
                   <tr>
                     <td>Jenis Kelamin</td>
-                    <td>: {{ pasien.jenis_kelamin }}</td>
+                    <td>: {{ formRujukan.pasien.jenis_kelamin }}</td>
                   </tr>
                   <tr>
                     <td>Tempat Tanggal Lahir</td>
                     <td>
-                      : {{ `${pasien.tempat_lahir}, ${pasien.tanggal_lahir}` }}
+                      :
+                      {{
+                        `${formRujukan.pasien.tempat_lahir}, ${formRujukan.pasien.tanggal_lahir}`
+                      }}
                     </td>
                   </tr>
-                  <tr v-if="pasien.alamat">
+                  <tr v-if="formRujukan.pasien.alamat">
                     <td>Alamat</td>
-                    <td>: {{ pasien.alamat }}</td>
+                    <td>: {{ formRujukan.pasien.alamat }}</td>
                   </tr>
-                  <tr v-if="pasien.kontak">
+                  <tr v-if="formRujukan.pasien.kontak">
                     <td>Kontak</td>
-                    <td>: {{ pasien.kontak }}</td>
+                    <td>: {{ formRujukan.pasien.kontak }}</td>
                   </tr>
-                  <tr v-if="pasien.riwayat_penyakit_pribadi">
+                  <tr v-if="formRujukan.pasien.riwayat_penyakit_pribadi">
                     <td>Riwayat Penyakit Pribadi</td>
-                    <td>: {{ pasien.riwayat_penyakit_pribadi }}</td>
+                    <td>: {{ formRujukan.pasien.riwayat_penyakit_pribadi }}</td>
                   </tr>
-                  <tr v-if="pasien.riwayat_penyakit_keluarga">
+                  <tr v-if="formRujukan.pasien.riwayat_penyakit_keluarga">
                     <td>Riwayat Penyakit Keluarga</td>
-                    <td>: {{ pasien.riwayat_penyakit_keluarga }}</td>
+                    <td>
+                      : {{ formRujukan.pasien.riwayat_penyakit_keluarga }}
+                    </td>
                   </tr>
-                  <tr v-if="pasien.riwayat_alergi">
+                  <tr v-if="formRujukan.pasien.riwayat_alergi">
                     <td>Riwayat Alergi</td>
-                    <td>: {{ pasien.riwayat_alergi }}</td>
+                    <td>: {{ formRujukan.pasien.riwayat_alergi }}</td>
                   </tr>
                 </tbody>
               </template>
             </v-simple-table>
             <v-divider class="my-4"></v-divider>
-            <v-expansion-panels focusable hover>
-              <v-expansion-panel>
-                <v-expansion-panel-header class="pink darken-4">
-                  Diagnosa
-                </v-expansion-panel-header>
-                <v-expansion-panel-content class="blue-grey darken-4">
-                  <p class="text-secondary mt-3">Hasil diagnosa pasien</p>
-                  <v-form>
-                    <v-row>
-                      <v-col cols="12">
-                        <v-textarea
-                          outlined
-                          color="secondary"
-                          label="Diagnosa"
-                          v-model="form.diagnosa"
-                        ></v-textarea>
-                        <v-textarea
-                          outlined
-                          color="secondary"
-                          label="Pengobatan"
-                          v-model="form.pengobatan"
-                        ></v-textarea>
-                        <v-text-field
-                          type="number"
-                          min="0"
-                          color="secondary"
-                          label="Total Biaya"
-                          hint="*Total biaya belum termasuk harga obat"
-                          prefix="Rp."
-                          v-model="form.total_biaya"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                  </v-form>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-              <v-expansion-panel>
-                <v-expansion-panel-header class="pink darken-4">
-                  Resep Obat
-                </v-expansion-panel-header>
-                <v-expansion-panel-content class="blue-grey darken-4">
-                  <p class="text-secondary mt-3">
-                    Resep obat akan langsung dikirim ke bagian Farmasi.
+            <v-form>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    filled
+                    color="secondary"
+                    label="Tujuan Rujukan"
+                    hint="*Rumah Sakit tujuan rujukan"
+                    v-model="formRujukan.tujuan"
+                  ></v-text-field>
+                  <v-textarea
+                    filled
+                    color="secondary"
+                    label="Diagnosa"
+                    v-model="formRujukan.diagnosa"
+                  ></v-textarea>
+                  <v-textarea
+                    filled
+                    color="secondary"
+                    label="Pengobatan"
+                    v-model="formRujukan.pengobatan"
+                  ></v-textarea>
+                  <v-textarea
+                    filled
+                    color="secondary"
+                    label="Keadaan"
+                    v-model="formRujukan.keadaan"
+                  ></v-textarea>
+                </v-col>
+              </v-row>
+            </v-form>
+            <v-form id="print" class="d-none">
+              <h4 style="text-align: center; margin-bottom: 10px">
+                Puskesmas Bangkinang Kota
+              </h4>
+              <hr />
+              <h3
+                style="
+                  text-align: center;
+                  margin-bottom: 10px;
+                  margin-top: 10px;
+                  text-decoration: underline;
+                "
+              >
+                SURAT RUJUKAN
+              </h3>
+              <div>
+                <p>Kepada Yth</p>
+                <p>{{ formRujukan.tujuan }}</p>
+              </div>
+              <br />
+              <div>
+                <p>Dengan Hormat,</p>
+                <p>
+                  Mohon perawatan lebih lanjut penderita tersebut di bawah ini :
+                </p>
+              </div>
+              <table dense style="width: 100%; margin-top: 20px">
+                <tbody>
+                  <tr>
+                    <td>Nama</td>
+                    <td>: {{ formRujukan.pasien.nama }}</td>
+                  </tr>
+                  <tr>
+                    <td>Jenis Kelamin</td>
+                    <td>: {{ formRujukan.pasien.jenis_kelamin }}</td>
+                  </tr>
+                  <tr>
+                    <td>Tempat Tanggal Lahir</td>
+                    <td>
+                      :
+                      {{
+                        `${formRujukan.pasien.tempat_lahir}, ${formRujukan.pasien.tanggal_lahir}`
+                      }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Tujuan Rujukan</td>
+                    <td>: {{ formRujukan.tujuan }}</td>
+                  </tr>
+                  <tr>
+                    <td>Diagnosa</td>
+                    <td>: {{ formRujukan.diagnosa }}</td>
+                  </tr>
+                  <tr>
+                    <td>Pengobatan</td>
+                    <td>: {{ formRujukan.pengobatan }}</td>
+                  </tr>
+                  <tr>
+                    <td>Kondisi</td>
+                    <td>: {{ formRujukan.keadaan }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <v-row style="margin-top: 120px">
+                <v-col cols="12">
+                  <p style="text-align: right">
+                    Bangkinang, {{ $moment().format('Do MMMM YYYY', 'id') }}
                   </p>
-                  <v-switch
-                    inset
-                    small
-                    :color="isResep ? 'success' : ''"
-                    :label="isResep ? 'Aktif' : 'Non-Aktif'"
-                    v-model="isResep"
-                  ></v-switch>
-                  <v-card-text v-if="isResep">
-                    <v-row
-                      v-for="(resep, index) in resepObat.resep_obat"
-                      :key="index"
-                    >
-                      <v-col cols="8">
-                        <v-select
-                          outlined
-                          :items="obat"
-                          item-text="nama"
-                          item-value="id"
-                          label="Nama Obat"
-                          v-model="resep.obat"
-                        ></v-select>
-                      </v-col>
-                      <v-col cols="4">
-                        <v-text-field
-                          outlined
-                          type="number"
-                          color="secondary"
-                          label="Jumlah"
-                          suffix="Satuan"
-                          v-model="resep.jumlah"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                    <v-textarea
-                      outlined
-                      label="Catatan"
-                      hint="catatan dosis dan penggunaan obat"
-                      v-model="resepObat.catatan"
-                    ></v-textarea>
-                    <v-col class="text-center">
-                      <v-btn
-                        class="mx-2"
-                        fab
-                        small
-                        dark
-                        color="primary"
-                        @click="tambahResep"
-                      >
-                        <v-icon dark> mdi-plus </v-icon>
-                      </v-btn>
-                    </v-col>
-                  </v-card-text>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-            </v-expansion-panels>
+                </v-col>
+              </v-row>
+              <br />
+              <v-row style="margin-top: 50px">
+                <v-col cols="4"></v-col>
+                <v-col cols="4"></v-col>
+                <v-col cols="4">
+                  <hr />
+                  <p style="text-align: center">
+                    {{ dokter.nama }}
+                  </p>
+                </v-col>
+              </v-row>
+            </v-form>
             <v-col cols="12">
               <v-btn
                 dark
                 color="primary"
                 class="mt-3 float-right"
                 :loading="isLoading"
-                @click="store"
+                @click="storeRujukan"
                 >Selesai</v-btn
               >
-              <v-btn dark class="mt-3" :loading="isLoading" @click="rujukan"
-                >Rujuk Pasien</v-btn
-              >
             </v-col>
-          </v-card-text>
-          <v-card-text v-else>
-            <p class="text-center">Pilih pasien terlebih daluhu...</p>
           </v-card-text>
         </v-card>
       </v-col>
@@ -377,6 +391,7 @@ export default {
   computed: {
     ...mapState('dokter', { dokter: (state) => state.currentDokter }),
     ...mapState('rekam-medis', { urlRekamMedis: (state) => state.url }),
+    ...mapState('surat-rujukan', { urlSuratRujukan: (state) => state.url }),
     ...mapState('obat', {
       urlObat: (state) => state.url,
       obat: (state) => state.data,
@@ -413,7 +428,8 @@ export default {
       this.resepObat.resep_obat.push({})
     },
     async rujukan() {
-      this.formRujukan = this.$_.clone(this.form)
+      this.formRujukan = this.$_.cloneDeep(this.form)
+      this.formRujukan.pasien = this.$_.clone(this.pasien)
       await this.store()
       this.isRujuk = true
     },
@@ -438,6 +454,67 @@ export default {
         .then(() => {
           this.isLoading = false
         })
+    },
+    storeRujukan() {
+      var form = this.formRujukan
+      form.dokter_id = this.dokter.id
+      this.isLoading = true
+      this.$axios
+        .post(`${this.urlSuratRujukan}`, form)
+        .then((response) => {
+          if (response.data.status) {
+            this.formRujukan = {}
+            this.isRujuk = false
+            this.print()
+            this.$snackbar('success', response.data.message)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+          this.$snackbar('danger', err)
+        })
+        .then(() => {
+          this.isLoading = false
+        })
+    },
+    async print() {
+      // Pass the element id here
+      // Get HTML to print from element
+      const prtHtml = document.getElementById('print').innerHTML
+
+      // Get all stylesheets HTML
+      let stylesHtml = ''
+      for (const node of [
+        ...document.querySelectorAll('link[rel="stylesheet"], style'),
+      ]) {
+        stylesHtml += node.outerHTML
+      }
+
+      // Open the print window
+      const WinPrint = window.open(
+        '',
+        '',
+        'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0'
+      )
+
+      WinPrint.document.write(`<!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            tr{
+              padding: 5px;
+            }
+          </style>
+          ${stylesHtml}
+        </head>
+        <body>
+          ${prtHtml}
+        </body>
+      </html>`)
+
+      WinPrint.document.close()
+      WinPrint.focus()
+      WinPrint.print()
     },
   },
 }

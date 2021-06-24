@@ -10,4 +10,5 @@ class SuratRujukan extends Model
     use HasFactory;
 
     protected $table = 'surat_rujukan';
+    protected $guarded = ['id'];
 }

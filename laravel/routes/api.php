@@ -89,3 +89,8 @@ Route::prefix('pasien')->name('pasien.')->group(function () {
   Route::put('/{pasien}', 'PasienController@update')->name('update');
   Route::delete('/{pasien}', 'PasienController@destroy')->name('destroy');
 });
+
+// Surat Rujukan Routes
+Route::prefix('surat-rujukan')->name('surat-rujukan.')->group(function () {
+  Route::post('/', 'SuratRujukanController@store')->name('store');
+});
