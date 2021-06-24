@@ -63,6 +63,9 @@
               :headers="headers"
               :items="rekamMedis"
             >
+              <template v-slot:[`item.no`]="props">
+                {{ props.index + 1 }}
+              </template>
               <template v-slot:[`item.status`]="{ item }">
                 <v-chip
                   outlined
@@ -71,6 +74,13 @@
                 >
                   {{ getStatusText(item.status) }}
                 </v-chip>
+              </template>
+              <template v-slot:[`item.is_bayar`]="{ item }">
+                <v-chip
+                  class="black--text"
+                  :color="item.is_bayar ? 'success' : 'sedondary'"
+                  >{{ item.is_bayar ? 'Sudah Bayar' : 'Belum Bayar' }}</v-chip
+                >
               </template>
               <template v-slot:[`item.created_at`]="{ item }">
                 {{
@@ -131,7 +141,7 @@
                                     { status: 0, text: 'Belum Bayar' },
                                     { status: 1, text: 'Sudah Bayar' },
                                   ]"
-                                  v-model="filter.status"
+                                  v-model="filter.pembayaran"
                                 >
                                 </v-select>
                               </v-col>
@@ -234,6 +244,7 @@ export default {
         { status: 'null', text: 'Sedang Mengantri' },
         { status: 0, text: 'Tidak Datang' },
         { status: 1, text: 'Selesai' },
+        { status: 2, text: 'Skipped' },
       ],
       headers: [
         {

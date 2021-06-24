@@ -6,6 +6,8 @@ use App\Events\AntrianObatEvent;
 use App\Models\AntrianObat;
 use Illuminate\Http\Request;
 
+use function PHPSTORM_META\type;
+
 class AntrianObatController extends Controller
 {
     /**
@@ -20,6 +22,7 @@ class AntrianObatController extends Controller
         $from = $request->date[0];
         $to = $request->date[1] ?? $request->date[0];
 
+        // return gettype($status);
         $antrian = AntrianObat::with('rekam_medis')
             ->when($nama, function ($q) use ($nama) {
                 return $q->where('nama', $nama)->orWhereHas('rekam_medis', function ($que) use ($nama) {
@@ -28,8 +31,11 @@ class AntrianObatController extends Controller
                     });
                 });
             })
-            ->when($status, function ($q) use ($status) {
-                return $q->where('status', $status == 'null' ? null : $status);
+            ->when(!is_null($status), function ($q) use ($status) {
+                if ($status == 'null') {
+                    return $q->whereNull('status');
+                }
+                return $q->where('status', $status);
             })
             ->when($request->date, function ($q) use ($from, $to) {
                 return $q->whereBetween('created_at', [$from, date('Y-m-d', strtotime($to . '+1 day'))]);

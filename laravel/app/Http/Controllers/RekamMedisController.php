@@ -43,11 +43,14 @@ class RekamMedisController extends Controller
                     return $query->where('nama', 'LIKE', '%' . $nama . '%')->orWhere('nik', $nama);
                 });
             })
-            ->when($status, function ($q) use ($status) {
-                return $q->where('status', $status == 'null' ? null : $status);
+            ->when(!is_null($status), function ($q) use ($status) {
+                if ($status == 'null') {
+                    return $q->whereNull('status');
+                }
+                return $q->where('status', $status);
             })
-            ->when($status_bayar, function ($q) use ($status_bayar) {
-                return $q->where('is_bayar', $status_bayar == 'null' ? null : $status_bayar);
+            ->when(!is_null($status_bayar), function ($q) use ($status_bayar) {
+                return $q->where('is_bayar', $status_bayar);
             })
             ->when($poli, function ($q) use ($poli) {
                 return $q->where('is_bayar', $poli == 'null' ? null : $poli);
@@ -100,6 +103,7 @@ class RekamMedisController extends Controller
         return response()->json($this->paginate($result, $request->perPage, $request->page));
         return response()->json($antrian);
     }
+
     public function paginate($items, $perPage = 5, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
@@ -137,6 +141,7 @@ class RekamMedisController extends Controller
     {
         $nama = $request->nama;
         $status = $request->status;
+        $pembayaran = $request->pembayaran;
         $from = $request->date[0];
         $to = $request->date[1] ?? $request->date[0];
 
@@ -146,8 +151,14 @@ class RekamMedisController extends Controller
                     return $query->where('nama', 'LIKE', '%' . $nama . '%')->orWhere('nik', $nama);
                 });
             })
-            ->when($status, function ($q) use ($status) {
-                return $q->where('status', $status == 'null' ? null : $status);
+            ->when(!is_null($status), function ($q) use ($status) {
+                if ($status == 'null') {
+                    return $q->whereNull('status');
+                }
+                return $q->where('status', $status);
+            })
+            ->when(!is_null($pembayaran), function ($q) use ($pembayaran) {
+                return $q->where('is_bayar', $pembayaran);
             })
             ->when($request->date, function ($q) use ($from, $to) {
                 return $q->whereBetween('created_at', [$from, date('Y-m-d', strtotime($to . '+1 day'))]);
