@@ -25,6 +25,7 @@
         <v-row>
           <v-col>
             <antrian-poli
+              :excludePaid="1"
               height="400"
               :poliMenu="true"
               header="Sedang Dalam Antrian"
