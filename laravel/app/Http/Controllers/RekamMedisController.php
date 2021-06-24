@@ -142,8 +142,14 @@ class RekamMedisController extends Controller
         $nama = $request->nama;
         $status = $request->status;
         $pembayaran = $request->pembayaran;
-        $from = $request->date[0];
-        $to = $request->date[1] ?? $request->date[0];
+        $from = $request->date[0] ?? null;
+        $to = null;
+        if ($request->date[1] ?? null) {
+            $to = $request->date[1];
+        } else {
+            $to = $from;
+        }
+        // $to = $request->date[1] ?? $request->date[0];
 
         $antrian = RekamMedis::with('pasien')
             ->when($nama, function ($q) use ($nama) {

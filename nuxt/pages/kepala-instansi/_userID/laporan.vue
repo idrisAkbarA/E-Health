@@ -29,11 +29,15 @@
           </v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
-          <v-tab-item></v-tab-item>
+          <v-tab-item class="bg-pattern">
+            <pelayanan-history :noRibbon="true"></pelayanan-history>
+          </v-tab-item>
           <v-tab-item class="bg-pattern">
             <kasir-history :noRibbon="true"></kasir-history>
           </v-tab-item>
-          <v-tab-item></v-tab-item>
+          <v-tab-item>
+            <apoteker-history></apoteker-history>
+          </v-tab-item>
         </v-tabs-items>
       </v-card-text>
     </v-card>

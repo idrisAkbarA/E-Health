@@ -19,8 +19,13 @@ class AntrianObatController extends Controller
     {
         $nama = $request->nama;
         $status = $request->status;
-        $from = $request->date[0];
-        $to = $request->date[1] ?? $request->date[0];
+        $from = $request->date[0] ?? null;
+        $to = null;
+        if ($request->date[1] ?? null) {
+            $to = $request->date[1];
+        } else {
+            $to = $from;
+        }
 
         // return gettype($status);
         $antrian = AntrianObat::with('rekam_medis')
