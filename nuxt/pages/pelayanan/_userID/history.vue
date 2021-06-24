@@ -141,7 +141,7 @@
                                     { status: 0, text: 'Belum Bayar' },
                                     { status: 1, text: 'Sudah Bayar' },
                                   ]"
-                                  v-model="filter.status"
+                                  v-model="filter.pembayaran"
                                 >
                                 </v-select>
                               </v-col>
@@ -244,6 +244,7 @@ export default {
         { status: 'null', text: 'Sedang Mengantri' },
         { status: 0, text: 'Tidak Datang' },
         { status: 1, text: 'Selesai' },
+        { status: 2, text: 'Skipped' },
       ],
       headers: [
         {
