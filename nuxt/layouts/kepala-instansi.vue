@@ -202,7 +202,27 @@
 import { mapActions, mapMutations, mapState } from 'vuex'
 export default {
   middleware: ['kepala-instansi'],
+  created() {
+    this.getPoli()
+  },
+  mounted() {
+    this.getAntrianPoli()
+    this.$echo.channel('antrian-poli').listen('AntrianPoli', (e) => {
+      console.log('update', e)
+      this.$store.commit('antrian-poli/setData', e.rekamMedis)
+    })
+    this.getAntrianObat()
+    this.$echo.channel('antrian-obat').listen('AntrianObatEvent', (e) => {
+      console.log('update:', e)
+      this.$store.commit('antrian-obat/SET_DATA', e.antrianObat)
+    })
+  },
   methods: {
+    ...mapActions({
+      getAntrianObat: 'antrian-obat/fetchData',
+      getPoli: 'poli/getPoli',
+      getAntrianPoli: 'antrian-poli/fetchData',
+    }),
     toggleDrawer(bool) {
       if (!bool) {
         this.miniVariant = !this.miniVariant
