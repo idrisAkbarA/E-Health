@@ -57,9 +57,9 @@
         </v-col>
         <v-col>
           <br>
-          <span>
+          <!-- <span>
             <a href="/lupa-password">Lupa Password?</a>
-          </span>
+          </span> -->
         </v-col>
       </v-row>
     </v-container>

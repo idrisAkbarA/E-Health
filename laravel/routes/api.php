@@ -55,6 +55,7 @@ Route::prefix('dokter')->name('dokter.')->group(function () {
 
 // Rekam Medis Routes
 Route::prefix('rekam-medis')->name('rekam-medis.')->group(function () {
+  Route::get('/', 'RekamMedisController@index')->name('index');
   Route::post('/', 'RekamMedisController@store')->name('store');
   Route::get('/antrian', 'RekamMedisController@antrian')->name('antrian');
   Route::get('/{rekamMedis}', 'RekamMedisController@show')->name('show');
