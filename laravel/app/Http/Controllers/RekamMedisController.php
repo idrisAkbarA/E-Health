@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Events\AntrianPoli;
+use App\Models\AntrianObat;
 use App\Models\Pasien;
 use App\Models\RekamMedis;
 use App\Services\Antrian;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class RekamMedisController extends Controller
 {
@@ -17,9 +21,90 @@ class RekamMedisController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $nama = $request->has('nama') ? $request->nama : null;
+        $status = $request->has('status') ? $request->status : null;
+        $status_bayar = $request->has('status_bayar') ? $request->status_bayar : null;
+        $payment = $request->has('payment') ? true : false;
+        $poli = $request->has('poli') ? $request->poli : null;
+        $page = $request->has('page') ? $request->page : null;
+        $from = null;
+        $to = null;
+        if ($request->has('tanggal')) {
+            if (count($request->tanggal) > 0) {
+                $from = $request->tanggal[0];
+                $to = $request->tanggal[1];
+            }
+        }
+        $antrian = RekamMedis::with('pasien')
+            ->when($nama, function ($q) use ($nama) {
+                return $q->whereHas('pasien', function ($query) use ($nama) {
+                    return $query->where('nama', 'LIKE', '%' . $nama . '%')->orWhere('nik', $nama);
+                });
+            })
+            ->when($status, function ($q) use ($status) {
+                return $q->where('status', $status == 'null' ? null : $status);
+            })
+            ->when($status_bayar, function ($q) use ($status_bayar) {
+                return $q->where('is_bayar', $status_bayar == 'null' ? null : $status_bayar);
+            })
+            ->when($poli, function ($q) use ($poli) {
+                return $q->where('is_bayar', $poli == 'null' ? null : $poli);
+            })
+            ->when($request->tanggal, function ($q) use ($from, $to) {
+                return $q->whereBetween('created_at', [$from, date('Y-m-d', strtotime($to . '+1 day'))]);
+            })
+            ->latest()
+            ->get();
+
+        $antrianObat = (new AntrianObat())
+            ->when($nama, function ($q) use ($nama) {
+                return $q->where('nama', 'LIKE', '%' . $nama . '%');
+            })
+            ->when($status, function ($q) use ($status) {
+                return $q->where('status', $status == 'null' ? null : $status);
+            })
+            ->when($request->tanggal, function ($q) use ($from, $to) {
+                return $q->whereBetween('created_at', [$from, date('Y-m-d', strtotime($to . '+1 day'))]);
+            })
+            ->latest()
+            ->get();
+
+        $finalAntrianObat = [];
+        foreach ($antrianObat as $key => $value) {
+            $temp = [
+                'from_antrian_obat' => true,
+                'pasien' => ["nama" => $value['nama']],
+                "pasien_id" => null,
+                "dokter_id" => null,
+                "poli_id" => null,
+                "nama_poli" => "-",
+                "daignosa" => null,
+                "pengobatan" => null,
+                "total_biaya" => null,
+                "status" => null,
+                "total_biaya" => $value['total_biaya'],
+                "status" => null,
+                "is_bayar" => $value['is_bayar'],
+                "lunas_at" => null,
+                "created_at" => $value['created_at'],
+                "updated_at" => $value['updated_at'],
+            ];
+            array_push($finalAntrianObat, $temp);
+        }
+
+        $result = array_merge($antrian->toArray(), $finalAntrianObat);
+
+
+        return response()->json($this->paginate($result, $request->perPage, $request->page));
+        return response()->json($antrian);
+    }
+    public function paginate($items, $perPage = 5, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 
     /**
