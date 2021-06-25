@@ -19,6 +19,7 @@
           <v-divider></v-divider>
           <v-card-text class="pb-15">
             <v-text-field
+              :rules="ruleRequired"
               outlined
               color="secondary"
               label="Nama Pembeli"
@@ -28,6 +29,7 @@
               <v-col cols="8">
                 <v-select
                   outlined
+                  :rules="ruleRequired"
                   :items="obat"
                   item-text="nama"
                   item-value="id"
@@ -38,6 +40,7 @@
               <v-col cols="4">
                 <v-text-field
                   outlined
+                  :rules="ruleRequired"
                   type="number"
                   min="0"
                   color="secondary"
@@ -49,6 +52,7 @@
             </v-row>
             <v-textarea
               outlined
+              :rules="ruleRequired"
               label="Catatan"
               hint="catatan dosis dan penggunaan obat"
               v-model="form.catatan"
@@ -218,6 +222,7 @@ export default {
       formCreate: false,
       selectedItem: {},
       form: { resep_obat: [{}] },
+      ruleRequired: [(v) => !!v || 'Field ini wajib diisi!'],
     }
   },
   mounted() {
