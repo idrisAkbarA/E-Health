@@ -48,7 +48,7 @@ Route::prefix('poli')->name('poli.')->group(function () {
 Route::prefix('dokter')->name('dokter.')->group(function () {
   Route::get('/', 'DokterController@index')->name('index');
   Route::get('/rekam-medis', 'DokterController@rekamMedis')->name('rekam-medis');
-  Route::get('user/{user}', 'DokterController@getByUserId')->name('get-by-user');
+  Route::get('/user/{user}', 'DokterController@getByUserId')->name('get-by-user');
   Route::get('/{dokter}', 'DokterController@show')->name('show');
   Route::put('/{dokter}', 'DokterController@update')->name('update');
 });
@@ -59,9 +59,9 @@ Route::prefix('rekam-medis')->name('rekam-medis.')->group(function () {
   Route::post('/', 'RekamMedisController@store')->name('store');
   Route::get('/antrian', 'RekamMedisController@antrian')->name('antrian');
   Route::get('/history', 'RekamMedisController@history')->name('history');
+  Route::get('/poli/{poli}', 'RekamMedisController@getByPoliId')->name('get-by-poli');
   Route::get('/{rekamMedis}', 'RekamMedisController@show')->name('show');
   Route::put('/{rekamMedis}', 'RekamMedisController@update')->name('update');
-  // Route::get('/{pasien}', 'RekamMedisController@index')->name('index');
 });
 
 

@@ -6,5 +6,8 @@ export const state = () => ({
 export const mutations = {
   setTitle(state, newTitle) {
     state.title = newTitle
+  },
+  setLoading(state, data) {
+    state.isLoading = data
   }
 }

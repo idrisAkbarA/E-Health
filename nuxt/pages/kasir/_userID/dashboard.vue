@@ -4,11 +4,7 @@
       <v-row>
         <v-col cols="12">
           <v-card width="100%">
-            <v-skeleton-loader
-              width="100%"
-              type="article"
-            ></v-skeleton-loader>
-
+            <v-skeleton-loader width="100%" type="article"></v-skeleton-loader>
           </v-card>
         </v-col>
         <v-col>
@@ -27,7 +23,6 @@
               max-width="300"
               type="list-item-two-line"
             ></v-skeleton-loader>
-
           </v-card>
         </v-col>
         <v-col>
@@ -37,7 +32,6 @@
               max-width="300"
               type="list-item-two-line"
             ></v-skeleton-loader>
-
           </v-card>
         </v-col>
       </v-row>
@@ -54,13 +48,9 @@
       </v-row>
     </div>
     <div v-if="true">
-
       <v-row justify="space-between">
         <v-col cols="12">
-          <v-card
-            dark
-            :width="'100%'"
-          >
+          <v-card dark :width="'100%'">
             <v-img
               gradient="to top right, rgba(58, 231, 87, 0.33), rgba(25,32,72,.7)"
               cover
@@ -69,8 +59,9 @@
                 <span class="body 2">Dashboard Kasir</span>
               </v-card-title>
               <v-card-text>
-                <h1>Selamat Datang Kasir!</h1>
-                <p>Lihat lebih rinci di menu history <br>
+                <h1>Selamat Datang {{ $auth.user.name }}!</h1>
+                <p>
+                  Pilih menu kasir untuk memulai <br />
                   Selamat bekerja!
                 </p>
               </v-card-text>
@@ -78,30 +69,24 @@
           </v-card>
         </v-col>
         <v-col>
-          <v-card
-            dark
-            :height="100*1.2"
-            :width="'100%'"
-          >
+          <v-card dark :height="100 * 1.2" :width="'100%'">
             <v-img
               gradient="to top right, rgba(58, 231, 87, 0.33), rgba(25,32,72,.7)"
-              :src="'https://picsum.photos/200/100?random=3'"
+              :src="'https://picsum.photos/200/100?random=1'"
             >
               <v-card-title>
-                <span class="body 2">Total Pendaftaran Hari Ini</span>
+                <span class="body 2">Hari ini</span>
               </v-card-title>
               <v-card-text>
-                <h1>20</h1>
+                <h1>
+                  {{ $moment(new Date()).format('dddd, Do MMMM YYYY', 'id') }}
+                </h1>
               </v-card-text>
             </v-img>
           </v-card>
         </v-col>
         <v-col>
-          <v-card
-            dark
-            :height="100*1.2"
-            :width="'100%'"
-          >
+          <v-card dark :height="100 * 1.2" :width="'100%'">
             <v-img
               gradient="to top right, rgba(58, 231, 87, 0.33), rgba(25,32,72,.7)"
               :src="'https://picsum.photos/200/100?random=2'"
@@ -116,11 +101,7 @@
           </v-card>
         </v-col>
         <v-col>
-          <v-card
-            dark
-            :height="100*1.2"
-            :width="'100%'"
-          >
+          <v-card dark :height="100 * 1.2" :width="'100%'">
             <v-img
               gradient="to top right, rgba(58, 231, 87, 0.33), rgba(25,32,72,.7)"
               :src="'https://picsum.photos/200/100?random=1'"
@@ -136,35 +117,26 @@
         </v-col>
       </v-row>
       <!-- Tabel -->
-      <v-card class="mt-10">
-        <!-- <v-data-table>
-        </v-data-table> -->
-        <!-- :headers="headers"
-          :items="final_data"
-          :items-per-page="10"
-          :loading="isLoading"
-          class="elevation-1" -->
-      </v-card>
+      <v-card class="mt-10"> </v-card>
     </div>
-
   </v-container>
 </template>
 
 <script>
 export default {
-  mounted() {
-    this.$store.commit('page/setTitle', this.title)
-  },
+  layout: 'kasir',
   head() {
     return {
       title: this.title,
     }
+  },
+  mounted() {
+    this.$store.commit('page/setTitle', this.title)
   },
   data() {
     return {
       title: 'Dashboard Kasir',
     }
   },
-  layout: 'kasir',
 }
 </script>

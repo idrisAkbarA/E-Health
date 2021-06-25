@@ -75,7 +75,7 @@
                 <span class="body 2">Total Antrian Poli Hari ini</span>
               </v-card-title>
               <v-card-text>
-                <h1>20 Antrian</h1>
+                <h1>{{ antrianPoli ? antrianPoli.length : 0 }} Antrian</h1>
               </v-card-text>
             </v-img>
           </v-card>
@@ -90,7 +90,7 @@
                 <span class="body 2">Total Antrian Farmasi Hari ini</span>
               </v-card-title>
               <v-card-text>
-                <h1>5 Antrian</h1>
+                <h1>{{ antrianObat ? antrianObat.length : 0 }} Antrian</h1>
               </v-card-text>
             </v-img>
           </v-card>
@@ -105,7 +105,7 @@
                 <span class="body 2">Dokter Bertugas Hari ini</span>
               </v-card-title>
               <v-card-text>
-                <h1>15 Dokter</h1>
+                <h1>{{ dokter ? dokter.length : 0 }} Dokter</h1>
               </v-card-text>
             </v-img>
           </v-card>
@@ -117,6 +117,8 @@
 </template>
 
 <script>
+import { mapState, mapMutations, mapActions } from 'vuex'
+
 export default {
   layout: 'kepala-instansi',
   head() {
@@ -126,11 +128,32 @@ export default {
   },
   mounted() {
     this.$store.commit('page/setTitle', this.title)
+    this.getAntrianObat()
+    this.getDokter()
   },
   data() {
     return {
       title: 'Dashboard Kepala Instansi',
     }
+  },
+  computed: {
+    ...mapState('dokter', { dokter: (state) => state.data }),
+    ...mapState('antrian-obat', { antrianObat: (state) => state.data }),
+    ...mapState('antrian-poli', { antrianPoli: (state) => state.data }),
+    isLoading: {
+      get: function () {
+        return this.$store.state.page.isLoading
+      },
+      set: function (v) {
+        this.$store.commit('page/setLoading', v)
+      },
+    },
+  },
+  methods: {
+    ...mapActions({
+      getDokter: 'dokter/getDokter',
+      getAntrianObat: 'antrian-obat/getAntrianObat',
+    }),
   },
 }
 </script>

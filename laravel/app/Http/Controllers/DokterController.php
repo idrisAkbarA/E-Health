@@ -16,7 +16,13 @@ class DokterController extends Controller
    */
   public function index()
   {
-    //
+    $dokter = Dokter::where('is_aktif', true)->get();
+
+    $this->reply = [
+      'status' => true,
+      'data' => $dokter
+    ];
+    return response()->json($this->reply, 200);
   }
 
   public function getByUserId(User $user)

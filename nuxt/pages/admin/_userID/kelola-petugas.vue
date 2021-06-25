@@ -95,94 +95,121 @@
 
     <!-- Bottom Sheet -->
     <v-bottom-sheet v-model="bottomSheet" scrollable inset>
-      <v-card height="250px">
+      <v-card height="280px">
         <v-card-title>
           <span>Kelola Petugas</span>
           <v-spacer></v-spacer>
           <v-btn text class="mr-2" @click="bottomSheet = false">batal</v-btn>
-          <v-btn color="primary" dark @click="submit" :loading="isLoading"
+          <v-btn
+            color="primary"
+            dark
+            @click="submit"
+            :loading="isLoading"
+            :disabled="!formCreate"
             >Simpan</v-btn
           >
         </v-card-title>
         <v-card-text>
-          <v-row align="center" v-if="!form.id">
-            <v-col cols="6">
-              <v-text-field color="#2C3E50" label="Nama" v-model="form.name">
-              </v-text-field>
-            </v-col>
-            <v-col cols="6">
-              <v-select
-                :items="roles"
-                label="Role"
-                item-text="nama"
-                item-value="nama"
-                v-model="form.role"
-              ></v-select>
-            </v-col>
-            <v-col cols="6">
-              <v-text-field
-                color="#2C3E50"
-                label="Username"
-                v-model="form.username"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col cols="6">
-              <v-text-field
-                color="#2C3E50"
-                label="Password"
-                type="password"
-                hint="Password akan digunakan untuk login"
-                v-model="form.password"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col cols="4" v-if="form.dokter">
-              <v-text-field
-                color="#2C3E50"
-                label="Tempat Tanggal Lahir"
-                v-model="form.dokter.tempat_tanggal_lahir"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col cols="4" v-if="form.dokter">
-              <v-select
-                :items="['Laki-Laki', 'Perempuan']"
-                label="Jenis Kelamin"
-                v-model="form.dokter.jenis_kelamin"
-              ></v-select>
-            </v-col>
-            <v-col cols="4" v-if="form.dokter">
-              <v-select
-                :items="poli"
-                label="Poli"
-                item-text="nama"
-                item-value="id"
-                v-model="form.dokter.poli_id"
-              ></v-select>
-            </v-col>
-          </v-row>
-          <v-row v-else>
-            <v-col cols="6">
-              <v-text-field
-                type="password"
-                color="#2C3E50"
-                label="Password Baru"
-                v-model="form.password"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col cols="6">
-              <v-text-field
-                type="password"
-                color="#2C3E50"
-                label="Konfirmasi Password"
-                hint="Ulangi password baru"
-                v-model="form.password2"
-              >
-              </v-text-field>
-            </v-col>
-          </v-row>
+          <v-form v-model="formCreate">
+            <v-row align="center" v-if="!form.id">
+              <v-col cols="6">
+                <v-text-field
+                  filled
+                  color="#2C3E50"
+                  label="Nama"
+                  :rules="ruleRequired"
+                  v-model="form.name"
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="6">
+                <v-select
+                  filled
+                  :items="roles"
+                  :rules="ruleRequired"
+                  label="Role"
+                  item-text="nama"
+                  item-value="nama"
+                  v-model="form.role"
+                ></v-select>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  filled
+                  :rules="ruleRequired"
+                  color="#2C3E50"
+                  label="Username"
+                  v-model="form.username"
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  filled
+                  :rules="ruleRequired"
+                  color="#2C3E50"
+                  label="Password"
+                  type="password"
+                  hint="Password akan digunakan untuk login"
+                  v-model="form.password"
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="4" v-if="form.dokter">
+                <v-text-field
+                  filled
+                  :rules="ruleRequired"
+                  color="#2C3E50"
+                  label="Tempat Tanggal Lahir"
+                  v-model="form.dokter.tempat_tanggal_lahir"
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="4" v-if="form.dokter">
+                <v-select
+                  filled
+                  :rules="ruleRequired"
+                  :items="['Laki-Laki', 'Perempuan']"
+                  label="Jenis Kelamin"
+                  v-model="form.dokter.jenis_kelamin"
+                ></v-select>
+              </v-col>
+              <v-col cols="4" v-if="form.dokter">
+                <v-select
+                  filled
+                  :rules="ruleRequired"
+                  :items="poli"
+                  label="Poli"
+                  item-text="nama"
+                  item-value="id"
+                  v-model="form.dokter.poli_id"
+                ></v-select>
+              </v-col>
+            </v-row>
+            <v-row v-else>
+              <v-col cols="6">
+                <v-text-field
+                  filled
+                  type="password"
+                  color="#2C3E50"
+                  label="Password Baru"
+                  v-model="form.password"
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  filled
+                  type="password"
+                  color="#2C3E50"
+                  label="Konfirmasi Password"
+                  hint="Ulangi password baru"
+                  v-model="form.password2"
+                >
+                </v-text-field>
+              </v-col>
+            </v-row>
+          </v-form>
         </v-card-text>
       </v-card>
     </v-bottom-sheet>
@@ -237,7 +264,9 @@ export default {
       isLoading: false,
       bottomSheet: false,
       dialogDelete: false,
+      formCreate: false,
       form: {},
+      ruleRequired: [(v) => !!v || 'Field ini wajib diisi!'],
       roles: [
         { nama: 'Admin', color: 'info' },
         { nama: 'Pelayanan', color: 'purple' },

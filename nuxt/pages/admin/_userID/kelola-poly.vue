@@ -57,38 +57,51 @@
           <span>Kelola Poli</span>
           <v-spacer></v-spacer>
           <v-btn text class="mr-2" @click="bottomSheet = false">batal</v-btn>
-          <v-btn color="primary" dark @click="submit" :loading="isLoading"
+          <v-btn
+            color="primary"
+            dark
+            @click="submit"
+            :loading="isLoading"
+            :disabled="!formCreate"
             >Simpan</v-btn
           >
         </v-card-title>
         <v-card-text>
-          <v-row align="center">
-            <v-col cols="6">
-              <v-text-field
-                color="#2C3E50"
-                label="Nama Poli"
-                hint="*Contoh : Anak, Jiwa, Jantung"
-                v-model="form.nama"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col cols="6">
-              <v-text-field
-                color="#2C3E50"
-                label="Nama Penanggungjawab"
-                v-model="form.penanggungjawab"
-              >
-              </v-text-field>
-            </v-col>
-            <v-col cols="12">
-              <v-text-field
-                color="#2C3E50"
-                label="Keterangan"
-                v-model="form.keterangan"
-              >
-              </v-text-field>
-            </v-col>
-          </v-row>
+          <v-form v-model="formCreate">
+            <v-row align="center">
+              <v-col cols="6">
+                <v-text-field
+                  filled
+                  :rules="ruleRequired"
+                  color="#2C3E50"
+                  label="Nama Poli"
+                  hint="*Contoh : Anak, Jiwa, Jantung"
+                  v-model="form.nama"
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  filled
+                  :rules="ruleRequired"
+                  color="#2C3E50"
+                  label="Nama Penanggungjawab"
+                  v-model="form.penanggungjawab"
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  filled
+                  :rules="ruleRequired"
+                  color="#2C3E50"
+                  label="Keterangan"
+                  v-model="form.keterangan"
+                >
+                </v-text-field>
+              </v-col>
+            </v-row>
+          </v-form>
         </v-card-text>
       </v-card>
     </v-bottom-sheet>
@@ -139,6 +152,8 @@ export default {
       isLoading: false,
       bottomSheet: false,
       dialogDelete: false,
+      formCreate: false,
+      ruleRequired: [(v) => !!v || 'Field ini wajib diisi!'],
       form: {},
       headers: [
         {
