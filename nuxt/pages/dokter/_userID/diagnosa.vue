@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height>
-    <v-row style="height: 100%">
+    <v-row style="height: 100%" v-if="dokter && dokter.is_aktif">
       <v-col cols="7" v-if="!isRujuk">
         <v-card class="mb-10">
           <v-card-title>
@@ -374,6 +374,31 @@
           @antrian-selected="showDetail"
         ></antrian-poli>
       </v-col>
+    </v-row>
+    <v-row v-else>
+      <v-container fill-height>
+        <v-row
+          justify="center"
+          align="center"
+          align-content="center"
+          no-gutters
+        >
+          <v-col cols="12">
+            <v-img
+              max-width="30vw"
+              :src="'/pertanyaan.png'"
+              class="mx-auto"
+            ></v-img>
+          </v-col>
+          <v-col cols="12">
+            <h2 class="mx-auto text-center center-text">
+              Status anda tidak aktif. jika terjadi kesalahan, mohon hubungi
+              admin
+            </h2>
+          </v-col>
+        </v-row>
+        <v-row justify="center" no-gutters> </v-row>
+      </v-container>
     </v-row>
   </v-container>
 </template>

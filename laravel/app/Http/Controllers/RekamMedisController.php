@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Events\AntrianPoli;
 use App\Models\AntrianObat;
-use App\Models\Pasien;
+use App\Models\Poli;
 use App\Models\RekamMedis;
 use App\Services\Antrian;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\Paginator;
@@ -109,6 +108,20 @@ class RekamMedisController extends Controller
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+    }
+
+    public function getByPoliId(Poli $poli)
+    {
+        $rekamMedis = RekamMedis::where('poli_id', $poli->id)
+            ->whereDate('created_at', today())
+            ->latest()
+            ->get();
+
+        $this->reply = [
+            'status' => true,
+            'data' => $rekamMedis
+        ];
+        return response()->json($this->reply, 200);
     }
 
     /**

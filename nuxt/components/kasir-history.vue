@@ -1,31 +1,15 @@
 <template>
   <v-container>
-    <div :class="noRibbon?'':'ribbon'"></div>
-    <div style="z-index:2">
-      <v-card
-        class="mt-5"
-        flat
-        style="z-index:2"
-        color="transparent"
-      >
-        <h1>
-          Pusat Riwayat Pembayaran
-        </h1>
+    <div :class="noRibbon ? '' : 'ribbon'"></div>
+    <div style="z-index: 2">
+      <v-card class="mt-5" flat style="z-index: 2" color="transparent">
+        <h1>Pusat Riwayat Pembayaran</h1>
         <h4>Lihat dan monitor pembayaran</h4>
         <h4>Klik antrian untuk melihat detail</h4>
         <v-row class="mt-10 mb-n6">
-          <v-col
-            cols="4"
-            class="dflex"
-          >
-            <v-chip
-              color="primary"
-              label
-            >
-              Antrian Hari Ini
-            </v-chip>
+          <v-col cols="4" class="dflex">
+            <v-chip color="primary" label> Antrian Hari Ini </v-chip>
           </v-col>
-
         </v-row>
         <v-row>
           <v-col>
@@ -55,11 +39,7 @@
             ></antrian-poli>
           </v-col>
         </v-row>
-        <v-chip
-          color="primary"
-          label
-          class="mt-10 mb-2"
-        >
+        <v-chip color="primary" label class="mt-10 mb-2">
           Riwayat Seluruhnya
         </v-chip>
         <v-row>
@@ -70,23 +50,17 @@
               </v-card-title>
               <v-card-subtitle>Lihat riwayat data pasien</v-card-subtitle>
               <v-card-text>
-                <v-expansion-panels
-                  focusable
-                  hover
-                >
+                <v-expansion-panels focusable hover>
                   <v-expansion-panel>
                     <v-expansion-panel-header class="pink darken-4">
                       <v-row align="center">
-                        <v-icon class="mr-4">mdi-filter</v-icon> <span>Pencarian</span>
+                        <v-icon class="mr-4">mdi-filter</v-icon>
+                        <span>Pencarian</span>
                       </v-row>
                     </v-expansion-panel-header>
                     <v-expansion-panel-content class="blue-grey darken-4">
                       <v-container>
-                        <v-form
-                          ref="form"
-                          v-model="valid"
-                        >
-
+                        <v-form ref="form" v-model="valid">
                           <v-row>
                             <v-col>
                               <v-text-field
@@ -176,10 +150,9 @@
                             >
                               <v-icon>mdi-magnify</v-icon> Cari
                             </v-btn>
-                            <v-btn
-                              text
-                              @click="resetDataNValidation()"
-                            > reset pencarian</v-btn>
+                            <v-btn text @click="resetDataNValidation()">
+                              reset pencarian</v-btn
+                            >
                           </v-row>
                         </v-form>
                       </v-container>
@@ -188,14 +161,8 @@
                 </v-expansion-panels>
               </v-card-text>
             </v-card>
-            <transition
-              name="fade-transition"
-              mode="out-in"
-            >
-              <v-card
-                v-if="isLoading"
-                width="100%"
-              >
+            <transition name="fade-transition" mode="out-in">
+              <v-card v-if="isLoading" width="100%">
                 <v-skeleton-loader
                   class="mx-auto"
                   width="100%"
@@ -218,55 +185,56 @@
                 ></v-skeleton-loader>
               </v-card>
             </transition>
-            <transition
-              name="fade-transition"
-              mode="out-in"
-            >
-
+            <transition name="fade-transition" mode="out-in">
               <v-simple-table v-if="!isLoading">
                 <!-- height="500px" -->
                 <template v-slot:default>
                   <thead>
                     <tr>
-                      <th class="text-left">
-                        #
-                      </th>
-                      <th class="text-left">
-                        Nama
-                      </th>
-                      <th class="text-left">
-                        Poli
-                      </th>
-                      <th class="text-left">
-                        Status Bayar
-                      </th>
-                      <th class="text-left">
-                        Tanggal Dibuat
-                      </th>
+                      <th class="text-left">#</th>
+                      <th class="text-left">Nama</th>
+                      <th class="text-left">Poli</th>
+                      <th class="text-left">Status Bayar</th>
+                      <th class="text-left">Tanggal Dibuat</th>
                     </tr>
                   </thead>
                   <tbody>
                     <template>
                       <tr
-                        v-for="(data,index) in dataHistory.data"
+                        v-for="(data, index) in dataHistory.data"
                         :key="index"
                       >
-                        <td>{{index+1}}</td>
-                        <td>{{data.pasien.nama}}</td>
-                        <td>{{data.nama_poli}}</td>
+                        <td>{{ index + 1 }}</td>
+                        <td>
+                          {{ data.pasien.nama }}
+                        </td>
+                        <td>{{ data.nama_poli }}</td>
                         <td>
                           <v-chip
                             v-if="data.is_bayar"
                             class="black--text"
                             color="success"
-                          >{{data.is_bayar?"Sudah Bayar":"Belum Bayar"}}</v-chip>
+                            >{{
+                              data.is_bayar ? 'Sudah Bayar' : 'Belum Bayar'
+                            }}</v-chip
+                          >
                           <v-chip
                             v-else
                             class="black--text"
                             color="secondary"
-                          >{{data.is_bayar?"Sudah Bayar":"Belum Bayar"}}</v-chip>
+                            >{{
+                              data.is_bayar ? 'Sudah Bayar' : 'Belum Bayar'
+                            }}</v-chip
+                          >
                         </td>
-                        <td>{{$moment(data.created_at).format("Do MMMM YYYY","id")}}</td>
+                        <td>
+                          {{
+                            $moment(data.created_at).format(
+                              'Do MMMM YYYY',
+                              'id'
+                            )
+                          }}
+                        </td>
                       </tr>
                     </template>
                   </tbody>
@@ -279,10 +247,7 @@
                   <v-row align="center">
                     <v-spacer></v-spacer>
                     <span class="mr-2">Item per Halaman:</span>
-                    <div
-                      class="mr-2"
-                      style="width:75px"
-                    >
+                    <div class="mr-2" style="width: 75px">
                       <v-select
                         :items="dataPerPage"
                         v-model="perPage"
@@ -291,9 +256,15 @@
                         color="secondary"
                         hide-details
                       ></v-select>
-
                     </div>
-                    <span> {{"Halaman "+dataHistory.current_page+" dari "+dataHistory.last_page}}</span>
+                    <span>
+                      {{
+                        'Halaman ' +
+                        dataHistory.current_page +
+                        ' dari ' +
+                        dataHistory.last_page
+                      }}</span
+                    >
                     <v-btn
                       :disabled="!dataHistory.prev_page_url"
                       @click="goPrev()"

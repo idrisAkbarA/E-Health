@@ -17,17 +17,13 @@ class PasienController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $pasien = Pasien::latest()->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $this->reply = [
+            'status' => true,
+            'data' => $pasien
+        ];
+        return response()->json($this->reply, 200);
     }
 
     /**
@@ -72,17 +68,6 @@ class PasienController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Pasien $pasien)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Pasien  $pasien
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Pasien $pasien)
     {
         //
     }
