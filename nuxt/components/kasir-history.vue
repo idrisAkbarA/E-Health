@@ -180,6 +180,13 @@
                               text
                               @click="resetDataNValidation()"
                             > reset pencarian</v-btn>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                              @click="print()"
+                              color="primary"
+                            >
+                              <v-icon class="mr-2">mdi-printer</v-icon>Cetak Laporan
+                            </v-btn>
                           </v-row>
                         </v-form>
                       </v-container>
@@ -441,6 +448,10 @@ export default {
     }
   },
   methods: {
+    print() {
+      this.isExport = true
+      this.getData()
+    },
     test(item) {
       console.log('current selected', item)
     },
@@ -458,6 +469,7 @@ export default {
       this.$axios
         .get(url, {
           params: {
+            isExport: this.isExport,
             nama: this.nama,
             poli: this.poli,
             tanggal: this.tanggal,
@@ -471,7 +483,7 @@ export default {
           this.dataHistory = response.data
         })
         .finally(() => {
-          this.isLoading = false
+          ;(this.isExport = false), (this.isLoading = false)
         })
     },
     resetDataNValidation() {
