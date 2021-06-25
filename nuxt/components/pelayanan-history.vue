@@ -1,25 +1,14 @@
 <template>
   <v-container>
-    <div :class="noRibbon?'':'ribbon'"></div>
+    <div :class="noRibbon ? '' : 'ribbon'"></div>
     <div style="z-index: 2">
-      <v-card
-        class="mt-5"
-        flat
-        style="z-index: 2"
-        color="transparent"
-      >
+      <v-card class="mt-5" flat style="z-index: 2" color="transparent">
         <h1>Pusat Riwayat Antrian</h1>
         <h4>Lihat dan monitor detail riwayat antrian</h4>
         <h4>Klik antrian untuk melihat detail</h4>
         <v-row class="mt-10 mb-n6">
-          <v-col
-            cols="4"
-            class="dflex"
-          >
-            <v-chip
-              color="primary"
-              label
-            > Antrian Hari Ini </v-chip>
+          <v-col cols="4" class="dflex">
+            <v-chip color="primary" label> Antrian Hari Ini </v-chip>
           </v-col>
         </v-row>
         <v-row>
@@ -62,11 +51,7 @@
             ></antrian-poli>
           </v-col>
         </v-row>
-        <v-chip
-          color="primary"
-          label
-          class="mt-10 mb-2"
-        >
+        <v-chip color="primary" label class="mt-10 mb-2">
           Riwayat Seluruhnya
         </v-chip>
         <v-row>
@@ -95,11 +80,15 @@
                 <v-chip
                   class="black--text"
                   :color="item.is_bayar ? 'success' : 'sedondary'"
-                >{{ item.is_bayar ? 'Sudah Bayar' : 'Belum Bayar' }}</v-chip>
+                  >{{ item.is_bayar ? 'Sudah Bayar' : 'Belum Bayar' }}</v-chip
+                >
               </template>
               <template v-slot:[`item.created_at`]="{ item }">
                 {{
-                  $moment(item.created_at).format('dddd, Do MMMM YYYY', 'id')
+                  $moment(item.created_at).format(
+                    'dddd, Do MMMM YYYY HH:mm:ss',
+                    'id'
+                  )
                 }}
               </template>
               <template v-slot:top>
@@ -110,10 +99,7 @@
                   </v-card-title>
                   <v-card-subtitle>Lihat riwayat data pasien</v-card-subtitle>
                   <v-card-text>
-                    <v-expansion-panels
-                      focusable
-                      hover
-                    >
+                    <v-expansion-panels focusable hover>
                       <v-expansion-panel>
                         <v-expansion-panel-header class="pink darken-4">
                           <v-row align="center">
@@ -218,11 +204,9 @@
                               >
                                 <v-icon>mdi-magnify</v-icon> Cari
                               </v-btn>
-                              <v-btn
-                                text
-                                @click="filter = {}"
+                              <v-btn text @click="filter = {}">
+                                reset pencarian</v-btn
                               >
-                                reset pencarian</v-btn>
                             </v-row>
                           </v-container>
                         </v-expansion-panel-content>

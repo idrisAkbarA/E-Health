@@ -18,41 +18,47 @@
           >
           <v-divider></v-divider>
           <v-card-text class="pb-15">
-            <v-text-field
-              outlined
-              color="secondary"
-              label="Nama Pembeli"
-              v-model="form.nama"
-            ></v-text-field>
-            <v-row v-for="(resep, index) in form.resep_obat" :key="index">
-              <v-col cols="8">
-                <v-select
-                  outlined
-                  :items="obat"
-                  item-text="nama"
-                  item-value="id"
-                  label="Nama Obat"
-                  v-model="resep.obat"
-                ></v-select>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field
-                  outlined
-                  type="number"
-                  min="0"
-                  color="secondary"
-                  label="Jumlah"
-                  suffix="Satuan"
-                  v-model="resep.jumlah"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-textarea
-              outlined
-              label="Catatan"
-              hint="catatan dosis dan penggunaan obat"
-              v-model="form.catatan"
-            ></v-textarea>
+            <v-form v-model="formResep">
+              <v-text-field
+                :rules="ruleRequired"
+                outlined
+                color="secondary"
+                label="Nama Pembeli"
+                v-model="form.nama"
+              ></v-text-field>
+              <v-row v-for="(resep, index) in form.resep_obat" :key="index">
+                <v-col cols="8">
+                  <v-select
+                    outlined
+                    :rules="ruleRequired"
+                    :items="obat"
+                    item-text="nama"
+                    item-value="id"
+                    label="Nama Obat"
+                    v-model="resep.obat"
+                  ></v-select>
+                </v-col>
+                <v-col cols="4">
+                  <v-text-field
+                    outlined
+                    :rules="ruleRequired"
+                    type="number"
+                    min="0"
+                    color="secondary"
+                    label="Jumlah"
+                    suffix="Satuan"
+                    v-model="resep.jumlah"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-textarea
+                outlined
+                :rules="ruleRequired"
+                label="Catatan"
+                hint="catatan dosis dan penggunaan obat"
+                v-model="form.catatan"
+              ></v-textarea>
+            </v-form>
             <v-col class="text-center">
               <v-btn
                 class="mx-2"
@@ -70,6 +76,7 @@
               color="primary"
               class="mt-3 float-right"
               :loading="isLoading"
+              :disabled="!formResep"
               @click="store"
               >Simpan</v-btn
             >
@@ -218,6 +225,7 @@ export default {
       formCreate: false,
       selectedItem: {},
       form: { resep_obat: [{}] },
+      ruleRequired: [(v) => !!v || 'Field ini wajib diisi!'],
     }
   },
   mounted() {

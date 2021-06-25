@@ -44,8 +44,8 @@ class DokterController extends Controller
   public function rekamMedis(Request $request)
   {
     $nama = $request->nama;
-    $from = $request->date[0];
-    $to = $request->date[1] ?? $request->date[0];
+    $from = $request->date ? $request->date[0] : null;
+    $to = $request->date ? $request->date[1] ? $request->date[1] : $request->date[0] : null;
 
     $dokter = Dokter::where('user_id', Auth::id())->first();
     $rekamMedis = $dokter->rekam_medis()
