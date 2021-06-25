@@ -1,6 +1,6 @@
 export const state = () => ({
   url: '/api/antrian-obat',
-  data: null
+  data: []
 })
 
 export const mutations = {
