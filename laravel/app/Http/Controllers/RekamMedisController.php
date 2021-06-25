@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\AntrianPoli;
+use App\Exports\LaporanKasir;
 use App\Models\AntrianObat;
 use App\Models\Poli;
 use App\Models\RekamMedis;
@@ -15,6 +16,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class RekamMedisController extends Controller
 {
+    public function Export($data)
+    {
+        $converted = Collection::make($data);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -22,6 +27,7 @@ class RekamMedisController extends Controller
      */
     public function index(Request $request)
     {
+        $isExport = $request->has('isExport') ? $request->isExport : null;
         $nama = $request->has('nama') ? $request->nama : null;
         $status = $request->has('status') ? $request->status : null;
         $status_bayar = $request->has('status_bayar') ? $request->status_bayar : null;
@@ -97,7 +103,10 @@ class RekamMedisController extends Controller
         }
 
         $result = array_merge($antrian->toArray(), $finalAntrianObat);
-
+        if ($isExport) {
+            $this->export($result);
+            return 0;
+        }
 
         return response()->json($this->paginate($result, $request->perPage, $request->page));
         return response()->json($antrian);

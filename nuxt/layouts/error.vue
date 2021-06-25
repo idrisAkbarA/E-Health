@@ -3,6 +3,7 @@
     <error404 v-if="error.statusCode === 404"></error404>
     <error401 v-if="error.statusCode === 401"></error401>
     <h1 v-else>
+      {{error}}
       {{ otherError }}
       {{error.statusCode}}
     </h1>
