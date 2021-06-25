@@ -30,6 +30,7 @@ export default {
     { src: './plugins/lodash.js', mode: 'client' },
     { src: './plugins/snackbar.js', mode: 'client' },
     { src: './plugins/thousandSeperator.js', mode: 'client' },
+    { src: './plugins/js-file-download.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

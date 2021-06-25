@@ -8,17 +8,22 @@ use App\Models\AntrianObat;
 use App\Models\Poli;
 use App\Models\RekamMedis;
 use App\Services\Antrian;
+use Facade\Ignition\Support\LaravelVersion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Maatwebsite\Excel\Excel;
+use Maatwebsite\Excel\Facades\Excel as FacadesExcel;
 
 class RekamMedisController extends Controller
 {
-    public function Export($data)
+    public function export($data)
     {
         $converted = Collection::make($data);
+        $export =  new LaporanKasir($converted);
+        return FacadesExcel::download($export, 'laporan.pdf', Excel::MPDF);
     }
     /**
      * Display a listing of the resource.
@@ -103,9 +108,10 @@ class RekamMedisController extends Controller
         }
 
         $result = array_merge($antrian->toArray(), $finalAntrianObat);
-        if ($isExport) {
-            $this->export($result);
-            return 0;
+
+
+        if ($isExport == 'true') {
+            return $this->export($result);
         }
 
         return response()->json($this->paginate($result, $request->perPage, $request->page));

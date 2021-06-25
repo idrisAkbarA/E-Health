@@ -351,7 +351,9 @@ export default {
   },
   watch: {
     perPage(v) {
-      this.getData()
+      if (!this.isExport) {
+        this.getData()
+      }
     },
     date(v) {
       console.log('date', v)
@@ -391,6 +393,7 @@ export default {
   },
   data() {
     return {
+      isExport: null,
       perPage: 5,
       dataPerPage: [5, 15, 30],
       dataHistory: [],
@@ -450,7 +453,10 @@ export default {
   methods: {
     print() {
       this.isExport = true
+      var temp = this.perPage
+      this.perPage = null
       this.getData()
+      this.perPage = temp
     },
     test(item) {
       console.log('current selected', item)
@@ -477,10 +483,15 @@ export default {
             perPage: this.perPage,
             page,
           },
+          responseType: this.isExport ? 'blob' : null,
         })
         .then((response) => {
           console.log(response.data)
-          this.dataHistory = response.data
+          if (this.isExport) {
+            this.$download(response.data, 'file.pdf')
+          } else {
+            this.dataHistory = response.data
+          }
         })
         .finally(() => {
           ;(this.isExport = false), (this.isLoading = false)

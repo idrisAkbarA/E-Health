@@ -9,7 +9,7 @@ use Illuminate\Support\Carbon;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class LaporanKasir implements FromView, ShouldAutoSize
+class LaporanKasir implements FromView
 {
 
     protected $data;
