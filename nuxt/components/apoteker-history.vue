@@ -358,8 +358,9 @@ export default {
 </script>
 <style>
 .print {
-  position: absolute;
   top: 0;
+  position: fixed;
+  z-index: 999;
   /* display: none; */
   visibility: hidden;
 }
