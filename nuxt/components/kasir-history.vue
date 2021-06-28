@@ -1,9 +1,12 @@
 <template>
   <v-container>
-    <div :class="noRibbon?'':'ribbon'"></div>
-    <div style="z-index:2">
+    <div :class="noRibbon?'':'ribbon notprint'"></div>
+    <div
+      class="notprint"
+      style="z-index:2"
+    >
       <v-card
-        class="mt-5"
+        class="mt-5 "
         flat
         style="z-index:2"
         color="transparent"
@@ -323,6 +326,58 @@
         </v-row>
       </v-card>
     </div>
+    <div class="print">
+      <v-simple-table v-if="!isLoading">
+
+        <!-- height="500px" -->
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">
+                #
+              </th>
+              <th class="text-left">
+                Nama
+              </th>
+              <th class="text-left">
+                Poli
+              </th>
+              <th class="text-left">
+                Status Bayar
+              </th>
+              <th class="text-left">
+                Tanggal Dibuat
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <template>
+              <tr
+                v-for="(data,index) in printData"
+                :key="index"
+              >
+                <td>{{index+1}}</td>
+                <td>{{data.pasien.nama}}</td>
+                <td>{{data.nama_poli}}</td>
+                <td>
+                  <v-chip
+                    v-if="data.is_bayar"
+                    class="black--text"
+                    color="success"
+                  >{{data.is_bayar?"Sudah Bayar":"Belum Bayar"}}</v-chip>
+                  <v-chip
+                    v-else
+                    class="black--text"
+                    color="secondary"
+                  >{{data.is_bayar?"Sudah Bayar":"Belum Bayar"}}</v-chip>
+                </td>
+                <td>{{$moment(data.created_at).format("Do MMMM YYYY","id")}}</td>
+              </tr>
+            </template>
+          </tbody>
+        </template>
+      </v-simple-table>
+    </div>
   </v-container>
 </template>
 
@@ -393,6 +448,7 @@ export default {
   },
   data() {
     return {
+      printData: [],
       isExport: null,
       perPage: 5,
       dataPerPage: [5, 15, 30],
@@ -451,12 +507,15 @@ export default {
     }
   },
   methods: {
-    print() {
+    async print() {
       this.isExport = true
       var temp = this.perPage
       this.perPage = null
-      this.getData()
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+      await this.getData()
       this.perPage = temp
+      window.print()
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
     },
     test(item) {
       console.log('current selected', item)
@@ -469,10 +528,10 @@ export default {
       var page = this.dataHistory.prev_page_url.split('=')[1]
       this.getData(page)
     },
-    getData(page) {
+    async getData(page) {
       this.isLoading = true
       var url = this.$store.state.pasien.urlAntrian
-      this.$axios
+      await this.$axios
         .get(url, {
           params: {
             isExport: this.isExport,
@@ -483,12 +542,14 @@ export default {
             perPage: this.perPage,
             page,
           },
-          responseType: this.isExport ? 'blob' : null,
+          // responseType: this.isExport ? 'blob' : null,
         })
         .then((response) => {
           console.log(response.data)
           if (this.isExport) {
-            this.$download(response.data, 'file.pdf')
+            this.printData = response.data
+            console.log(this.printData)
+            // this.$download(response.data, 'file.pdf')
           } else {
             this.dataHistory = response.data
           }
@@ -524,5 +585,24 @@ export default {
   /* background: #33691e; */
   width: 100%;
   height: 400px;
+}
+.print {
+  /* display: none; */
+}
+@media print {
+  * {
+    color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .notprint {
+    display: none;
+  }
+  /* *:not(.print) {
+    display: none;
+  } */
+  .print {
+    display: block !important;
+  }
 }
 </style>

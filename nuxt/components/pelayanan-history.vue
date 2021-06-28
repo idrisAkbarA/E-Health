@@ -300,7 +300,6 @@ export default {
   },
   methods: {
     print() {
-      this.isExport = true
       this.filter['isExport'] = true
     },
     getRekamMedis() {
