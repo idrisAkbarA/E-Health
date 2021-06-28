@@ -627,7 +627,10 @@ export default {
   height: 400px;
 }
 .print {
-  display: none;
+  position: absolute;
+  top: 0;
+  /* display: none; */
+  visibility: hidden;
 }
 @media print {
   * {
@@ -643,6 +646,7 @@ export default {
   } */
   .print {
     display: block !important;
+    visibility: visible;
   }
 }
 </style>

@@ -1,7 +1,10 @@
 <template>
   <v-container>
-    <div :class="noRibbon ? '' : 'ribbon'"></div>
-    <div style="z-index: 2">
+    <div :class="noRibbon ? '' : 'ribbon notprint'"></div>
+    <div
+      class="notprint"
+      style="z-index: 2"
+    >
       <v-card
         class="mt-5"
         flat
@@ -246,6 +249,100 @@
         </v-row>
       </v-card>
     </div>
+    <div class="print">
+      <v-card flat>
+        <v-container>
+          <v-row class="d-flex justify-center">
+            <v-col cols="2">
+
+              <v-img
+                @load="setImageLoaded(1)"
+                class="mx-auto"
+                max-width="50"
+                src="/logo-bangkinang.png"
+              ></v-img>
+            </v-col>
+            <v-col
+              cols="8"
+              class="text-center"
+            >
+              <h4>PEMERINTAH KABUPATEN KAMPAR DINAS KESEHATAN</h4>
+              <h4>UPT BLUD PUSKESMAS BANGKINANG KOTA</h4>
+              <p>Jln. PROF. M. YAMIN, SH – BANGKINANG
+                KODE POS : 28411
+              </p>
+            </v-col>
+            <v-col cols="2">
+              <v-img
+                @load="setImageLoaded(1)"
+                class="mx-auto"
+                max-width="60"
+                src="/icon.png"
+              ></v-img>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-divider></v-divider>
+          </v-row>
+          <v-row>
+            <div class="ml-4 mt-4">
+              <h3>Laporan Pelayanan</h3>
+              <p>Tanggal laporan dibuat:{{" "+this.$moment(new Date()).format('dddd, Do MMMM YYYY', 'id')}}</p>
+            </div>
+          </v-row>
+        </v-container>
+      </v-card>
+      <v-simple-table v-if="!isLoading">
+
+        <!-- height="500px" -->
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">
+                #
+              </th>
+              <th class="text-left">
+                Nama Pasien
+              </th>
+              <th class="text-left">
+                Status
+              </th>
+              <th class="text-left">
+                Pembayaran
+              </th>
+              <th class="text-left">
+                Tanggal
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <template>
+              <tr
+                v-for="(data,index) in printData"
+                :key="index"
+              >
+                <td>{{index+1}}</td>
+                <td>{{data.nama_pasien}}</td>
+                <td>{{getStatusText(data.status)}}</td>
+                <td>
+                  <v-chip
+                    outlined
+                    v-if="data.is_bayar"
+                    color="success"
+                  >{{data.is_bayar?"Sudah Bayar":"Belum Bayar"}}</v-chip>
+                  <v-chip
+                    outlined
+                    v-else
+                    color="secondary"
+                  >{{data.is_bayar?"Sudah Bayar":"Belum Bayar"}}</v-chip>
+                </td>
+                <td>{{$moment(data.created_at).format("Do MMMM YYYY HH:mm:ss","id")}}</td>
+              </tr>
+            </template>
+          </tbody>
+        </template>
+      </v-simple-table>
+    </div>
   </v-container>
 </template>
 
@@ -270,6 +367,9 @@ export default {
   },
   data() {
     return {
+      image1: false,
+      image2: false,
+      printData: [],
       isExport: null,
       title: 'History',
       isLoading: false,
@@ -299,8 +399,27 @@ export default {
     ...mapState('rekam-medis', { urlRekamMedis: (state) => state.url }),
   },
   methods: {
-    print() {
-      this.filter['isExport'] = true
+    async print() {
+      // this.filter['isExport'] = true
+      this.printData = this.rekamMedis
+      let setTheme = async () => {
+        return new Promise((resolve) => {
+          this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+          resolve()
+          // while (this.image1 == true && this.image1 == true) {
+          // }
+        })
+      }
+      await setTheme()
+      window.print()
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+    },
+    setImageLoaded(index) {
+      if (index == 1) {
+        this.image1 = true
+      } else {
+        this.image2 = true
+      }
     },
     getRekamMedis() {
       this.isLoading = true
@@ -372,5 +491,28 @@ export default {
   /* background: #33691e; */
   width: 100%;
   height: 400px;
+}
+.print {
+  position: absolute;
+  top: 0;
+  /* display: none; */
+  visibility: hidden;
+}
+@media print {
+  * {
+    color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .notprint {
+    display: none;
+  }
+  /* *:not(.print) {
+    display: none;
+  } */
+  .print {
+    display: block !important;
+    visibility: visible;
+  }
 }
 </style>
