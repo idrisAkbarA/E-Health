@@ -81,6 +81,7 @@ class RekamMedisController extends Controller
             ->when($request->tanggal, function ($q) use ($from, $to) {
                 return $q->whereBetween('created_at', [$from, date('Y-m-d', strtotime($to . '+1 day'))]);
             })
+            ->whereNull('rekam_medis_id')
             ->latest()
             ->get();
 
@@ -111,11 +112,11 @@ class RekamMedisController extends Controller
 
 
         if ($isExport == 'true') {
-            return $this->export($result);
+            return response()->json($antrian);
+            // return $this->export($result);
         }
 
         return response()->json($this->paginate($result, $request->perPage, $request->page));
-        return response()->json($antrian);
     }
 
     public function paginate($items, $perPage = 5, $page = null, $options = [])
