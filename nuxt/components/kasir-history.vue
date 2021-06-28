@@ -327,6 +327,46 @@
       </v-card>
     </div>
     <div class="print">
+      <v-card flat>
+        <v-container>
+          <v-row class="d-flex justify-center">
+            <v-col cols="2">
+
+              <v-img
+                class="mx-auto"
+                max-width="50"
+                src="/logo-bangkinang.png"
+              ></v-img>
+            </v-col>
+            <v-col
+              cols="8"
+              class="text-center"
+            >
+              <h4>PEMERINTAH KABUPATEN KAMPAR DINAS KESEHATAN</h4>
+              <h4>UPT BLUD PUSKESMAS BANGKINANG KOTA</h4>
+              <p>Jln. PROF. M. YAMIN, SH – BANGKINANG
+                KODE POS : 28411
+              </p>
+            </v-col>
+            <v-col cols="2">
+              <v-img
+                class="mx-auto"
+                max-width="60"
+                src="/icon.png"
+              ></v-img>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-divider></v-divider>
+          </v-row>
+          <v-row>
+            <div class="ml-4 mt-4">
+              <h3>Laporan Kasir</h3>
+              <p>Tanggal laporan dibuat:{{" "+this.$moment(new Date()).format('dddd, Do MMMM YYYY', 'id')}}</p>
+            </div>
+          </v-row>
+        </v-container>
+      </v-card>
       <v-simple-table v-if="!isLoading">
 
         <!-- height="500px" -->
@@ -361,13 +401,13 @@
                 <td>{{data.nama_poli}}</td>
                 <td>
                   <v-chip
+                    outlined
                     v-if="data.is_bayar"
-                    class="black--text"
                     color="success"
                   >{{data.is_bayar?"Sudah Bayar":"Belum Bayar"}}</v-chip>
                   <v-chip
+                    outlined
                     v-else
-                    class="black--text"
                     color="secondary"
                   >{{data.is_bayar?"Sudah Bayar":"Belum Bayar"}}</v-chip>
                 </td>
@@ -587,7 +627,7 @@ export default {
   height: 400px;
 }
 .print {
-  /* display: none; */
+  display: none;
 }
 @media print {
   * {
