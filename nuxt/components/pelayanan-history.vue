@@ -51,7 +51,7 @@
               @antrian-selected="test"
             ></antrian-poli>
           </v-col>
-          <v-col>
+          <!-- <v-col>
             <antrian-poli
               height="400"
               :poliMenu="true"
@@ -63,7 +63,7 @@
               :status="2"
               @antrian-selected="test"
             ></antrian-poli>
-          </v-col>
+          </v-col> -->
         </v-row>
         <v-chip
           color="primary"
