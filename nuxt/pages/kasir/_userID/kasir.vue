@@ -118,12 +118,12 @@
                           <td></td>
                           <td><span class="font-weight-bold">Total Biaya:</span>
                             <br>
-                            <span v-if="detailObat.resep_obat">
+                            <span v-if="detailObat">
                               Rp{{$numberify((parseFloat(currentSelected.total_biaya)+parseFloat(detailObat.total_harga)))}}
                             </span>
-                            <span v-else-if="!detailObat.resep_obat">
+                            <!-- <span v-else-if="!detailObat.resep_obat">
                               Rp{{$numberify(calcTotal())}}
-                            </span>
+                            </span> -->
                             <span v-else>
                               Rp{{$numberify(currentSelected.total_biaya)}}
                             </span>
