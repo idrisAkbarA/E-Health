@@ -68,58 +68,21 @@
             </v-img>
           </v-card>
         </v-col>
-        <v-col>
-          <v-card dark :height="100 * 1.2" :width="'100%'">
-            <v-img
-              gradient="to top right, rgba(58, 231, 87, 0.33), rgba(25,32,72,.7)"
-              :src="'https://picsum.photos/200/100?random=1'"
-            >
-              <v-card-title>
-                <span class="body 2">Hari ini</span>
-              </v-card-title>
-              <v-card-text>
-                <h1>
-                  {{ $moment(new Date()).format('dddd, Do MMMM YYYY', 'id') }}
-                </h1>
-              </v-card-text>
-            </v-img>
-          </v-card>
-        </v-col>
-        <v-col>
-          <v-card dark :height="100 * 1.2" :width="'100%'">
-            <v-img
-              gradient="to top right, rgba(58, 231, 87, 0.33), rgba(25,32,72,.7)"
-              :src="'https://picsum.photos/200/100?random=3'"
-            >
-              <v-card-title>
-                <span class="body 2"
-                  >Antrian Poli {{ dokter ? dokter.poli : '' }}</span
-                >
-              </v-card-title>
-              <v-card-text>
-                <h1>{{ antrian ? antrian.length : 0 }} Orang</h1>
-              </v-card-text>
-            </v-img>
-          </v-card>
-        </v-col>
-        <v-col>
-          <v-card dark :height="100 * 1.2" :width="'100%'">
-            <v-img
-              gradient="to top right, rgba(58, 231, 87, 0.33), rgba(25,32,72,.7)"
-              :src="'https://picsum.photos/200/100?random=2'"
-            >
-              <v-card-title>
-                <span class="body 2">Status</span>
-              </v-card-title>
-              <v-card-text>
-                <h1>
-                  {{
-                    dokter ? (dokter.is_aktif ? 'Aktif' : 'Tidak Aktif') : '-'
-                  }}
-                </h1>
-              </v-card-text>
-            </v-img>
-          </v-card>
+        <v-col
+          v-for="({ actionIcon, actionText, ...attrs }, i) in stats"
+          :key="i"
+          cols="12"
+          md="6"
+          lg="4"
+        >
+          <material-stat-card v-bind="attrs">
+            <template #actions>
+              <v-icon class="mr-2" small v-text="actionIcon" />
+              <div class="text-truncate">
+                {{ actionText }}
+              </div>
+            </template>
+          </material-stat-card>
         </v-col>
       </v-row>
       <!-- Tabel -->
@@ -130,6 +93,7 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
+import MaterialStatCard from '../../../components/MaterialStatsCard.vue'
 
 export default {
   layout: 'dokter',
@@ -137,6 +101,9 @@ export default {
     return {
       title: this.title,
     }
+  },
+  components: {
+    MaterialStatCard,
   },
   created() {
     this.$store.commit('page/setTitle', this.title)
@@ -160,6 +127,36 @@ export default {
       set: function (v) {
         this.$store.commit('page/setLoading', v)
       },
+    },
+    stats() {
+      return [
+        {
+          actionIcon: '',
+          actionText: '...',
+          color: 'primary',
+          icon: 'mdi-bank',
+          title: 'Poli',
+          value: `${this.dokter.poli ? this.dokter.poli : '-'}`,
+        },
+        {
+          actionIcon: '',
+          actionText: '...',
+          color: 'success',
+          icon: 'mdi-human-queue',
+          title: `Antrian Poli ${this.dokter ? this.dokter.poli : ''}`,
+          value: `${this.antrian ? this.antrian.length : 0}`,
+        },
+        {
+          actionIcon: '',
+          actionText: '...',
+          color: 'info',
+          icon: 'mdi-list-status',
+          title: 'Status',
+          value: `${
+            this.dokter ? (this.dokter.is_aktif ? 'Aktif' : 'Tidak Aktif') : '-'
+          }`,
+        },
+      ]
     },
   },
   watch: {
