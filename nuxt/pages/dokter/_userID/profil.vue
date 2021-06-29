@@ -1,7 +1,10 @@
 <template>
   <v-container fill-height>
     <v-row style="height: 100%">
-      <v-col cols="6" class="mx-auto pb-10">
+      <v-col
+        cols="6"
+        class="mx-auto pb-10"
+      >
         <v-card v-if="dokter">
           <v-card-title>
             <v-icon class="mr-3">mdi-account</v-icon>
@@ -10,19 +13,23 @@
           <v-card-text v-if="!isEdit">
             <v-row>
               <v-col cols="4">
-                <v-badge color="secondary" bottom offset-x="30" offset-y="30">
+                <v-badge
+                  color="secondary"
+                  bottom
+                  offset-x="30"
+                  offset-y="30"
+                >
                   <template v-slot:badge>
                     <v-icon
                       color="primary"
                       title="Ubah Foto"
                       @click="$refs.photo.$refs.input.click()"
-                      >mdi-camera-plus-outline</v-icon
-                    >
+                    >mdi-camera-plus-outline</v-icon>
                   </template>
                   <v-avatar size="150">
                     <v-img
                       lazy-src="https://picsum.photos/id/11/10/6"
-                      src="https://picsum.photos/id/11/500/300"
+                      :src="dokter.foto?'http://localhost:8000/'+dokter.foto:'https://picsum.photos/id/11/10/6'"
                       class="rounded-circle"
                     ></v-img>
                   </v-avatar>
@@ -40,9 +47,7 @@
                     <v-list-item-title class="text-h5 mt-4 mb-1">
                       {{ dokter.nama }}
                     </v-list-item-title>
-                    <v-list-item-subtitle
-                      >Poli {{ dokter.poli }}</v-list-item-subtitle
-                    >
+                    <v-list-item-subtitle>Poli {{ dokter.poli }}</v-list-item-subtitle>
                   </v-list-item-content>
                   <v-btn
                     fab
@@ -53,26 +58,27 @@
                     title="Ubah Profil"
                     :loading="isLoading"
                     @click="edit"
-                    ><v-icon dark> mdi-pencil </v-icon></v-btn
                   >
+                    <v-icon dark> mdi-pencil </v-icon>
+                  </v-btn>
                 </v-list-item>
                 <v-chip
                   class="mt-4 ml-4"
                   :color="dokter.is_aktif ? 'success' : 'red'"
                   outlined
-                  >{{ dokter.is_aktif ? 'Aktif' : 'Non-Aktif' }}</v-chip
-                >
+                >{{ dokter.is_aktif ? 'Aktif' : 'Non-Aktif' }}</v-chip>
               </v-col>
             </v-row>
             <v-divider class="my-2"></v-divider>
             <v-row class="px-5">
-              <v-col cols="12" class="mt-5">
+              <v-col
+                cols="12"
+                class="mt-5"
+              >
                 <v-list>
                   <v-list-item two-line>
                     <v-list-item-content>
-                      <v-list-item-subtitle
-                        >Tempat Tanggal Lahir</v-list-item-subtitle
-                      >
+                      <v-list-item-subtitle>Tempat Tanggal Lahir</v-list-item-subtitle>
                       <v-list-item-title>{{
                         dokter.tempat_tanggal_lahir
                       }}</v-list-item-title>
@@ -127,8 +133,8 @@
                   >
                     <v-list-item-content>
                       <v-list-item-title>
-                        <v-icon>mdi-school</v-icon> {{ row }}</v-list-item-title
-                      >
+                        <v-icon>mdi-school</v-icon> {{ row }}
+                      </v-list-item-title>
                     </v-list-item-content>
                   </v-list-item>
                 </v-list>
@@ -136,7 +142,10 @@
             </v-row>
             <v-col cols="12 mt-2"> </v-col>
           </v-card-text>
-          <v-card-text class="pb-15" v-else>
+          <v-card-text
+            class="pb-15"
+            v-else
+          >
             <v-row>
               <v-col cols="12">
                 <v-text-field
@@ -260,8 +269,7 @@
                 class="mt-3 float-right"
                 :loading="isLoading"
                 @click="update"
-                >Simpan</v-btn
-              >
+              >Simpan</v-btn>
             </v-col>
           </v-card-text>
         </v-card>
@@ -314,18 +322,29 @@ export default {
       var formData = new FormData()
       var file = this.photo
       formData.append('file', file)
-      formData.append('filse', 'file')
-      console.log(formData)
+      formData.append('id', this.dokter.id)
+      // console.log(formData.get('file'))
+      // console.log(formData.get('id'))
       this.form = formData
       this.formHeader = {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       }
-      this.update()
+      var data = this.form
+      this.$axios({
+        method: 'post',
+        url: `${this.urlDokter}/photo/${this.dokter.id}`,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        data,
+      })
     },
     update() {
+      // console.log(data.get('file'))
       this.isLoading = true
+
       this.$axios
         .put(`${this.urlDokter}/${this.dokter.id}`, this.form, null)
         .then((response) => {

@@ -51,6 +51,7 @@ Route::prefix('dokter')->name('dokter.')->group(function () {
   Route::get('/user/{user}', 'DokterController@getByUserId')->name('get-by-user');
   Route::get('/{dokter}', 'DokterController@show')->name('show');
   Route::put('/{dokter}', 'DokterController@update')->name('update');
+  Route::post('/photo/{dokter}', 'DokterController@updatePhoto')->name('update');
 });
 
 // Rekam Medis Routes

@@ -93,6 +93,7 @@ class DokterController extends Controller
   {
     // if ($request->file('file')) {
     // $foto = $request->file('file');
+    return var_dump($request->all());
     return var_dump($request->file());
     // }
     $dokter->update($request->all());
@@ -101,6 +102,21 @@ class DokterController extends Controller
       'status' => true,
       'message' => 'Dokter Updated!',
       'data' => $dokter
+    ];
+    return response()->json($this->reply, 200);
+  }
+  public function updatePhoto(Request $request, Dokter $dokter)
+  {
+    // return $request->all();
+    $id = $request->id;
+    $path = $request->file('file')->storePublicly("public/images/dokter/" . $id, ['visibility' => 'public']);
+    // $dokter->update($request->all());
+    $dokter->foto = $path;
+    $dokter->save();
+    $this->reply = [
+      'status' => true,
+      'message' => 'Dokter Updated!',
+      'url' => $path
     ];
     return response()->json($this->reply, 200);
   }
