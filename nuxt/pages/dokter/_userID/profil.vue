@@ -1,70 +1,140 @@
 <template>
   <v-container fill-height>
     <v-row style="height: 100%">
-      <v-col cols="8" class="mx-auto pb-10">
+      <v-col cols="6" class="mx-auto pb-10">
         <v-card v-if="dokter">
           <v-card-title>
             <v-icon class="mr-3">mdi-account</v-icon>
             <span>Profil</span>
           </v-card-title>
-          <v-card-text class="pb-15" v-if="!isEdit">
-            <v-simple-table>
-              <template v-slot:default>
-                <tbody>
-                  <tr>
-                    <td>Nama</td>
-                    <td>: {{ dokter.nama }}</td>
-                  </tr>
-                  <tr>
-                    <td>Spesialis</td>
-                    <td>: {{ dokter.spesialis }}</td>
-                  </tr>
-                  <tr>
-                    <td>Jenis Kelamin</td>
-                    <td>: {{ dokter.jenis_kelamin }}</td>
-                  </tr>
-                  <tr>
-                    <td>Tempat Tanggal Lahir</td>
-                    <td>: {{ dokter.tempat_tanggal_lahir }}</td>
-                  </tr>
-                  <tr>
-                    <td>Agama</td>
-                    <td>: {{ dokter.agama ? dokter.agama : '-' }}</td>
-                  </tr>
-                  <tr>
-                    <td>Alamat</td>
-                    <td>: {{ dokter.alamat ? dokter.alamat : '-' }}</td>
-                  </tr>
-                  <tr>
-                    <td>Kontak</td>
-                    <td>: {{ dokter.kontak ? dokter.kontak : '-' }}</td>
-                  </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
-            <v-divider class="my-1"></v-divider>
-            <v-list dense>
-              <v-subheader>Pendidikan</v-subheader>
-              <p class="ml-2" v-if="!dokter.pendidikan">-</p>
-              <v-list-item
-                v-for="(row, index) in dokter.pendidikan"
-                :key="'pendidikan-' + index"
-              >
-                <v-list-item-content>
-                  <v-list-item-title> - {{ row }}</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-            <v-col cols="12 mt-2">
-              <v-btn
-                dark
-                color="primary"
-                class="mt-3 float-right"
-                :loading="isLoading"
-                @click="edit"
-                >Ubah Profil</v-btn
-              >
-            </v-col>
+          <v-card-text v-if="!isEdit">
+            <v-row>
+              <v-col cols="4">
+                <v-badge color="secondary" bottom offset-x="30" offset-y="30">
+                  <template v-slot:badge>
+                    <v-icon
+                      color="primary"
+                      title="Ubah Foto"
+                      @click="$refs.photo.$refs.input.click()"
+                      >mdi-camera-plus-outline</v-icon
+                    >
+                  </template>
+                  <v-avatar size="150">
+                    <v-img
+                      lazy-src="https://picsum.photos/id/11/10/6"
+                      src="https://picsum.photos/id/11/500/300"
+                      class="rounded-circle"
+                    ></v-img>
+                  </v-avatar>
+                </v-badge>
+                <v-file-input
+                  class="d-none"
+                  ref="photo"
+                  v-model="photo"
+                  @change="changePhoto"
+                ></v-file-input>
+              </v-col>
+              <v-col cols="8">
+                <v-list-item three-line>
+                  <v-list-item-content>
+                    <v-list-item-title class="text-h5 mt-4 mb-1">
+                      {{ dokter.nama }}
+                    </v-list-item-title>
+                    <v-list-item-subtitle
+                      >Poli {{ dokter.poli }}</v-list-item-subtitle
+                    >
+                  </v-list-item-content>
+                  <v-btn
+                    fab
+                    dark
+                    small
+                    color="primary"
+                    class="mt-3 float-right"
+                    title="Ubah Profil"
+                    :loading="isLoading"
+                    @click="edit"
+                    ><v-icon dark> mdi-pencil </v-icon></v-btn
+                  >
+                </v-list-item>
+                <v-chip
+                  class="mt-4 ml-4"
+                  :color="dokter.is_aktif ? 'success' : 'red'"
+                  outlined
+                  >{{ dokter.is_aktif ? 'Aktif' : 'Non-Aktif' }}</v-chip
+                >
+              </v-col>
+            </v-row>
+            <v-divider class="my-2"></v-divider>
+            <v-row class="px-5">
+              <v-col cols="12" class="mt-5">
+                <v-list>
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-subtitle
+                        >Tempat Tanggal Lahir</v-list-item-subtitle
+                      >
+                      <v-list-item-title>{{
+                        dokter.tempat_tanggal_lahir
+                      }}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-subtitle>Jenis Kelamin</v-list-item-subtitle>
+                      <v-list-item-title>{{
+                        dokter.jenis_kelamin
+                      }}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-subtitle>Agama</v-list-item-subtitle>
+                      <v-list-item-title>{{
+                        dokter.agama ? dokter.agama : '-'
+                      }}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-subtitle>Spesialis</v-list-item-subtitle>
+                      <v-list-item-title>{{
+                        dokter.spesialis ? dokter.spesialis : '-'
+                      }}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-subtitle>Alamat</v-list-item-subtitle>
+                      <v-list-item-title>{{
+                        dokter.alamat ? dokter.alamat : '-'
+                      }}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-subtitle>Kontak</v-list-item-subtitle>
+                      <v-list-item-title>{{
+                        dokter.kontak ? dokter.kontak : '-'
+                      }}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+                <v-list subheader>
+                  <v-subheader>Pendidikan</v-subheader>
+                  <v-list-item
+                    v-for="(row, index) in dokter.pendidikan"
+                    :key="'pendidikan-' + index"
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        <v-icon>mdi-school</v-icon> {{ row }}</v-list-item-title
+                      >
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-col>
+            </v-row>
+            <v-col cols="12 mt-2"> </v-col>
           </v-card-text>
           <v-card-text class="pb-15" v-else>
             <v-row>
@@ -223,6 +293,8 @@ export default {
       title: 'Profil',
       isLoading: false,
       isEdit: false,
+      photo: null,
+      formHeader: null,
       form: {},
       ruleRequired: [(v) => !!v || 'Field ini wajib diisi!'],
     }
@@ -238,10 +310,24 @@ export default {
         ? this.form.pendidikan.push('')
         : (this.form.pendidikan = [''])
     },
+    changePhoto() {
+      var formData = new FormData()
+      var file = this.photo
+      formData.append('file', file)
+      formData.append('filse', 'file')
+      console.log(formData)
+      this.form = formData
+      this.formHeader = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+      this.update()
+    },
     update() {
       this.isLoading = true
       this.$axios
-        .put(`${this.urlDokter}/${this.dokter.id}`, this.form)
+        .put(`${this.urlDokter}/${this.dokter.id}`, this.form, null)
         .then((response) => {
           if (response.data.status) {
             this.form = {}

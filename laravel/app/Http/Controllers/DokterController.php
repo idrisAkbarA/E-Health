@@ -91,6 +91,10 @@ class DokterController extends Controller
    */
   public function update(Request $request, Dokter $dokter)
   {
+    // if ($request->file('file')) {
+    // $foto = $request->file('file');
+    return var_dump($request->file());
+    // }
     $dokter->update($request->all());
 
     $this->reply = [
