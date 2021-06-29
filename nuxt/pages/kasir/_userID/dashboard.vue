@@ -68,69 +68,23 @@
             </v-img>
           </v-card>
         </v-col>
-        <v-col>
-          <v-card dark :height="100 * 1.2" :width="'100%'">
-            <v-img
-              gradient="to top right, rgba(58, 231, 87, 0.33), rgba(25,32,72,.7)"
-              :src="'https://picsum.photos/200/100?random=1'"
-            >
-              <v-card-title>
-                <span class="body 2">Hari ini</span>
-              </v-card-title>
-              <v-card-text>
-                <h1>
-                  {{ $moment(new Date()).format('dddd, Do MMMM YYYY', 'id') }}
-                </h1>
-              </v-card-text>
-            </v-img>
-          </v-card>
-        </v-col>
-        <v-col>
-          <v-card dark :height="100 * 1.2" :width="'100%'">
-            <v-img
-              gradient="to top right, rgba(58, 231, 87, 0.33), rgba(25,32,72,.7)"
-              :src="'https://picsum.photos/200/100?random=2'"
-            >
-              <v-card-title>
-                <span class="body 2">Total Sudah Bayar</span>
-              </v-card-title>
-              <v-card-text>
-                <h1>
-                  {{
-                    rekamMedis !== null
-                      ? filterStatusBayar(rekamMedis, true).length +
-                        filterStatusBayar(antrianObat, true).length
-                      : 0
-                  }}
-                </h1>
-              </v-card-text>
-            </v-img>
-          </v-card>
-        </v-col>
-        <v-col>
-          <v-card dark :height="100 * 1.2" :width="'100%'">
-            <v-img
-              gradient="to top right, rgba(58, 231, 87, 0.33), rgba(25,32,72,.7)"
-              :src="'https://picsum.photos/200/100?random=1'"
-            >
-              <v-card-title>
-                <span class="body 2">Total Belum Bayar</span>
-              </v-card-title>
-              <v-card-text>
-                <h1>
-                  {{
-                    rekamMedis !== null
-                      ? filterStatusBayar(rekamMedis, false).length +
-                        filterStatusBayar(antrianObat, false).length
-                      : 0
-                  }}
-                </h1>
-              </v-card-text>
-            </v-img>
-          </v-card>
+        <v-col
+          v-for="({ actionIcon, actionText, ...attrs }, i) in stats"
+          :key="i"
+          cols="12"
+          md="6"
+          lg="4"
+        >
+          <material-stat-card v-bind="attrs">
+            <template #actions>
+              <v-icon class="mr-2" small v-text="actionIcon" />
+              <div class="text-truncate">
+                {{ actionText }}
+              </div>
+            </template>
+          </material-stat-card>
         </v-col>
       </v-row>
-      <!-- Tabel -->
       <v-card class="mt-10"> </v-card>
     </div>
   </v-container>
@@ -138,6 +92,7 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
+import MaterialStatCard from '../../../components/MaterialStatsCard.vue'
 
 export default {
   layout: 'kasir',
@@ -145,6 +100,9 @@ export default {
     return {
       title: this.title,
     }
+  },
+  components: {
+    MaterialStatCard,
   },
   mounted() {
     this.$store.commit('page/setTitle', this.title)
@@ -160,6 +118,44 @@ export default {
   computed: {
     ...mapState('rekam-medis', { urlRekamMedis: (state) => state.url }),
     ...mapState('antrian-obat', { antrianObat: (state) => state.data }),
+    stats() {
+      return [
+        {
+          actionIcon: '',
+          actionText: '...',
+          color: 'primary',
+          icon: 'mdi-calendar',
+          title: this.$moment(new Date()).format('dddd, Do MMMM YYYY', 'id'),
+          value: 'Hari ini',
+        },
+        {
+          actionIcon: '',
+          actionText: '...',
+          color: 'success',
+          icon: 'mdi-cash-check',
+          title: 'Sudah Bayar',
+          value: `${
+            this.rekamMedis !== null
+              ? this.filterStatusBayar(this.rekamMedis, true).length +
+                this.filterStatusBayar(this.antrianObat, true).length
+              : 0
+          }`,
+        },
+        {
+          actionIcon: '',
+          actionText: '...',
+          color: 'info',
+          icon: 'mdi-cash-remove',
+          title: 'Belum Bayar',
+          value: `${
+            this.rekamMedis !== null
+              ? this.filterStatusBayar(this.rekamMedis, false).length +
+                this.filterStatusBayar(this.antrianObat, false).length
+              : 0
+          }`,
+        },
+      ]
+    },
   },
   methods: {
     ...mapActions({ getAntrianObat: 'antrian-obat/getAntrianObat' }),

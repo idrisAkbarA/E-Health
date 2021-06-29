@@ -37,10 +37,12 @@ export default {
 
   height: 100%;
   background-image: linear-gradient(
-    90deg,
-    rgba(184, 194, 173, 1) 0%,
-    rgba(247, 24, 113, 1) 100%
-  );
+      90deg,
+      rgba(184, 194, 173, 0.6) 0%,
+      rgba(247, 24, 113, 0.9) 100%
+    ),
+    url('/puskesmas-bangkinang.jpeg');
+  background-size: cover;
 }
 .right {
   height: 100%;
