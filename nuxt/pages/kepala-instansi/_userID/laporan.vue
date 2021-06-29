@@ -1,12 +1,15 @@
 <template>
   <v-container>
-    <v-card>
-      <v-card-title>
-        Pusat Laporan
-      </v-card-title>
-      <v-card-subtitle>
-        Daftar Laporan Aplikasi Puskesmas Bangkinang Kota
-      </v-card-subtitle>
+    <v-card class="print-change">
+      <div class="notprint">
+
+        <v-card-title>
+          Pusat Laporan
+        </v-card-title>
+        <v-card-subtitle>
+          Daftar Laporan Aplikasi Puskesmas Bangkinang Kota
+        </v-card-subtitle>
+      </div>
       <v-card-text>
         <v-tabs
           v-model="tab"
@@ -68,5 +71,10 @@ export default {
 .bg-pattern {
   background: url('/pattern.svg') repeat;
   background-size: 400px;
+}
+@media print {
+  .print-change {
+    visibility: hidden;
+  }
 }
 </style>

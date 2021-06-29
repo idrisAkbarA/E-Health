@@ -1,6 +1,7 @@
 <template>
   <v-app id="inspire">
     <v-navigation-drawer
+      class="notprint"
       :src="'/drawer-bg.jpg'"
       v-model="drawer"
       app
@@ -70,6 +71,7 @@
     </v-navigation-drawer>
 
     <v-app-bar
+      class="notprint"
       app
       dense
       clipped-left
