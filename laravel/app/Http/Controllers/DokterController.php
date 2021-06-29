@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Dokter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class DokterController extends Controller
 {
@@ -91,11 +92,6 @@ class DokterController extends Controller
    */
   public function update(Request $request, Dokter $dokter)
   {
-    // if ($request->file('file')) {
-    // $foto = $request->file('file');
-    return var_dump($request->all());
-    return var_dump($request->file());
-    // }
     $dokter->update($request->all());
 
     $this->reply = [
@@ -107,16 +103,27 @@ class DokterController extends Controller
   }
   public function updatePhoto(Request $request, Dokter $dokter)
   {
-    // return $request->all();
-    $id = $request->id;
-    $path = $request->file('file')->storePublicly("public/images/dokter/" . $id, ['visibility' => 'public']);
-    // $dokter->update($request->all());
-    $dokter->foto = $path;
+    $validated = $request->validate([
+      'file' => 'required|mimes:jpg,jpeg,png|max:512|dimensions:min_width=400,min_height=500'
+    ]);
+
+    $photo = $validated['file'];
+    $extension = $photo->getClientOriginalExtension();
+    $newName = 'profil-' . $dokter->id . '.' . $extension;
+    /**
+     * Delete old file
+     */
+    $path = 'public/profil';
+    Storage::delete($path . '/' . $newName);
+    Storage::putFileAs($path, $photo, $newName);
+
+    $dokter->foto = Storage::url('profil' . '/' . $newName);
     $dokter->save();
+
     $this->reply = [
       'status' => true,
       'message' => 'Dokter Updated!',
-      'url' => $path
+      'url' => $dokter->foto
     ];
     return response()->json($this->reply, 200);
   }

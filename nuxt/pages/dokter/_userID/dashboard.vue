@@ -136,7 +136,7 @@ export default {
           color: 'primary',
           icon: 'mdi-bank',
           title: 'Poli',
-          value: `${this.dokter.poli ? this.dokter.poli : '-'}`,
+          value: `${this.dokter ? this.dokter.poli : '-'}`,
         },
         {
           actionIcon: '',
