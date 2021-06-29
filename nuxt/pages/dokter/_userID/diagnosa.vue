@@ -269,11 +269,23 @@
                 </v-col>
               </v-row>
             </v-form>
-            <v-form id="print" class="d-none">
-              <h4 style="text-align: center; margin-bottom: 10px">
-                Puskesmas Bangkinang Kota
-              </h4>
-              <hr />
+            <v-form id="print">
+              <v-row style="text-align: center">
+                <v-col cols="2">
+                  <img class="mx-auto" width="50" src="/logo-bangkinang.png" />
+                </v-col>
+                <v-col cols="8" style="text-align: center">
+                  <h4>PEMERINTAH KABUPATEN KAMPAR DINAS KESEHATAN</h4>
+                  <h4>UPT BLUD PUSKESMAS BANGKINANG KOTA</h4>
+                  <p>Jln. PROF. M. YAMIN, SH – BANGKINANG KODE POS : 28411</p>
+                </v-col>
+                <v-col cols="2">
+                  <img class="mx-auto" width="60" src="/icon.png" />
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-divider></v-divider>
+              </v-row>
               <h3
                 style="
                   text-align: center;
@@ -554,9 +566,11 @@ export default {
         </body>
       </html>`)
 
-      WinPrint.document.close()
-      WinPrint.focus()
-      WinPrint.print()
+      setTimeout(function () {
+        WinPrint.document.close()
+        WinPrint.focus()
+        WinPrint.print()
+      }, 3000)
     },
   },
 }
