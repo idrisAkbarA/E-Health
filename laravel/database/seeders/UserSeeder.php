@@ -31,7 +31,7 @@ class UserSeeder extends Seeder
         ]);
         $user->dokter()->create([
             'poli_id' => 1,
-            'tempat_tanggal_lahir' => 'Pekanbaru 16 Juli 1999',
+            'tempat_tanggal_lahir' => 'Pekanbaru, 16 Juli 1999',
             'jenis_kelamin' => 'Laki-Laki',
             'agama' => 'Islam',
             'pendidikan' => ["S1 Pendidikan Dokter", "S2 Kedokteran Anak"],
