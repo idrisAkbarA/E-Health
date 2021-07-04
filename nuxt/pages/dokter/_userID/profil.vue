@@ -356,15 +356,8 @@ export default {
         })
         .catch((err) => {
           console.error(err)
-          console.log(err.response.status)
-          if (err.response.status == 422) {
-            this.$snackbar(
-              'danger',
-              'foto harus ukuran 2x3. format .jpg, .jpeg, .png'
-            )
-          } else {
-            this.$snackbar('danger', err)
-          }
+          const message = 'foto harus ukuran 2x3. format .jpg, .jpeg, .png'
+          this.$snackbar('danger', err.response.status == 422 ? message : err)
         })
         .then(() => {
           this.isLoading = false
