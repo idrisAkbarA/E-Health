@@ -271,7 +271,7 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="6" class="mx-auto pb-10">
+      <v-col cols="5" class="mx-auto pb-10">
         <ganti-password :id="parseInt($auth.user.id)"></ganti-password>
       </v-col>
     </v-row>
