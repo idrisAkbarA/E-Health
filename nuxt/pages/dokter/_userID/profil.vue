@@ -1,7 +1,7 @@
 <template>
   <v-container fill-height>
     <v-row style="height: 100%">
-      <v-col cols="6" class="mx-auto pb-10">
+      <v-col cols="6" class="mx-auto mt-4 pb-10">
         <v-card v-if="dokter">
           <v-card-title>
             <v-icon class="mr-3">mdi-account</v-icon>
@@ -173,7 +173,7 @@
                   filled
                   color="secondary"
                   label="Tempat Lahir"
-                  v-model="form.tempat_tanggal_lahir"
+                  v-model="tempat_lahir"
                   prepend-inner-icon="mdi-map-marker"
                 ></v-text-field>
               </v-col>
@@ -184,7 +184,7 @@
                   filled
                   color="secondary"
                   label="Tanggal Lahir"
-                  v-model="form.tempat_tanggal_lahir"
+                  v-model="tanggal_lahir"
                   prepend-inner-icon="mdi-calendar"
                 ></v-text-field>
               </v-col>
@@ -271,6 +271,9 @@
           </v-card-text>
         </v-card>
       </v-col>
+      <v-col cols="6" class="mx-auto pb-10">
+        <ganti-password :id="parseInt($auth.user.id)"></ganti-password>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -292,6 +295,26 @@ export default {
       urlDokter: (state) => state.url,
       dokter: (state) => state.currentDokter,
     }),
+    tempat_lahir: {
+      get: function () {
+        return this.form.tempat_tanggal_lahir.split(', ')[0] ?? ''
+      },
+      set: function (v) {
+        this.form.tempat_tanggal_lahir = `${v}, ${
+          this.form.tempat_tanggal_lahir.split(', ')[1]
+        }`
+      },
+    },
+    tanggal_lahir: {
+      get: function () {
+        return this.form.tempat_tanggal_lahir.split(', ')[1] ?? ''
+      },
+      set: function (v) {
+        this.form.tempat_tanggal_lahir = `${
+          this.form.tempat_tanggal_lahir.split(', ')[0]
+        }, ${v}`
+      },
+    },
   },
   data() {
     return {
@@ -339,14 +362,6 @@ export default {
           this.isLoading = false
           this.getDokterByUserId(this.$auth.user.id)
         })
-      // this.$axios({
-      //   method: 'post',
-      //   url: `${this.urlDokter}/photo/${this.dokter.id}`,
-      // headers: {
-      //   'Content-Type': 'multipart/form-data',
-      // },
-      //   data,
-      // })
     },
     update() {
       this.isLoading = true
